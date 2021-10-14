@@ -33,3 +33,30 @@ This is the Battlecode 2021 scaffold, containing an `examplefuncsplayer`. Read h
 - `./gradlew update`
     Update to the newest version! Run every so often
 
+## Strategy
+
+**Enlightenment Centers**
+
+- Bid if influence is above a certain threshold (maybe enough influence to make a certain bot?) after creating specified amount of bots
+- Bot creation priority: muckrakers, politicians, slanderers?
+- need to decide how much influence to allocate each robot
+
+**Muckrakers**
+
+- send muckrakers in first to find as many slanderers as possible
+- if a muckraker detects a robot, move closer to it
+- if a muckraker finds an enlightment center, set a flag
+- if a muckraker finds a politician, set a flag
+- if a muckraker finds a muckraker, set a flag
+
+**Slanderers**
+
+- hide slanderers (can they sense other robots?)
+- move away from muckraker flags
+
+**Politicians**
+
+- send politicians to flag
+- priority: neutral enlightenment center, other politicians, muckrakers, enemy enlightenment centers
+	(This may be something we want to change as we see results)
+- empower at the destination
