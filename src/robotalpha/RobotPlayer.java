@@ -63,8 +63,8 @@ public strictfp class RobotPlayer
     }
 
     static void runEnlightenmentCenter() throws GameActionException {
-//        RobotType toBuild = randomSpawnableRobotType();
-        RobotType toBuild = RobotType.MUCKRAKER;
+        RobotType toBuild = randomSpawnableRobotType();
+        //RobotType toBuild = RobotType.POLITICIAN;
         int influence = 50;
         for (Direction dir : directions) {
             if (rc.canBuildRobot(toBuild, dir, influence)) {
@@ -79,19 +79,18 @@ public strictfp class RobotPlayer
         Team enemy = rc.getTeam().opponent();
         int actionRadius = rc.getType().actionRadiusSquared;
         RobotInfo[] attackable = rc.senseNearbyRobots(actionRadius, enemy);
-        if (attackable.length != 0 && rc.canEmpower(actionRadius)) {
+        RobotInfo[] neutral = rc.senseNearbyRobots(actionRadius, Team.NEUTRAL);
+        if ((attackable.length != 0 || neutral.length != 0) && rc.canEmpower(actionRadius)) {
             System.out.println("empowering...");
             rc.empower(actionRadius);
             System.out.println("empowered");
             return;
         }
-        if (tryMove(randomDirection()))
-            System.out.println("");
+        if (tryMove(randomDirection())){}
     }
 
     static void runSlanderer() throws GameActionException {
-        if (tryMove(randomDirection()))
-           System.out.println("");
+        if (tryMove(randomDirection())){}
     }
 
     /**
@@ -151,8 +150,7 @@ public strictfp class RobotPlayer
             }
         }
 
-        if (tryMove(randomDirection()))
-            System.out.println("I moved!");
+        if (tryMove(randomDirection())){}
     }
 
     /**
