@@ -63,8 +63,7 @@ public strictfp class RobotPlayer
     }
 
     static void runEnlightenmentCenter() throws GameActionException {
-//        RobotType toBuild = randomSpawnableRobotType();
-        RobotType toBuild = RobotType.MUCKRAKER;
+        RobotType toBuild = randomSpawnableRobotType();
         int influence = 50;
         for (Direction dir : directions) {
             if (rc.canBuildRobot(toBuild, dir, influence)) {
@@ -79,19 +78,18 @@ public strictfp class RobotPlayer
         Team enemy = rc.getTeam().opponent();
         int actionRadius = rc.getType().actionRadiusSquared;
         RobotInfo[] attackable = rc.senseNearbyRobots(actionRadius, enemy);
-        if (attackable.length != 0 && rc.canEmpower(actionRadius)) {
+        RobotInfo[] neutral = rc.senseNearbyRobots(actionRadius, Team.NEUTRAL);
+        if ((attackable.length != 0 || neutral.length != 0) && rc.canEmpower(actionRadius)) {
             System.out.println("empowering...");
             rc.empower(actionRadius);
             System.out.println("empowered");
             return;
         }
-        if (tryMove(randomDirection()))
-            System.out.println("");
+        if (tryMove(randomDirection())){}
     }
 
     static void runSlanderer() throws GameActionException {
-        if (tryMove(randomDirection()))
-           System.out.println("");
+        if (tryMove(randomDirection())){}
     }
 
     /**
@@ -102,10 +100,35 @@ public strictfp class RobotPlayer
      * 3 - Enemy Muckraker
      * 4 - Enemy Enlightenment Centers
      *
+     * This will later be expanded to communicate location
+     * information via flags.
+     *
      **/
     static void runMuckraker() throws GameActionException {
         Team enemy = rc.getTeam().opponent();
         int actionRadius = rc.getType().actionRadiusSquared;
+        final double passabilityLimit = 0.7;
+        Direction myDirection = null;
+
+        // Move closer to robots it detects
+        for (MapLocation robotLocation : rc.detectNearbyRobots(actionRadius))
+        {
+            Direction d = rc.getLocation().directionTo(robotLocation);
+            if (rc.getLocation().equals(robotLocation)) {
+                break;
+            }
+            for (int i = 0; i < 2; ++i) {
+                if (rc.isReady()) {
+                    // If the space I am trying to move to is easily passable
+                    // then move
+                    if (rc.canMove(d) && rc.sensePassability(rc.getLocation().add(d)) >= passabilityLimit) {
+                        rc.move(d);
+                    } else if (myDirection == null) {
+                            myDirection = d.rotateRight();
+                    }
+                }
+            }
+        }
 
         // Sense enemy robots
         for (RobotInfo robot : rc.senseNearbyRobots(actionRadius, enemy))
@@ -151,8 +174,7 @@ public strictfp class RobotPlayer
             }
         }
 
-        if (tryMove(randomDirection()))
-            System.out.println("I moved!");
+        if (tryMove(randomDirection())){}
     }
 
     /**
