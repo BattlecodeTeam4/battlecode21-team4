@@ -26,6 +26,8 @@ public strictfp class RobotPlayer
 
     static RobotType spawnedRobot = randomSpawnableRobotType();
 
+    final static double passabilityLimit = 0.7;
+
     /**
      * run() is the method that is called when a robot is instantiated in the Battlecode world.
      * If this method returns, the robot dies!
@@ -159,10 +161,10 @@ public strictfp class RobotPlayer
      * information via flags.
      *
      **/
-    static void runMuckraker() throws GameActionException {
+    static void runMuckraker() throws GameActionException
+    {
         Team enemy = rc.getTeam().opponent();
         int actionRadius = rc.getType().actionRadiusSquared;
-        final double passabilityLimit = 0.7;
         Direction myDirection = null;
 
 //        // Move closer to robots it detects
@@ -222,21 +224,18 @@ public strictfp class RobotPlayer
         }
 
         // Sense neutral robots
-        for (RobotInfo robot : rc.senseNearbyRobots(actionRadius, Team.NEUTRAL)) {
-            if (robot.type.canBid()) {
-                    rc.setFlag(1);
-                    System.out.println("I found a neutral EC and set my flag to 1 ");
+        for (RobotInfo robot : rc.senseNearbyRobots(actionRadius, Team.NEUTRAL))
+        {
+            if (robot.type.canBid())
+            {
+                rc.setFlag(1);
+                System.out.println("I found a neutral EC and set my flag to 1 ");
             }
         }
 
         // Simple movement and passability check
         if (rc.isReady()) {
-            Direction d = randomDirection();
-            // If the space I am trying to move to is easily passable
-            // then move
-            if (rc.canMove(d) && rc.sensePassability(rc.getLocation().add(d)) >= passabilityLimit) {
-                tryMove(d);
-            }
+            tryMove(randomDirection());
         }
     }
 
@@ -267,7 +266,7 @@ public strictfp class RobotPlayer
      */
     static boolean tryMove(Direction dir) throws GameActionException {
         //System.out.println("I am trying to move " + dir + "; " + rc.isReady() + " " + rc.getCooldownTurns() + " " + rc.canMove(dir));
-        if (rc.canMove(dir)) {
+        if (rc.canMove(dir) && rc.sensePassability(rc.getLocation().add(dir)) >= passabilityLimit) {
             rc.move(dir);
             return true;
         } else return false;
