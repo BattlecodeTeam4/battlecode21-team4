@@ -112,6 +112,9 @@ public strictfp class RobotPlayer {
             }
             MapLocation destination = rc.getLocation().translate(moveX, moveY);
             System.out.println("My next runaway destination is: " + destination);
+            Direction direct = rc.getLocation().directionTo(destination);
+            tryMove(direct);
+
 
         }
     }
