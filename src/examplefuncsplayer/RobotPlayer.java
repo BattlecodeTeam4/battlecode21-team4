@@ -91,8 +91,27 @@ public strictfp class RobotPlayer {
         Team enemies = rc.getTeam().opponent();
         // scan for enemies in surrounding
         int actionRadius = rc.getType().actionRadiusSquared;
+        int moveX = 0;
+        int moveY = 0;
+        // checking if Muckraker's found, if found, then move
+        for (RobotInfo enemy : rc.senseNearbyRobots(actionRadius, enemies)) {
+            if (enemy.getType() == RobotType.MUCKRAKER) {
+                MapLocation enemyLoc = enemy.location;
+                if (enemyLoc.x > rc.getLocation().x) {
+                    moveX--;
+                } else {
+                    moveX++;
+                }
 
+                if (enemyLoc.y > rc.getLocation().y) {
+                    moveY--;
+                } else {
+                    moveY++;
+                }
 
+            }
+
+        }
     }
 
     static void runMuckraker() throws GameActionException {
