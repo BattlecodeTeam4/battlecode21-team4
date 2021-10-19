@@ -40,6 +40,7 @@ This is the Battlecode 2021 scaffold, containing an `examplefuncsplayer`. Read h
 - Bid if influence is above a certain threshold (maybe enough influence to make a certain bot?) after creating specified amount of bots
 - Bot creation priority: muckrakers, politicians, slanderers?
 - need to decide how much influence to allocate each robot
+- inform politician about location
 
 **Muckrakers**
 
