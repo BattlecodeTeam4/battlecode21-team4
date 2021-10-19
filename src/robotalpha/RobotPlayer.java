@@ -24,6 +24,8 @@ public strictfp class RobotPlayer
 
     static int turnCount;
 
+    static RobotType spawnedRobot = randomSpawnableRobotType();
+
     /**
      * run() is the method that is called when a robot is instantiated in the Battlecode world.
      * If this method returns, the robot dies!
@@ -66,14 +68,37 @@ public strictfp class RobotPlayer
         RobotType toBuild = randomSpawnableRobotType();
         //RobotType toBuild = RobotType.POLITICIAN;
         int influence = 50;
-        for (Direction dir : directions) {
-            if (rc.canBuildRobot(toBuild, dir, influence)) {
-                rc.buildRobot(toBuild, dir, influence);
-            } else {
+        int polInfluence = 10;
+        int slaInfluence = 100;
+        int muckInfluence = 1;
+
+        if (rc.canBid(500)) {
+            rc.bid(500);
+        }
+
+        Direction dir = randomDirection();
+        switch (spawnedRobot) {
+            case MUCKRAKER:
+                if (rc.canBuildRobot(RobotType.MUCKRAKER, dir, muckInfluence)) {
+                    rc.buildRobot(RobotType.MUCKRAKER, dir, muckInfluence);
+                    spawnedRobot = RobotType.POLITICIAN;
+                }
                 break;
-            }
+            case POLITICIAN:
+                if (rc.canBuildRobot(RobotType.POLITICIAN, dir, polInfluence)) {
+                    rc.buildRobot(RobotType.POLITICIAN, dir, polInfluence);
+                    spawnedRobot = RobotType.SLANDERER;
+                }
+                break;
+            case SLANDERER:
+                if (rc.canBuildRobot(RobotType.SLANDERER, dir, slaInfluence)) {
+                    rc.buildRobot(RobotType.SLANDERER, dir, slaInfluence);
+                    spawnedRobot = RobotType.MUCKRAKER;
+                }
+                break;
         }
     }
+
 
     static void runPolitician() throws GameActionException {
         Team enemy = rc.getTeam().opponent();
