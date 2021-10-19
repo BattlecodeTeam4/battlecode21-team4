@@ -90,7 +90,35 @@ public strictfp class RobotPlayer
     }
 
     static void runSlanderer() throws GameActionException {
-        if (tryMove(randomDirection())){}
+        Team enemies = rc.getTeam().opponent();
+        // scan for enemies in surrounding
+        int actionRadius = rc.getType().actionRadiusSquared;
+        int moveX = 0;
+        int moveY = 0;
+        // checking if Muckraker's found, if found, then move
+        for (RobotInfo enemy : rc.senseNearbyRobots(actionRadius, enemies)) {
+            if (enemy.getType() == RobotType.MUCKRAKER) {
+                MapLocation enemyLoc = enemy.location;
+                if (enemyLoc.x > rc.getLocation().x) {
+                    moveX--;
+                } else {
+                    moveX++;
+                }
+
+                if (enemyLoc.y > rc.getLocation().y) {
+                    moveY--;
+                } else {
+                    moveY++;
+                }
+
+            }
+            MapLocation destination = rc.getLocation().translate(moveX, moveY);
+            System.out.println("My next runaway destination is: " + destination);
+            Direction direct = rc.getLocation().directionTo(destination);
+            tryMove(direct);
+
+
+        }
     }
 
     /**
