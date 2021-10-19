@@ -88,8 +88,11 @@ public strictfp class RobotPlayer {
     }
 
     static void runSlanderer() throws GameActionException {
-        if (tryMove(randomDirection()))
-            System.out.println("I moved!");
+        Team enemies = rc.getTeam().opponent();
+        // scan for enemies in surrounding
+        int actionRadius = rc.getType().actionRadiusSquared;
+
+
     }
 
     static void runMuckraker() throws GameActionException {
