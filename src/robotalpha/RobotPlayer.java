@@ -116,9 +116,9 @@ public strictfp class RobotPlayer
             System.out.println("My next runaway destination is: " + destination);
             Direction direct = rc.getLocation().directionTo(destination);
             tryMove(direct);
-
-
         }
+        //move randomly if enemy not detected
+        tryMove(randomDirection());
     }
 
     /**
