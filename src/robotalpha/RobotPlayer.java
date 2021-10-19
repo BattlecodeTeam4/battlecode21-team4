@@ -119,6 +119,7 @@ public strictfp class RobotPlayer
         }
         //move randomly if enemy not detected
         tryMove(randomDirection());
+
     }
 
     /**
@@ -139,25 +140,25 @@ public strictfp class RobotPlayer
         final double passabilityLimit = 0.7;
         Direction myDirection = null;
 
-        // Move closer to robots it detects
-        for (MapLocation robotLocation : rc.detectNearbyRobots(actionRadius))
-        {
-            Direction d = rc.getLocation().directionTo(robotLocation);
-            if (rc.getLocation().equals(robotLocation)) {
-                break;
-            }
-            for (int i = 0; i < 2; ++i) {
-                if (rc.isReady()) {
-                    // If the space I am trying to move to is easily passable
-                    // then move
-                    if (rc.canMove(d) && rc.sensePassability(rc.getLocation().add(d)) >= passabilityLimit) {
-                        rc.move(d);
-                    } else if (myDirection == null) {
-                            myDirection = d.rotateRight();
-                    }
-                }
-            }
-        }
+//        // Move closer to robots it detects
+//        for (MapLocation robotLocation : rc.detectNearbyRobots(actionRadius))
+//        {
+//            Direction d = rc.getLocation().directionTo(robotLocation);
+//            if (rc.getLocation().equals(robotLocation)) {
+//                break;
+//            }
+//            for (int i = 0; i < 2; ++i) {
+//                if (rc.isReady()) {
+//                    // If the space I am trying to move to is easily passable
+//                    // then move
+//                    if (rc.canMove(d) && rc.sensePassability(rc.getLocation().add(d)) >= passabilityLimit) {
+//                        rc.move(d);
+//                    } else if (myDirection == null) {
+//                            myDirection = d.rotateRight();
+//                    }
+//                }
+//            }
+//        }
 
         // Sense enemy robots
         for (RobotInfo robot : rc.senseNearbyRobots(actionRadius, enemy))
@@ -203,7 +204,15 @@ public strictfp class RobotPlayer
             }
         }
 
-        if (tryMove(randomDirection())){}
+        // Simple movement and passability check
+        if (rc.isReady()) {
+            Direction d = randomDirection();
+            // If the space I am trying to move to is easily passable
+            // then move
+            if (rc.canMove(d) && rc.sensePassability(rc.getLocation().add(d)) >= passabilityLimit) {
+                tryMove(d);
+            }
+        }
     }
 
     /**
