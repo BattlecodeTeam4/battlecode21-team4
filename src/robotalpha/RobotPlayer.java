@@ -67,9 +67,8 @@ public strictfp class RobotPlayer
     }
 
     static void runEnlightenmentCenter() throws GameActionException {
-        RobotType toBuild = randomSpawnableRobotType();
+        //RobotType toBuild = randomSpawnableRobotType();
         //RobotType toBuild = RobotType.POLITICIAN;
-        int influence = 50;
         int polInfluence = 10;
         int slaInfluence = 100;
         int muckInfluence = 1;
@@ -113,7 +112,7 @@ public strictfp class RobotPlayer
             System.out.println("empowered");
             return;
         }
-        if (tryMove(randomDirection())){}
+        tryMove(randomDirection());
     }
 
     static void runSlanderer() throws GameActionException {
@@ -145,7 +144,9 @@ public strictfp class RobotPlayer
             tryMove(direct);
         }
         //move randomly if enemy not detected
-        tryMove(randomDirection());
+        if(tryMove(randomDirection())) {
+            System.out.println("I moved!");
+        }
 
     }
 
@@ -165,7 +166,7 @@ public strictfp class RobotPlayer
     {
         Team enemy = rc.getTeam().opponent();
         int actionRadius = rc.getType().actionRadiusSquared;
-        Direction myDirection = null;
+        //Direction myDirection = null;
 
 //        // Move closer to robots it detects
 //        for (MapLocation robotLocation : rc.detectNearbyRobots(actionRadius))
@@ -235,7 +236,9 @@ public strictfp class RobotPlayer
 
         // Simple movement and passability check
         if (rc.isReady()) {
-            tryMove(randomDirection());
+            if(tryMove(randomDirection())) {
+                System.out.println("I moved!");
+            }
         }
     }
 
