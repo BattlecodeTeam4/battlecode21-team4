@@ -4,6 +4,10 @@ import battlecode.common.*;
 
 public class Slanderer extends Robot {
     static void runSlanderer() throws GameActionException {
+        if(actionRadius == 0)
+        {
+            updateActionRadius();
+        }
         int moveX = 0;
         int moveY = 0;
         // checking if Muckraker's found, if found, then move

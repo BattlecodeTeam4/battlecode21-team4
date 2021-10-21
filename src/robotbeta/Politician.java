@@ -6,8 +6,14 @@ import battlecode.common.Team;
 
 public class Politician extends Robot {
     static void runPolitician() throws GameActionException {
+        if(actionRadius == 0)
+        {
+            updateActionRadius();
+        }
         RobotInfo[] attackable = rc.senseNearbyRobots(actionRadius, enemy);
         RobotInfo[] neutral = rc.senseNearbyRobots(actionRadius, Team.NEUTRAL);
+        System.out.println(actionRadius);
+        System.out.println((attackable.length != 0 || neutral.length != 0));
         if ((attackable.length != 0 || neutral.length != 0) && rc.canEmpower(actionRadius)) {
             System.out.println("empowering...");
             rc.empower(actionRadius);

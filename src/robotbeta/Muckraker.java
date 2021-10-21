@@ -40,7 +40,10 @@ public class Muckraker extends Robot {
 //                }
 //            }
 //        }
-
+        if(actionRadius == 0)
+        {
+            updateActionRadius();
+        }
         // Sense enemy robots
         for (RobotInfo robot : rc.senseNearbyRobots(actionRadius, enemy))
         {

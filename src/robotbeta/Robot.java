@@ -23,7 +23,7 @@ public class Robot extends RobotPlayer {
     }
 
     static Team enemy = rc.getTeam().opponent();
-    static int actionRadius = rc.getType().actionRadiusSquared;
+    static int actionRadius = 0;
     final static double passabilityLimit = 0.5;
 
     /**
@@ -33,9 +33,12 @@ public class Robot extends RobotPlayer {
      * @return true if a move was performed
      * @throws GameActionException
      */
+    static void updateActionRadius() {
+        actionRadius = rc.getType().actionRadiusSquared;
+    }
     static boolean tryMove(Direction dir) throws GameActionException {
         //System.out.println("I am trying to move " + dir + "; " + rc.isReady() + " " + rc.getCooldownTurns() + " " + rc.canMove(dir));
-        if (rc.canMove(dir)) {
+        /*if (rc.canMove(dir)) {
             if (rc.sensePassability(rc.getLocation().add(dir)) >= passabilityLimit) {
                 rc.move(dir);
                 return true;
@@ -44,7 +47,10 @@ public class Robot extends RobotPlayer {
                 return true;
             }
             else
-                return false;
+                return false;*/
+        if (rc.canMove(dir)) {
+            rc.move(dir);
+            return true;
         } else
             return false;
     }

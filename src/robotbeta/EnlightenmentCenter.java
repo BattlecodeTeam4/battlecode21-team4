@@ -26,7 +26,7 @@ public class EnlightenmentCenter extends Robot {
     static void runEnlightenmentCenter() throws GameActionException {
         //RobotType toBuild = randomSpawnableRobotType();
         //RobotType toBuild = RobotType.POLITICIAN;
-        int polInfluence = 10;
+        int polInfluence = 50;
         int slaInfluence = 50;
         int muckInfluence = 1;
 
@@ -56,7 +56,7 @@ public class EnlightenmentCenter extends Robot {
                 break;
         }
 
-        if (rc.getInfluence() > 150) {
+        if (rc.getInfluence() > 100) {
             rc.bid(rc.getInfluence() - 100);
         }
     }
