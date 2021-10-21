@@ -276,6 +276,10 @@ public strictfp class RobotPlayer
         if (rc.canMove(dir) && rc.sensePassability(rc.getLocation().add(dir)) >= passabilityLimit) {
             rc.move(dir);
             return true;
-        } else return false;
+        } else if (rc.sensePassability(rc.getLocation()) < passabilityLimit) {
+            rc.move(dir);
+            return true;
+        } else
+            return false;
     }
 }
