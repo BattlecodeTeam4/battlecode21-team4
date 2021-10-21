@@ -4,15 +4,16 @@ import battlecode.common.*;
 
 public class Slanderer extends Robot {
     static void runSlanderer() throws GameActionException {
-        if(actionRadius == 0)
+        if(sensorRadius == 0)
         {
-            updateActionRadius();
+            updateSensorRadius();
         }
         int moveX = 0;
         int moveY = 0;
         // checking if Muckraker's found, if found, then move
-        for (RobotInfo enemy : rc.senseNearbyRobots(actionRadius, enemy)) {
+        for (RobotInfo enemy : rc.senseNearbyRobots(sensorRadius, enemy)) {
             if (enemy.getType() == RobotType.MUCKRAKER) {
+                System.out.println("Running Away!");
                 MapLocation enemyLoc = enemy.location;
                 if (enemyLoc.x > rc.getLocation().x) {
                     moveX--;
@@ -31,6 +32,7 @@ public class Slanderer extends Robot {
             System.out.println("My next runaway destination is: " + destination);
             Direction direct = rc.getLocation().directionTo(destination);
             tryMove(direct);
+            return;
         }
         //move randomly if enemy not detected
         if(tryMove(randomDirection())) {

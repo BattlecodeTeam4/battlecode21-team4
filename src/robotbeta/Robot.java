@@ -24,6 +24,7 @@ public class Robot extends RobotPlayer {
 
     static Team enemy = rc.getTeam().opponent();
     static int actionRadius = 0;
+    static int sensorRadius = 0;
     final static double passabilityLimit = 0.5;
 
     /**
@@ -36,6 +37,11 @@ public class Robot extends RobotPlayer {
     static void updateActionRadius() {
         actionRadius = rc.getType().actionRadiusSquared;
     }
+
+    static void updateSensorRadius() {
+        sensorRadius = rc.getType().sensorRadiusSquared;
+    }
+
     static boolean tryMove(Direction dir) throws GameActionException {
         //System.out.println("I am trying to move " + dir + "; " + rc.isReady() + " " + rc.getCooldownTurns() + " " + rc.canMove(dir));
         /*if (rc.canMove(dir)) {
