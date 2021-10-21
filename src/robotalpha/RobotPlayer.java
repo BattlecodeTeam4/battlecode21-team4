@@ -26,7 +26,7 @@ public strictfp class RobotPlayer
 
     static RobotType spawnedRobot = randomSpawnableRobotType();
 
-    final static double passabilityLimit = 0.7;
+    final static double passabilityLimit = 0.5;
 
     /**
      * run() is the method that is called when a robot is instantiated in the Battlecode world.
