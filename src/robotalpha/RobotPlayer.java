@@ -70,12 +70,12 @@ public strictfp class RobotPlayer
         //RobotType toBuild = randomSpawnableRobotType();
         //RobotType toBuild = RobotType.POLITICIAN;
         int polInfluence = 10;
-        int slaInfluence = 100;
+        int slaInfluence = 50;
         int muckInfluence = 1;
 
-        if (rc.canBid(500)) {
-            rc.bid(500);
-        }
+//        if (rc.canBid(500)) {
+//            rc.bid(500);
+//        }
 
         Direction dir = randomDirection();
         switch (spawnedRobot) {
@@ -97,6 +97,10 @@ public strictfp class RobotPlayer
                     spawnedRobot = RobotType.MUCKRAKER;
                 }
                 break;
+        }
+
+        if (rc.getInfluence() > 150) {
+            rc.bid(rc.getInfluence() - 100);
         }
     }
 
@@ -272,6 +276,10 @@ public strictfp class RobotPlayer
         if (rc.canMove(dir) && rc.sensePassability(rc.getLocation().add(dir)) >= passabilityLimit) {
             rc.move(dir);
             return true;
-        } else return false;
+        } else if (rc.sensePassability(rc.getLocation()) < passabilityLimit) {
+            rc.move(dir);
+            return true;
+        } else
+            return false;
     }
 }
