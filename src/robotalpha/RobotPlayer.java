@@ -273,12 +273,16 @@ public strictfp class RobotPlayer
      */
     static boolean tryMove(Direction dir) throws GameActionException {
         //System.out.println("I am trying to move " + dir + "; " + rc.isReady() + " " + rc.getCooldownTurns() + " " + rc.canMove(dir));
-        if (rc.canMove(dir) && rc.sensePassability(rc.getLocation().add(dir)) >= passabilityLimit) {
-            rc.move(dir);
-            return true;
-        } else if (rc.sensePassability(rc.getLocation()) < passabilityLimit) {
-            rc.move(dir);
-            return true;
+        if (rc.canMove(dir)) {
+            if (rc.sensePassability(rc.getLocation().add(dir)) >= passabilityLimit) {
+                rc.move(dir);
+                return true;
+            } else if (rc.sensePassability(rc.getLocation()) < passabilityLimit) {
+                rc.move(dir);
+                return true;
+            }
+            else
+                return false;
         } else
             return false;
     }
