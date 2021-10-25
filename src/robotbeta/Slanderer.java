@@ -35,8 +35,6 @@ public class Slanderer extends Robot {
             return;
         }
         //move randomly if enemy not detected
-        if(tryMove(randomDirection())) {
-            System.out.println("I moved!");
-        }
+        tryMove(randomDirection());
     }
 }

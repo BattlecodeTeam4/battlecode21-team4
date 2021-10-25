@@ -54,11 +54,11 @@ public class EnlightenmentCenter extends Robot {
     }
 
     static void runEnlightenmentCenter() throws GameActionException {
-
+        rc.setFlag(4);
 //        if (rc.canBid(500)) {
 //            rc.bid(500);
 //        }
-        int a = 1 + (int) (Math.random() * 100);
+        int a = (int) (Math.random() * 100);
         if(Objects.equals(chanceArr.get(a), "pol")) {
             spawnedRobot = RobotType.POLITICIAN;
         }

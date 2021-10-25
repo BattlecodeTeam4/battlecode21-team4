@@ -3,6 +3,9 @@ package robotbeta;
 import battlecode.common.*;
 
 public abstract class Robot extends RobotPlayer {
+
+    static MapLocation homeLoc;
+    static int homeID;
     static final Direction[] directions = {
             Direction.NORTH,
             Direction.NORTHEAST,
@@ -39,8 +42,26 @@ public abstract class Robot extends RobotPlayer {
         actionRadius = rc.getType().actionRadiusSquared;
     }
 
-    static void init() {
-        target = new MapLocation(29056, 13636);
+    static void init() throws GameActionException {
+        findHome();
+        System.out.println(homeID);
+    }
+
+    static void findHome() throws GameActionException {
+        MapLocation curr = rc.getLocation();
+        for(int i = directions.length; --i >= 0;)
+        {
+            MapLocation parseLoc = curr.add(directions[i]);
+            if(rc.onTheMap(parseLoc)){
+                RobotInfo currBot = rc.senseRobotAtLocation(parseLoc);
+                if (currBot != null && currBot.type == RobotType.ENLIGHTENMENT_CENTER && currBot.team == rc.getTeam()) {
+                    if(homeLoc == null){
+                        homeLoc = currBot.getLocation();
+                        homeID = currBot.getID();
+                    }
+                }
+            }
+        }
     }
 
     static void updateSensorRadius() {
@@ -71,13 +92,13 @@ public abstract class Robot extends RobotPlayer {
         return false;
     }
 
-    static boolean moveLocation(MapLocation target) throws GameActionException
+    static boolean moveLocation(MapLocation loc) throws GameActionException
     {
-        if(Robot.target == null){
+        if(loc == null){
             tryMove(randomDirection());
             return true;
         }
-        Direction dir = rc.getLocation().directionTo(Robot.target);
+        Direction dir = rc.getLocation().directionTo(loc);
         if(dir != Direction.CENTER)
         {
             if(tryMove(dir))
