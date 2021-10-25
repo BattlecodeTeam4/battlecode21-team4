@@ -2,7 +2,7 @@ package robotbeta;
 
 import battlecode.common.*;
 
-public class Robot extends RobotPlayer {
+public abstract class Robot extends RobotPlayer {
     static final Direction[] directions = {
             Direction.NORTH,
             Direction.NORTHEAST,
@@ -25,6 +25,7 @@ public class Robot extends RobotPlayer {
     static Team enemy = rc.getTeam().opponent();
     static int actionRadius = 0;
     static int sensorRadius = 0;
+    static MapLocation target = null;
     final static double passabilityLimit = 0.5;
 
     /**
@@ -38,26 +39,55 @@ public class Robot extends RobotPlayer {
         actionRadius = rc.getType().actionRadiusSquared;
     }
 
+    static void init() {
+        target = new MapLocation(29056, 13636);
+    }
+
     static void updateSensorRadius() {
         sensorRadius = rc.getType().sensorRadiusSquared;
     }
 
-    static boolean tryMove(Direction dir) throws GameActionException {
+    static boolean tryMove(Direction dir) throws GameActionException
+    {
         //System.out.println("I am trying to move " + dir + "; " + rc.isReady() + " " + rc.getCooldownTurns() + " " + rc.canMove(dir));
-        /*if (rc.canMove(dir)) {
+        if (rc.canMove(dir)) {
+            rc.move(dir);
+            return true;
+        } else
+            return false;
+    }
+
+    static boolean pathfinding(Direction dir) throws GameActionException{
+        if (rc.canMove(dir)) {
             if (rc.sensePassability(rc.getLocation().add(dir)) >= passabilityLimit) {
                 rc.move(dir);
                 return true;
             } else if (rc.sensePassability(rc.getLocation()) < passabilityLimit) {
                 rc.move(dir);
                 return true;
-            }
-            else
-                return false;*/
-        if (rc.canMove(dir)) {
-            rc.move(dir);
+            } else
+                return false;
+        }
+        return false;
+    }
+
+    static boolean moveLocation(MapLocation target) throws GameActionException
+    {
+        if(Robot.target == null){
+            tryMove(randomDirection());
             return true;
-        } else
-            return false;
+        }
+        Direction dir = rc.getLocation().directionTo(Robot.target);
+        if(dir != Direction.CENTER)
+        {
+            if(tryMove(dir))
+            {
+                return true;
+            }
+            else {
+                return tryMove(randomDirection());
+            }
+        }
+        return false;
     }
 }

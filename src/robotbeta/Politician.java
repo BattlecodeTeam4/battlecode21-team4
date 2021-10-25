@@ -18,6 +18,6 @@ public class Politician extends Robot {
             System.out.println("empowered");
             return;
         }
-        tryMove(randomDirection());
+        moveLocation(target);
     }
 }
