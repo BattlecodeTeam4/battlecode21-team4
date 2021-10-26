@@ -38,7 +38,7 @@ public class Robot extends RobotPlayer {
     static Team enemy = rc.getTeam().opponent();
     static int actionRadius = 0;
     static int sensorRadius = 0;
-    final static double passabilityLimit = 0.5;
+    final static double passabilityLimit = 0.1;
 
 
     static void updateActionRadius() {
