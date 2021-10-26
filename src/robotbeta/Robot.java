@@ -110,4 +110,58 @@ public abstract class Robot extends RobotPlayer {
         }
         return false;
     }
+
+    /**
+     * Encodes location info into a flag
+     *
+     * @param loc location to send
+     * @throws GameActionException
+     */
+    static void sendLocation(MapLocation loc) throws GameActionException {
+        int x = loc.x, y = loc.y;
+        int encodedLocation = (x % 128) * 128 + (y % 128);
+        if (rc.canSetFlag(encodedLocation)) {
+            rc.setFlag((encodedLocation));
+        }
+        System.out.println("I set my flag to: " + encodedLocation);
+    }
+
+    /**
+     * Decodes location info from a flag
+     *
+     * @param flag flag received
+     * @return location
+     * @throws GameActionException
+     */
+    static MapLocation getLocationFromFlag(int flag) throws GameActionException {
+        int y = flag % 128;
+        int x = (flag / 128) % 128;
+
+        MapLocation currentLocation = rc.getLocation();
+        int offsetX128 = currentLocation.x / 128;
+        int offsetY128 = currentLocation.y / 128;
+        MapLocation actualLocation = new MapLocation(offsetX128 * 128 + x, offsetY128 * 128 + y);
+
+        MapLocation alt = actualLocation.translate(-128, 0);
+        if (rc.getLocation().distanceSquaredTo(alt) < rc.getLocation().distanceSquaredTo(actualLocation)) {
+            actualLocation = alt;
+        }
+
+        alt = actualLocation.translate(128, 0);
+        if (rc.getLocation().distanceSquaredTo(alt) < rc.getLocation().distanceSquaredTo(actualLocation)) {
+            actualLocation = alt;
+        }
+
+        alt = actualLocation.translate(0, -128);
+        if (rc.getLocation().distanceSquaredTo(alt) < rc.getLocation().distanceSquaredTo(actualLocation)) {
+            actualLocation = alt;
+        }
+
+        alt = actualLocation.translate(0, 128);
+        if (rc.getLocation().distanceSquaredTo(alt) < rc.getLocation().distanceSquaredTo(actualLocation)) {
+            actualLocation = alt;
+        }
+
+        return actualLocation;
+    }
 }
