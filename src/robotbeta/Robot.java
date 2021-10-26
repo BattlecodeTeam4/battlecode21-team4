@@ -15,6 +15,10 @@ public class Robot extends RobotPlayer {
             Direction.WEST,
             Direction.NORTHWEST,
     };
+
+    static MapLocation home; // home EC location
+    static boolean isHomeSet = false;
+
     /**
      * Returns a random Direction.
      *
@@ -117,4 +121,19 @@ public class Robot extends RobotPlayer {
         return actualLocation;
     }
 
+    /**
+     * Gets location of EC that created it
+     *
+     * @throws GameActionException
+     */
+    static void storeHomeLocation() throws GameActionException {
+        for (RobotInfo robot : rc.senseNearbyRobots(actionRadius, rc.getTeam()))
+        {
+            if (robot.type.canBid())
+            {
+                home = robot.getLocation();
+                System.out.println("I set my home to " + home);
+            }
+        }
+    }
 }

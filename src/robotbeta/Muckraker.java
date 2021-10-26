@@ -44,6 +44,13 @@ public class Muckraker extends Robot {
         {
             updateActionRadius();
         }
+
+        // Store home location after spawning
+        if(!isHomeSet) {
+            storeHomeLocation();
+            isHomeSet = true;
+        }
+
         // Sense enemy robots
         for (RobotInfo robot : rc.senseNearbyRobots(actionRadius, enemy))
         {
@@ -85,8 +92,8 @@ public class Muckraker extends Robot {
         {
             if (robot.type.canBid())
             {
-                rc.setFlag(1);
-                System.out.println("I found a neutral EC and set my flag to 1 ");
+                sendLocation(robot.getLocation());
+                System.out.println("I found a neutral EC");
             }
         }
 
