@@ -69,12 +69,12 @@ public class EnlightenmentCenter extends Robot {
 
     static void runEnlightenmentCenter() throws GameActionException {
         System.out.println(Clock.getBytecodesLeft());
-        if(turnCount % 5 == 0) {
-            checkIfExist();
+
+        checkIfExist();
+
+        if(turnCount % 10 == 0) {
+            rc.setFlag(0);
         }
-//        if (rc.canBid(500)) {
-//            rc.bid(500);
-//        }
 
         // Scan for new muckraker flags
         for (int id : mucIDList) {
