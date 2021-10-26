@@ -71,22 +71,19 @@ public class Muckraker extends Robot {
                 // It's a politician
                 if (robot.type.canEmpower())
                 {
-                    rc.setFlag(1);
-                    System.out.println("I found a politician and set my flag to 2");
+                    System.out.println("I found a politician");
                 }
 
                 // It's an enlightenment center
                 if (robot.type.canBid())
                 {
-                    rc.setFlag(4);
-                    System.out.println("I found an enemy EC and set my flag to 4");
+                    System.out.println("I found an enemy EC");
                 }
 
                 // It's a muckraker
                 if (robot.type.canExpose())
                 {
-                    rc.setFlag(3);
-                    System.out.println("I found a muckraker and set my flag to 3");
+                    System.out.println("I found a muckraker");
                 }
             }
 
