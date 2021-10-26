@@ -45,63 +45,70 @@ public class Muckraker extends Robot {
             updateActionRadius();
         }
 
-        // Store home location after spawning
-        if(!isHomeSet) {
-            storeHomeLocation();
-            isHomeSet = true;
-        }
+        if(goingHome) {
+            moveToTarget(home);
+        } else {
+            // Store home location after spawning
+            if(!isHomeSet) {
+                storeHomeLocation();
+                isHomeSet = true;
+            }
 
-        // Sense enemy robots
-        for (RobotInfo robot : rc.senseNearbyRobots(actionRadius, enemy))
-        {
-            if (robot.type.canBeExposed())
+            // Sense enemy robots
+            for (RobotInfo robot : rc.senseNearbyRobots(actionRadius, enemy))
             {
-                // It's a slanderer... go get them!
-                if (rc.canExpose(robot.location))
+                if (robot.type.canBeExposed())
                 {
-                    System.out.println("e x p o s e d");
-                    rc.expose(robot.location);
-                    return;
+                    // It's a slanderer... go get them!
+                    if (rc.canExpose(robot.location))
+                    {
+                        System.out.println("e x p o s e d");
+                        rc.expose(robot.location);
+                        return;
+                    }
+                }
+
+                // It's a politician
+                if (robot.type.canEmpower())
+                {
+                    rc.setFlag(1);
+                    System.out.println("I found a politician and set my flag to 2");
+                }
+
+                // It's an enlightenment center
+                if (robot.type.canBid())
+                {
+                    rc.setFlag(4);
+                    System.out.println("I found an enemy EC and set my flag to 4");
+                }
+
+                // It's a muckraker
+                if (robot.type.canExpose())
+                {
+                    rc.setFlag(3);
+                    System.out.println("I found a muckraker and set my flag to 3");
                 }
             }
 
-            // It's a politician
-            if (robot.type.canEmpower())
+            // Find neutral ECs
+            for (RobotInfo robot : rc.senseNearbyRobots(actionRadius, Team.NEUTRAL))
             {
-                rc.setFlag(1);
-                System.out.println("I found a politician and set my flag to 2");
+                if (robot.type.canBid())
+                {
+                    sendLocation(robot.getLocation());
+                    System.out.println("I found a neutral EC");
+                    goingHome = true;
+                }
             }
 
-            // It's an enlightenment center
-            if (robot.type.canBid())
-            {
-                rc.setFlag(4);
-                System.out.println("I found an enemy EC and set my flag to 4");
-            }
-
-            // It's a muckraker
-            if (robot.type.canExpose())
-            {
-                rc.setFlag(3);
-                System.out.println("I found a muckraker and set my flag to 3");
+            // Simple movement and passability check
+            if (rc.isReady()) {
+                if(tryMove(randomDirection())) {
+                    System.out.println("I moved!");
+                }
             }
         }
 
-        // Sense neutral robots
-        for (RobotInfo robot : rc.senseNearbyRobots(actionRadius, Team.NEUTRAL))
-        {
-            if (robot.type.canBid())
-            {
-                sendLocation(robot.getLocation());
-                System.out.println("I found a neutral EC");
-            }
-        }
 
-        // Simple movement and passability check
-        if (rc.isReady()) {
-            if(tryMove(randomDirection())) {
-                System.out.println("I moved!");
-            }
-        }
     }
 }

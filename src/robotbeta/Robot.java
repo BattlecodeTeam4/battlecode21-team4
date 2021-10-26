@@ -19,6 +19,13 @@ public class Robot extends RobotPlayer {
     static MapLocation home; // home EC location
     static boolean isHomeSet = false;
 
+    static MapLocation target; // target location
+    static boolean isTargetSet = false;
+
+    static Direction myDirection = null;
+
+    static boolean goingHome = false;
+
     /**
      * Returns a random Direction.
      *
@@ -80,6 +87,7 @@ public class Robot extends RobotPlayer {
         if (rc.canSetFlag(encodedLocation)) {
             rc.setFlag((encodedLocation));
         }
+        System.out.println("I set my flag to: " + encodedLocation);
     }
 
     /**
@@ -122,17 +130,38 @@ public class Robot extends RobotPlayer {
     }
 
     /**
-     * Gets location of EC that created it
+     * Gets location of home EC
      *
      * @throws GameActionException
      */
     static void storeHomeLocation() throws GameActionException {
-        for (RobotInfo robot : rc.senseNearbyRobots(actionRadius, rc.getTeam()))
-        {
-            if (robot.type.canBid())
-            {
-                home = robot.getLocation();
-                System.out.println("I set my home to " + home);
+            home = rc.getLocation();
+            System.out.println("I set my home to " + home);
+    }
+
+    /**
+     *
+     */
+    static void moveToTarget(MapLocation target) throws GameActionException {
+        Direction d = rc.getLocation().directionTo(target);
+        if (rc.getLocation().equals(target)) {
+            goingHome = false;
+            rc.setFlag(0);
+        } else if (rc.isReady()) {
+            if (rc.canMove(d) && rc.sensePassability(rc.getLocation().add(d)) >= passabilityLimit) {
+                rc.move(d);
+                myDirection = null;
+            } else {
+                if (myDirection == null) {
+                    myDirection = d.rotateRight();
+                }
+                for (int i = 0; i < 8; ++i) {
+                    if (rc.canMove(myDirection) && rc.sensePassability(rc.getLocation().add(myDirection)) >+ passabilityLimit) {
+                        rc.move(myDirection);
+                        break;
+                    }
+                }
+                myDirection = myDirection.rotateLeft();
             }
         }
     }

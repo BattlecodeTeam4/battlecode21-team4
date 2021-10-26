@@ -1,8 +1,6 @@
 package robotbeta;
 
-import battlecode.common.Direction;
-import battlecode.common.GameActionException;
-import battlecode.common.RobotType;
+import battlecode.common.*;
 
 public class EnlightenmentCenter extends Robot {
 
@@ -30,16 +28,27 @@ public class EnlightenmentCenter extends Robot {
         int slaInfluence = 50;
         int muckInfluence = 1;
 
-//        if (rc.canBid(500)) {
-//            rc.bid(500);
-//        }
+        if(sensorRadius == 0)
+        {
+            updateSensorRadius();
+        }
+
+        // Look for friendly muckrakers with flags set.
+        // If we find one, set our flag to the same flag, and
+        // spawn a politician.
+        for (RobotInfo robot : rc.senseNearbyRobots(sensorRadius, rc.getTeam())) {
+            if (robot.type.canExpose() && rc.getFlag(robot.ID) != 0) {
+                rc.setFlag(rc.getFlag(robot.ID));
+                System.out.println("I set my flag to!");
+                spawnedRobot = RobotType.POLITICIAN;
+            }
+        }
 
         Direction dir = randomDirection();
         switch (spawnedRobot) {
             case MUCKRAKER:
                 if (rc.canBuildRobot(RobotType.MUCKRAKER, dir, muckInfluence)) {
                     rc.buildRobot(RobotType.MUCKRAKER, dir, muckInfluence);
-                    spawnedRobot = RobotType.POLITICIAN;
                 }
                 break;
             case POLITICIAN:
