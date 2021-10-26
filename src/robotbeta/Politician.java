@@ -18,8 +18,21 @@ public class Politician extends Robot {
             System.out.println("empowered");
             return;
         }
+
+        if (target != null) {
+            if(rc.getLocation().isAdjacentTo(target) && rc.senseRobotAtLocation(target).getTeam() != Team.NEUTRAL)
+            {
+                rc.setFlag(0);
+                target = null;
+            }
+        }
+
+
         if(rc.canGetFlag(homeID)){
-            rc.setFlag(rc.getFlag(homeID));
+            if(rc.getFlag(homeID) != 0) {
+                rc.setFlag(rc.getFlag(homeID));
+                target = getLocationFromFlag(rc.getFlag(rc.getID()));
+            }
         }
 
         moveLocation(target);
