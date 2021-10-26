@@ -18,11 +18,14 @@ public class Politician extends Robot {
             {
                 if (robot.type.canBid() && rc.canGetFlag(robot.ID))
                 {
-                    target = getLocationFromFlag(rc.getFlag(robot.getID()));
-                    System.out.println("I set my target to " + target);
+                    if (rc.getFlag(robot.getID()) != 0) {
+                        target = getLocationFromFlag(rc.getFlag(robot.getID()));
+                        System.out.println("I set my target to " + target);
+                        isTargetSet = true;
+                    }
                 }
             }
-            isTargetSet = true;
+
         }
 
         RobotInfo[] attackable = rc.senseNearbyRobots(actionRadius, enemy);

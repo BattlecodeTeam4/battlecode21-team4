@@ -163,6 +163,7 @@ public class Robot extends RobotPlayer {
                         rc.move(myDirection);
                         break;
                     }
+                    myDirection = myDirection.rotateRight();
                 }
                 myDirection = myDirection.rotateLeft();
             }
