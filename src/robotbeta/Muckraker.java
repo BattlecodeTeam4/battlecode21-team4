@@ -44,6 +44,12 @@ public class Muckraker extends Robot {
         {
             updateActionRadius();
         }
+
+        // Muckraker resets flag if home EC already grabbed its flag
+        if(rc.getFlag(homeID) == rc.getFlag(rc.getID())) {
+            rc.setFlag(0);
+        }
+
         // Sense enemy robots
         for (RobotInfo robot : rc.senseNearbyRobots(actionRadius, enemy))
         {

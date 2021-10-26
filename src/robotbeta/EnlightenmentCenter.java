@@ -75,6 +75,15 @@ public class EnlightenmentCenter extends Robot {
 //        if (rc.canBid(500)) {
 //            rc.bid(500);
 //        }
+
+        // Scan for new muckraker flags
+        for (int id : mucIDList) {
+            if (rc.getFlag(id) != 0) {
+                rc.setFlag(rc.getFlag(id));
+                break;
+            }
+        }
+
         int a = (int) (Math.random() * 100);
         if(Objects.equals(chanceArr.get(a), "pol")) {
             spawnedRobot = RobotType.POLITICIAN;
