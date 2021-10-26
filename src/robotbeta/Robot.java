@@ -27,7 +27,7 @@ public abstract class Robot extends RobotPlayer {
 
     static Team enemy = rc.getTeam().opponent();
     static int actionRadius = 0;
-    static int sensorRadius = 0;
+    static int senseRadius = 0;
     static MapLocation target = null;
     final static double passabilityLimit = 0.5;
 
@@ -44,7 +44,6 @@ public abstract class Robot extends RobotPlayer {
 
     static void init() throws GameActionException {
         findHome();
-        System.out.println(homeID);
     }
 
     static void findHome() throws GameActionException {
@@ -64,8 +63,8 @@ public abstract class Robot extends RobotPlayer {
         }
     }
 
-    static void updateSensorRadius() {
-        sensorRadius = rc.getType().sensorRadiusSquared;
+    static void updateSenseRadius() {
+        senseRadius = rc.getType().sensorRadiusSquared;
     }
 
     static boolean tryMove(Direction dir) throws GameActionException

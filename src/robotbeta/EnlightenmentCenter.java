@@ -1,8 +1,10 @@
 package robotbeta;
 
+import battlecode.common.Clock;
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotType;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -22,7 +24,11 @@ public class EnlightenmentCenter extends Robot {
     static int slaChance = 25;
     static int mucChance = 25;
 
-    static ArrayList<String> chanceArr;
+    static ArrayList<String> chanceArr = new ArrayList<String>();;
+
+    static ArrayList<Integer> polIDList = new ArrayList<Integer>();
+    static ArrayList<Integer> slaIDList = new ArrayList<Integer>();
+    static ArrayList<Integer> mucIDList = new ArrayList<Integer>();
 
     /**
      * Returns a random spawnable RobotType
@@ -36,12 +42,10 @@ public class EnlightenmentCenter extends Robot {
     static RobotType spawnedRobot = randomSpawnableRobotType();
 
     static void init() {
-        if((polChance + slaChance + mucChance) < 100)
-        {
+        if((polChance + slaChance + mucChance) < 100) {
             System.out.println("Expected Spawn Percentages totaling 100%!");
             return;
         }
-        chanceArr = new ArrayList<String>();
         for(int a = 1; a <= polChance; a++) {
             chanceArr.add("pol");
         }
@@ -51,10 +55,23 @@ public class EnlightenmentCenter extends Robot {
         for(int c = 1; c <= mucChance; c++) {
             chanceArr.add("muc");
         }
+        if(senseRadius == 0)
+        {
+            updateSenseRadius();
+        }
+    }
+
+    static void checkIfExist() {
+        mucIDList.removeIf(nxt -> !rc.canGetFlag(nxt));
+        polIDList.removeIf(nxt -> !rc.canGetFlag(nxt));
+        slaIDList.removeIf(nxt -> !rc.canGetFlag(nxt));
     }
 
     static void runEnlightenmentCenter() throws GameActionException {
-        rc.setFlag(4);
+        System.out.println(Clock.getBytecodesLeft());
+        if(turnCount % 5 == 0) {
+            checkIfExist();
+        }
 //        if (rc.canBid(500)) {
 //            rc.bid(500);
 //        }
@@ -68,29 +85,27 @@ public class EnlightenmentCenter extends Robot {
         else if (Objects.equals(chanceArr.get(a), "muc")) {
             spawnedRobot = RobotType.MUCKRAKER;
         }
-
         Direction dir = randomDirection();
         switch (spawnedRobot) {
             case MUCKRAKER:
                 if (rc.canBuildRobot(RobotType.MUCKRAKER, dir, mucInfluence)) {
                     rc.buildRobot(RobotType.MUCKRAKER, dir, mucInfluence);
-                    spawnedRobot = RobotType.POLITICIAN;
+                    mucIDList.add(rc.senseRobotAtLocation(rc.adjacentLocation(dir)).getID());
                 }
                 break;
             case POLITICIAN:
                 if (rc.canBuildRobot(RobotType.POLITICIAN, dir, polInfluence)) {
                     rc.buildRobot(RobotType.POLITICIAN, dir, polInfluence);
-                    spawnedRobot = RobotType.SLANDERER;
+                    polIDList.add(rc.senseRobotAtLocation(rc.adjacentLocation(dir)).getID());
                 }
                 break;
             case SLANDERER:
                 if (rc.canBuildRobot(RobotType.SLANDERER, dir, slaInfluence)) {
                     rc.buildRobot(RobotType.SLANDERER, dir, slaInfluence);
-                    spawnedRobot = RobotType.MUCKRAKER;
+                    slaIDList.add(rc.senseRobotAtLocation(rc.adjacentLocation(dir)).getID());
                 }
                 break;
         }
-
         if (rc.getInfluence() > 100) {
             rc.bid(rc.getInfluence() - 100);
         }
