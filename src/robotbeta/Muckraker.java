@@ -92,9 +92,7 @@ public class Muckraker extends Robot {
 
         // Simple movement and passability check
         if (rc.isReady()) {
-            if(tryMove(randomDirection())) {
-                System.out.println("I moved!");
-            }
+            tryMove(randomDirection());
         }
     }
 }

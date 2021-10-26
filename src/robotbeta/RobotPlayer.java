@@ -28,15 +28,19 @@ public strictfp class RobotPlayer
                 //System.out.println("I'm a " + rc.getType() + "! Location " + rc.getLocation());
                 switch (rc.getType()) {
                     case ENLIGHTENMENT_CENTER:
+                        EnlightenmentCenter.init();
                         EnlightenmentCenter.runEnlightenmentCenter();
                         break;
                     case POLITICIAN:
+                        Politician.init();
                         Politician.runPolitician();
                         break;
                     case SLANDERER:
+                        Slanderer.init();
                         Slanderer.runSlanderer();
                         break;
                     case MUCKRAKER:
+                        Muckraker.init();
                         Muckraker.runMuckraker();
                         break;
                 }
