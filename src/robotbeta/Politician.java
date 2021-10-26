@@ -20,10 +20,13 @@ public class Politician extends Robot {
         }
 
         if (target != null) {
-            if(rc.getLocation().isAdjacentTo(target) && rc.senseRobotAtLocation(target).getTeam() != Team.NEUTRAL)
+            if(rc.canSenseLocation(target))
             {
-                rc.setFlag(0);
-                target = null;
+                Team curr = rc.senseRobotAtLocation(target).getTeam();
+                if((curr != Team.NEUTRAL) || (curr != enemy)){
+                    rc.setFlag(0);
+                    target = null;
+                }
             }
         }
 
