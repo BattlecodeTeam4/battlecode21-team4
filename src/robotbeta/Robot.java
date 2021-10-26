@@ -135,8 +135,8 @@ public class Robot extends RobotPlayer {
      * @throws GameActionException
      */
     static void storeHomeLocation() throws GameActionException {
-            home = rc.getLocation();
-            System.out.println("I set my home to " + home);
+        home = rc.getLocation();
+        System.out.println("I set my home to " + home);
     }
 
     /**
@@ -144,6 +144,9 @@ public class Robot extends RobotPlayer {
      */
     static void moveToTarget(MapLocation target) throws GameActionException {
         Direction d = rc.getLocation().directionTo(target);
+        if (rc.getLocation().isAdjacentTo(target)) {
+            isTargetSet = false;
+        }
         if (rc.getLocation().equals(target)) {
             goingHome = false;
             rc.setFlag(0);
