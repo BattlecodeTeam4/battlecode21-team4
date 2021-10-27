@@ -68,8 +68,6 @@ public class EnlightenmentCenter extends Robot {
     }
 
     static void runEnlightenmentCenter() throws GameActionException {
-        System.out.println(Clock.getBytecodesLeft());
-
         checkIfExist();
 
         if(turnCount % 10 == 0) {
@@ -117,6 +115,9 @@ public class EnlightenmentCenter extends Robot {
         }
         if (rc.getInfluence() > 100) {
             rc.bid(rc.getInfluence() - 100);
+        }
+        else if(rc.getInfluence() > 50){
+            rc.bid(1);
         }
     }
 }

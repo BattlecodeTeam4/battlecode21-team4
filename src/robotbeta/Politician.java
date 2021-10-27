@@ -2,6 +2,7 @@ package robotbeta;
 
 import battlecode.common.GameActionException;
 import battlecode.common.RobotInfo;
+import battlecode.common.RobotType;
 import battlecode.common.Team;
 
 public class Politician extends Robot {
@@ -23,21 +24,23 @@ public class Politician extends Robot {
             if(rc.canSenseLocation(target))
             {
                 Team curr = rc.senseRobotAtLocation(target).getTeam();
-                if((curr != Team.NEUTRAL) || (curr != enemy)){
+                RobotType currType = rc.senseRobotAtLocation(target).getType();
+                if(curr == rc.getTeam() && currType == RobotType.ENLIGHTENMENT_CENTER){
                     rc.setFlag(0);
                     target = null;
                 }
             }
         }
 
-
-        if(rc.canGetFlag(homeID)){
-            if(rc.getFlag(homeID) != 0) {
-                rc.setFlag(rc.getFlag(homeID));
-                target = getLocationFromFlag(rc.getFlag(rc.getID()));
+        if(rc.getFlag(rc.getID()) == 0)
+        {
+            if(rc.canGetFlag(homeID)){
+                if(rc.getFlag(homeID) != 0) {
+                    rc.setFlag(rc.getFlag(homeID));
+                    target = getLocationFromFlag(rc.getFlag(rc.getID()));
+                }
             }
         }
-
         moveLocation(target);
     }
 }
