@@ -40,9 +40,9 @@ public class Muckraker extends Robot {
 //                }
 //            }
 //        }
-        if(actionRadius == 0)
+        if(senseRadius == 0)
         {
-            updateActionRadius();
+            updateSenseRadius();
         }
 
         // Muckraker resets flag if home EC already grabbed its flag
@@ -51,9 +51,9 @@ public class Muckraker extends Robot {
         }
 
         // Sense neutral robots
-        for (RobotInfo robot : rc.senseNearbyRobots(actionRadius, Team.NEUTRAL))
+        for (RobotInfo robot : rc.senseNearbyRobots(senseRadius))
         {
-            if (robot.type.canBid())
+            if (robot.type.canBid() && ((robot.getTeam() == enemy) || (robot.getTeam() == Team.NEUTRAL)))
             {
                 sendLocation(robot.getLocation());
                 System.out.println("I found a neutral EC");
