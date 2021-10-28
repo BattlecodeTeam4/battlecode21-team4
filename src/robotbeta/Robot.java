@@ -12,7 +12,7 @@ public abstract class Robot extends RobotPlayer {
     static int actionRadius = 0;
     static int senseRadius = 0;
 
-    static int slaThreshold = 295;
+    static int slaThreshold = 290;
 
     static MapLocation target = null;
     final static double passAbilityLimit = 0.5;

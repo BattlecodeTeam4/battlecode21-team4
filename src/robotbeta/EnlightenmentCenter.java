@@ -71,7 +71,6 @@ public class EnlightenmentCenter extends Robot {
         mucIDList.removeIf(nxt -> !rc.canGetFlag(nxt));
         polIDList.removeIf(nxt -> !rc.canGetFlag(nxt));
         slaIDList.removeIf(nxt -> !rc.canGetFlag(nxt));
-        System.out.println("Muc" + mucIDList + "Pol" + polIDList + "Sla" + slaIDList);
     }
 
     /**
@@ -147,9 +146,11 @@ public class EnlightenmentCenter extends Robot {
      * @throws GameActionException
      */
     static void runEnlightenmentCenter() throws GameActionException {
-        checkIfExist();
+        if(turnCount % 5 == 0)
+        {
+            checkIfExist();
+        }
         bidThreshold = 0.005;
-
         if(turnCount % 50 == 0) {
             rc.setFlag(0);
         }
