@@ -2,10 +2,21 @@ package robotbeta;
 
 import battlecode.common.*;
 
+@SuppressWarnings({"JavaDoc", "RedundantThrows", "unused", "UnusedReturnValue", "DuplicatedCode"})
 public abstract class Robot extends RobotPlayer {
 
     static MapLocation homeLoc;
     static int homeID;
+
+    static Team enemy = rc.getTeam().opponent();
+    static int actionRadius = 0;
+    static int senseRadius = 0;
+
+    static int slaThreshold = 295;
+
+    static MapLocation target = null;
+    final static double passAbilityLimit = 0.5;
+
     static final Direction[] directions = {
             Direction.NORTH,
             Direction.NORTHEAST,
@@ -16,36 +27,31 @@ public abstract class Robot extends RobotPlayer {
             Direction.WEST,
             Direction.NORTHWEST,
     };
+
     /**
-     * Returns a random Direction.
-     *
-     * @return a random Direction
+     * @return
      */
     static Direction randomDirection() {
         return directions[(int) (Math.random() * directions.length)];
     }
 
-    static Team enemy = rc.getTeam().opponent();
-    static int actionRadius = 0;
-    static int senseRadius = 0;
-    static MapLocation target = null;
-    final static double passabilityLimit = 0.5;
-
     /**
-     * Attempts to move in a given direction.
      *
-     * @param dir The intended direction of movement
-     * @return true if a move was performed
-     * @throws GameActionException
      */
     static void updateActionRadius() {
         actionRadius = rc.getType().actionRadiusSquared;
     }
 
+    /**
+     * @throws GameActionException
+     */
     static void init() throws GameActionException {
         findHome();
     }
 
+    /**
+     * @throws GameActionException
+     */
     static void findHome() throws GameActionException {
         MapLocation curr = rc.getLocation();
         for(int i = directions.length; --i >= 0;)
@@ -67,9 +73,13 @@ public abstract class Robot extends RobotPlayer {
         senseRadius = rc.getType().sensorRadiusSquared;
     }
 
+    /**
+     * @param dir
+     * @return
+     * @throws GameActionException
+     */
     static boolean tryMove(Direction dir) throws GameActionException
     {
-        //System.out.println("I am trying to move " + dir + "; " + rc.isReady() + " " + rc.getCooldownTurns() + " " + rc.canMove(dir));
         if (rc.canMove(dir)) {
             rc.move(dir);
             return true;
@@ -77,12 +87,17 @@ public abstract class Robot extends RobotPlayer {
             return false;
     }
 
+    /**
+     * @param dir
+     * @return
+     * @throws GameActionException
+     */
     static boolean pathfinding(Direction dir) throws GameActionException{
         if (rc.canMove(dir)) {
-            if (rc.sensePassability(rc.getLocation().add(dir)) >= passabilityLimit) {
+            if (rc.sensePassability(rc.getLocation().add(dir)) >= passAbilityLimit) {
                 rc.move(dir);
                 return true;
-            } else if (rc.sensePassability(rc.getLocation()) < passabilityLimit) {
+            } else if (rc.sensePassability(rc.getLocation()) < passAbilityLimit) {
                 rc.move(dir);
                 return true;
             } else
@@ -91,6 +106,11 @@ public abstract class Robot extends RobotPlayer {
         return false;
     }
 
+    /**
+     * @param loc
+     * @return
+     * @throws GameActionException
+     */
     static boolean moveLocation(MapLocation loc) throws GameActionException
     {
         if(loc == null){
@@ -123,7 +143,6 @@ public abstract class Robot extends RobotPlayer {
         if (rc.canSetFlag(encodedLocation)) {
             rc.setFlag((encodedLocation));
         }
-        System.out.println("I set my flag to: " + encodedLocation);
     }
 
     /**
@@ -133,7 +152,7 @@ public abstract class Robot extends RobotPlayer {
      * @return location
      * @throws GameActionException
      */
-    static MapLocation getLocationFromFlag(int flag) throws GameActionException {
+     static MapLocation getLocationFromFlag(int flag) throws GameActionException {
         int y = flag % 128;
         int x = (flag / 128) % 128;
 
