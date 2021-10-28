@@ -20,9 +20,9 @@ public class EnlightenmentCenter extends Robot {
     static int slaInfluence = 50;
     static int mucInfluence = 1;
 
-    static int polChance = 50;
-    static int slaChance = 25;
-    static int mucChance = 25;
+    static int polChance = 40;
+    static int slaChance = 40;
+    static int mucChance = 20;
 
     static ArrayList<String> chanceArr = new ArrayList<String>();;
 
