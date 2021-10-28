@@ -2,8 +2,19 @@ package robotbeta;
 
 import battlecode.common.*;
 
+@SuppressWarnings({"JavaDoc", "RedundantThrows", "unused", "UnusedReturnValue", "DuplicatedCode"})
 public class Slanderer extends Robot {
+    /**
+     * @throws GameActionException
+     */
     static void runSlanderer() throws GameActionException {
+        if(turnCount >= slaThreshold)
+        {
+            if(rc.canSetFlag(turnCount))
+            {
+                rc.setFlag(turnCount);
+            }
+        }
         if(senseRadius == 0)
         {
             updateSenseRadius();

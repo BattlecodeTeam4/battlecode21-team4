@@ -1,16 +1,19 @@
 package robotbeta;
 import battlecode.common.*;
 
+@SuppressWarnings({"RedundantThrows", "unused", "InfiniteLoopStatement", "JavaDoc"})
 public strictfp class RobotPlayer
 {
     static RobotController rc;
     static int turnCount;
 
+
     /**
-     * run() is the method that is called when a robot is instantiated in the Battlecode world.
+     * @param rc
+     * @throws GameActionException
+     * run() is the method that is called when a robot is instantiated in the BattleCode world.
      * If this method returns, the robot dies!
      **/
-    @SuppressWarnings("unused")
     public static void run(RobotController rc) throws GameActionException {
 
         // This is the RobotController object. You use it to perform actions from this robot,

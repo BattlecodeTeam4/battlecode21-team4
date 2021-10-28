@@ -1,10 +1,12 @@
 package robotbeta;
 
-import battlecode.common.*;
-
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Objects;
 
+import battlecode.common.*;
+
+@SuppressWarnings({"JavaDoc", "RedundantThrows", "unused", "UnusedReturnValue", "DuplicatedCode"})
 public class EnlightenmentCenter extends Robot {
 
     static final RobotType[] spawnableRobot = {
@@ -24,16 +26,14 @@ public class EnlightenmentCenter extends Robot {
     static int threshold = 100;
     static double bidThreshold;
 
-    static ArrayList<String> chanceArr = new ArrayList<String>();;
+    static ArrayList<String> chanceArr = new ArrayList<>();
 
-    static ArrayList<Integer> polIDList = new ArrayList<Integer>();
-    static ArrayList<Integer> slaIDList = new ArrayList<Integer>();
-    static ArrayList<Integer> mucIDList = new ArrayList<Integer>();
+    static ArrayList<Integer> polIDList = new ArrayList<>();
+    static ArrayList<Integer> slaIDList = new ArrayList<>();
+    static ArrayList<Integer> mucIDList = new ArrayList<>();
 
     /**
-     * Returns a random spawnable RobotType
-     *
-     * @return a random RobotType
+     * @return
      */
     static RobotType randomSpawnableRobotType() {
         return spawnableRobot[(int) (Math.random() * spawnableRobot.length)];
@@ -41,6 +41,9 @@ public class EnlightenmentCenter extends Robot {
 
     static RobotType spawnedRobot = randomSpawnableRobotType();
 
+    /**
+     *
+     */
     static void init() {
         if(senseRadius == 0)
         {
@@ -48,12 +51,33 @@ public class EnlightenmentCenter extends Robot {
         }
     }
 
-    static void checkIfExist() {
+    /**
+     * @throws GameActionException
+     */
+    static void checkIfExist() throws GameActionException {
+        Iterator<Integer> itr = slaIDList.iterator();
+        while(itr.hasNext())
+        {
+            int id = itr.next();
+            if(rc.canGetFlag(id))
+            {
+                if(rc.getFlag(id) >= slaThreshold)
+                {
+                    polIDList.add(id);
+                    itr.remove();
+                }
+            }
+        }
         mucIDList.removeIf(nxt -> !rc.canGetFlag(nxt));
         polIDList.removeIf(nxt -> !rc.canGetFlag(nxt));
         slaIDList.removeIf(nxt -> !rc.canGetFlag(nxt));
+        System.out.println("Muc" + mucIDList + "Pol" + polIDList + "Sla" + slaIDList);
     }
 
+    /**
+     * @param thresh
+     * @throws GameActionException
+     */
     static void bidByThreshold(double thresh) throws GameActionException {
         int bid = (int)(rc.getInfluence() * thresh);
         if(bid < 1) bid = 1;
@@ -62,6 +86,15 @@ public class EnlightenmentCenter extends Robot {
         }
     }
 
+    /**
+     * @param mucCha
+     * @param polCha
+     * @param slaCha
+     * @param mucInf
+     * @param polInf
+     * @param slaInf
+     * @throws GameActionException
+     */
     static void spawnRandom (int mucCha, int polCha, int slaCha,
                              int mucInf, int polInf, int slaInf) throws GameActionException {
         chanceArr.clear();
@@ -110,6 +143,9 @@ public class EnlightenmentCenter extends Robot {
         }
     }
 
+    /**
+     * @throws GameActionException
+     */
     static void runEnlightenmentCenter() throws GameActionException {
         checkIfExist();
         bidThreshold = 0.005;

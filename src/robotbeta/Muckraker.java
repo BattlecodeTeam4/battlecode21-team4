@@ -4,8 +4,11 @@ import battlecode.common.GameActionException;
 import battlecode.common.RobotInfo;
 import battlecode.common.Team;
 
+@SuppressWarnings({"JavaDoc", "RedundantThrows", "unused", "UnusedReturnValue", "DuplicatedCode"})
 public class Muckraker extends Robot {
+
     /**
+     * @throws GameActionException
      *
      * Muckraker Flags:
      * 1 - Neutral Enlightenment Centers
@@ -16,30 +19,9 @@ public class Muckraker extends Robot {
      * This will later be expanded to communicate location
      * information via flags.
      *
-     **/
+     */
     static void runMuckraker() throws GameActionException
     {
-        //Direction myDirection = null;
-
-//        // Move closer to robots it detects
-//        for (MapLocation robotLocation : rc.detectNearbyRobots(actionRadius))
-//        {
-//            Direction d = rc.getLocation().directionTo(robotLocation);
-//            if (rc.getLocation().equals(robotLocation)) {
-//                break;
-//            }
-//            for (int i = 0; i < 2; ++i) {
-//                if (rc.isReady()) {
-//                    // If the space I am trying to move to is easily passable
-//                    // then move
-//                    if (rc.canMove(d) && rc.sensePassability(rc.getLocation().add(d)) >= passabilityLimit) {
-//                        rc.move(d);
-//                    } else if (myDirection == null) {
-//                            myDirection = d.rotateRight();
-//                    }
-//                }
-//            }
-//        }
         if(senseRadius == 0)
         {
             updateSenseRadius();
