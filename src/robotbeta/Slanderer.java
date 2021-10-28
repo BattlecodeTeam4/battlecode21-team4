@@ -13,7 +13,7 @@ public class Slanderer extends Robot {
         // checking if Muckraker's found, if found, then move
         for (RobotInfo enemy : rc.senseNearbyRobots(senseRadius, enemy)) {
             if (enemy.getType() == RobotType.MUCKRAKER) {
-                System.out.println("Running Away!");
+                System.out.println("R u n n i n g  A w a y ! ! !");
                 MapLocation enemyLoc = enemy.location;
                 if (enemyLoc.x > rc.getLocation().x) {
                     moveX--;
@@ -29,7 +29,6 @@ public class Slanderer extends Robot {
 
             }
             MapLocation destination = rc.getLocation().translate(moveX, moveY);
-            System.out.println("My next runaway destination is: " + destination);
             Direction direct = rc.getLocation().directionTo(destination);
             tryMove(direct);
             return;

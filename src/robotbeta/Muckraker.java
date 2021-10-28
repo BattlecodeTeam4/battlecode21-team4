@@ -56,45 +56,25 @@ public class Muckraker extends Robot {
             if (robot.type.canBid() && ((robot.getTeam() == enemy) || (robot.getTeam() == Team.NEUTRAL)))
             {
                 sendLocation(robot.getLocation());
-                System.out.println("I found a neutral EC");
             }
         }
 
         // Sense enemy robots
-        for (RobotInfo robot : rc.senseNearbyRobots(actionRadius, enemy))
-        {
-            if (robot.type.canBeExposed())
-            {
+        for (RobotInfo robot : rc.senseNearbyRobots(actionRadius, enemy)) {
+            if (robot.type.canBeExposed()) {
                 // It's a slanderer... go get them!
-                if (rc.canExpose(robot.location))
-                {
-                    System.out.println("e x p o s e d");
-                    rc.expose(robot.location);
+                if (rc.canExpose(robot.getLocation())) {
+                    System.out.println("E x p o s i n g . . .");
+                    rc.expose(robot.getLocation());
+                    System.out.println("E x p o s e d . . .");
                     return;
                 }
-            }
-
-            // It's a politician
-            if (robot.type.canEmpower())
-            {
-                System.out.println("I found a politician");
-            }
-
-            // It's an enlightenment center
-            if (robot.type.canBid())
-            {
-                sendLocation(robot.getLocation());
-                System.out.println("I found an enemy EC");
-            }
-
-            // It's a muckraker
-            if (robot.type.canExpose())
-            {
-                System.out.println("I found a muckraker");
+                else if(rc.isReady())
+                {
+                    moveLocation(robot.getLocation());
+                }
             }
         }
-
-
         // Simple movement and passability check
         if (rc.isReady()) {
             tryMove(randomDirection());
