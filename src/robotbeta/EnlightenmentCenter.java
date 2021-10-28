@@ -54,23 +54,37 @@ public class EnlightenmentCenter extends Robot {
     /**
      * @throws GameActionException
      */
-    static void checkIfExist() throws GameActionException {
-        Iterator<Integer> itr = slaIDList.iterator();
-        while(itr.hasNext())
+    static void checkIfExistMuckraker() throws GameActionException {
+        mucIDList.removeIf(muc -> !rc.canGetFlag(muc));
+    }
+
+    /**
+     * @throws GameActionException
+     */
+    static void checkIfExistPolitician() throws GameActionException {
+        polIDList.removeIf(pol -> !rc.canGetFlag(pol));
+    }
+
+    /**
+     * @throws GameActionException
+     */
+    static void checkIfExistSlanderer() throws GameActionException {
+        Iterator<Integer> sla = slaIDList.iterator();
+        while(sla.hasNext())
         {
-            int id = itr.next();
+            int id = sla.next();
             if(rc.canGetFlag(id))
             {
                 if(rc.getFlag(id) >= slaThreshold)
                 {
                     polIDList.add(id);
-                    itr.remove();
+                    sla.remove();
                 }
             }
+            else if(!rc.canGetFlag(id)){
+                sla.remove();
+            }
         }
-        mucIDList.removeIf(nxt -> !rc.canGetFlag(nxt));
-        polIDList.removeIf(nxt -> !rc.canGetFlag(nxt));
-        slaIDList.removeIf(nxt -> !rc.canGetFlag(nxt));
     }
 
     /**
@@ -148,18 +162,33 @@ public class EnlightenmentCenter extends Robot {
     static void runEnlightenmentCenter() throws GameActionException {
         if(turnCount % 5 == 0)
         {
-            checkIfExist();
+            checkIfExistSlanderer();
+            System.out.println("Slanderer Cleanup!");
+        }
+        if(turnCount % 50 == 0)
+        {
+            checkIfExistPolitician();
+            System.out.println("Politician Cleanup!");
+        }
+        if(turnCount % 100 == 0)
+        {
+            checkIfExistMuckraker();
+            System.out.println("Muckraker Cleanup!");
         }
         bidThreshold = 0.005;
+
         if(turnCount % 50 == 0) {
             rc.setFlag(0);
         }
 
         // Scan for new muckraker flags
         for (int id : mucIDList) {
-            if (rc.getFlag(id) != 0) {
-                rc.setFlag(rc.getFlag(id));
-                break;
+            if(rc.canGetFlag(id))
+            {
+                if (rc.getFlag(id) != 0) {
+                    rc.setFlag(rc.getFlag(id));
+                    break;
+                }
             }
         }
         RobotInfo[] near = rc.senseNearbyRobots(senseRadius, enemy);
