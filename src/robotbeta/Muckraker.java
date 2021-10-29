@@ -33,7 +33,13 @@ public class Muckraker extends Robot {
         }
 
         // Muckraker resets flag if home EC already grabbed its flag
-        if(rc.getFlag(homeID) == rc.getFlag(rc.getID())) {
+        if(rc.canGetFlag(homeID)) {
+            if (rc.getFlag(homeID) == rc.getFlag(rc.getID())) {
+                rc.setFlag(0);
+            }
+        }
+        else {
+            homeID = 0;
             rc.setFlag(0);
         }
 
@@ -48,7 +54,7 @@ public class Muckraker extends Robot {
 
         // Sense enemy robots
         for (RobotInfo robot : rc.senseNearbyRobots(actionRadius, enemy)) {
-            if (robot.type.canBeExposed()) {
+            if (robot.getType().canBeExposed()) {
                 // It's a slanderer... go get them!
                 if (rc.canExpose(robot.getLocation())) {
                     System.out.println("E x p o s i n g . . .");

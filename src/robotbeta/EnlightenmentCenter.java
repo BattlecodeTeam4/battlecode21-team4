@@ -161,23 +161,18 @@ public class EnlightenmentCenter extends Robot {
         if(turnCount % 5 == 0)
         {
             checkIfExistSlanderer();
-            System.out.println("Slanderer Cleanup!");
         }
         if(turnCount % 50 == 0)
         {
             checkIfExistPolitician();
-            System.out.println("Politician Cleanup!");
         }
         if(turnCount % 100 == 0)
         {
             checkIfExistMuckraker();
-            System.out.println("Muckraker Cleanup!");
         }
         bidThreshold = 0.005;
 
-        if(turnCount % 50 == 0) {
-            rc.setFlag(0);
-        }
+        rc.setFlag(0);
 
         // Scan for new muckraker flags
         for (int id : mucIDList) {
@@ -203,7 +198,7 @@ public class EnlightenmentCenter extends Robot {
         }
         if(rc.getInfluence() >= threshold) {
             int influence = (int) (rc.getInfluence() * 0.50);
-            if(rc.getRoundNum() <= 250) spawnRandom(50, 0, 50, mucInfluence, influence, influence);
+            if(rc.getRoundNum() <= 250) spawnRandom(50, 10, 40, mucInfluence, influence, influence);
             else{
                 int muc = mucChance;
                 int pol = polChance;
