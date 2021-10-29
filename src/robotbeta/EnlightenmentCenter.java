@@ -214,6 +214,7 @@ public class EnlightenmentCenter extends Robot {
                 sla -= 20;
             }
             spawnRandom(muc, pol, sla, mucInfluence, influence, influence);
+            if(rc.getRoundNum() >= 750) bidThreshold = 0.05;
             bidByThreshold(bidThreshold);
         }
         bidByThreshold(bidThreshold);

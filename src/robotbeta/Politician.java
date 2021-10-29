@@ -17,14 +17,9 @@ public class Politician extends Robot {
         }
         RobotInfo[] attackable = rc.senseNearbyRobots(actionRadius, enemy);
         RobotInfo[] neutral = rc.senseNearbyRobots(actionRadius, Team.NEUTRAL);
-        if ((attackable.length != 0 || neutral.length != 0) && rc.canEmpower(actionRadius)) {
-            System.out.println("E m p o w e r i n g . . .");
-            rc.empower(actionRadius);
-            System.out.println("E m p o w e r e d . . .");
-            return;
-        }
 
-        if (target != null) {
+        if(target != null)
+        {
             if(rc.canSenseLocation(target))
             {
                 Team curr = rc.senseRobotAtLocation(target).getTeam();
@@ -33,6 +28,24 @@ public class Politician extends Robot {
                     rc.setFlag(0);
                     target = null;
                 }
+            }
+
+            if ((attackable.length != 0 || neutral.length != 0) && rc.canEmpower(actionRadius) && rc.canSenseLocation(target)) {
+                if(rc.senseRobotAtLocation(target).getType() == RobotType.ENLIGHTENMENT_CENTER)
+                {
+                    System.out.println("E m p o w e r i n g . . .");
+                    rc.empower(actionRadius);
+                    System.out.println("E m p o w e r e d . . .");
+                }
+                return;
+            }
+        }
+        else {
+            if ((attackable.length != 0 || neutral.length != 0) && rc.canEmpower(actionRadius)) {
+                System.out.println("E m p o w e r i n g . . .");
+                rc.empower(actionRadius);
+                System.out.println("E m p o w e r e d . . .");
+                return;
             }
         }
 
