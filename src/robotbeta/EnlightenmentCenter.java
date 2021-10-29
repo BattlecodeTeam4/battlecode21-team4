@@ -172,7 +172,10 @@ public class EnlightenmentCenter extends Robot {
         }
         bidThreshold = 0.005;
 
-        rc.setFlag(0);
+        if(turnCount % 5 == 0)
+        {
+            rc.setFlag(0);
+        }
 
         // Scan for new muckraker flags
         for (int id : mucIDList) {
