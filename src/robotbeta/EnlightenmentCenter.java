@@ -217,6 +217,7 @@ public class EnlightenmentCenter extends Robot {
             if(rc.getRoundNum() >= 750) bidThreshold = 0.05;
             bidByThreshold(bidThreshold);
         }
+        if(rc.getRoundNum() >= 750) bidThreshold = 0.05;
         bidByThreshold(bidThreshold);
     }
 }
