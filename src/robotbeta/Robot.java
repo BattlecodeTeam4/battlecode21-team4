@@ -15,6 +15,7 @@ public abstract class Robot extends RobotPlayer {
     static int slaThreshold = 290;
 
     static MapLocation target = null;
+    static Direction strDir = null;
     final static double passAbilityLimit = 0.5;
 
     static final Direction[] directions = {
@@ -129,6 +130,17 @@ public abstract class Robot extends RobotPlayer {
             }
         }
         return false;
+    }
+
+    static void moveStraight() throws GameActionException {
+        if(strDir == null)
+        {
+            strDir = randomDirection();
+        }
+        if (rc.isReady()) {
+            if(!rc.canMove(strDir)) strDir = randomDirection();
+            tryMove(strDir);
+        }
     }
 
     /**

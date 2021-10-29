@@ -1,8 +1,6 @@
 package robotbeta;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 
 import battlecode.common.*;
 
@@ -19,18 +17,18 @@ public class EnlightenmentCenter extends Robot {
     static int slaInfluence = 50;
     static int mucInfluence = 1;
 
-    static int polChance = 20;
+    static int polChance = 30;
     static int slaChance = 50;
-    static int mucChance = 30;
+    static int mucChance = 20;
 
     static int threshold = 100;
     static double bidThreshold;
 
     static ArrayList<String> chanceArr = new ArrayList<>();
 
-    static ArrayList<Integer> polIDList = new ArrayList<>();
-    static ArrayList<Integer> slaIDList = new ArrayList<>();
-    static ArrayList<Integer> mucIDList = new ArrayList<>();
+    static Set<Integer> polIDList = new HashSet<>();
+    static Set<Integer> slaIDList = new HashSet<>();
+    static Set<Integer> mucIDList = new HashSet<>();
 
     /**
      * @return
@@ -196,26 +194,30 @@ public class EnlightenmentCenter extends Robot {
         {
             if(r.getType() == RobotType.ENLIGHTENMENT_CENTER)
             {
-                int muc = 35;
-                int pol = 30;
-                int sla = 35;
+                int muc = 50;
+                int pol = 50;
+                int sla = 0;
                 spawnRandom(muc, pol, sla, mucInfluence, 10, 10);
                 break;
             }
         }
         if(rc.getInfluence() >= threshold) {
             int influence = (int) (rc.getInfluence() * 0.50);
-            int muc = mucChance;
-            int pol = polChance;
-            int sla = slaChance;
-            if(rc.getFlag(rc.getID()) != 0)
-            {
-                pol += 20;
-                sla -= 20;
+            if(rc.getRoundNum() <= 250) spawnRandom(50, 0, 50, mucInfluence, influence, influence);
+            else{
+                int muc = mucChance;
+                int pol = polChance;
+                int sla = slaChance;
+                if(rc.getFlag(rc.getID()) != 0)
+                {
+                    pol += 20;
+                    sla -= 20;
+                }
+                spawnRandom(muc, pol, sla, mucInfluence, influence, influence);
             }
-            spawnRandom(muc, pol, sla, mucInfluence, influence, influence);
             if(rc.getRoundNum() >= 750) bidThreshold = 0.05;
             bidByThreshold(bidThreshold);
+
         }
         if(rc.getRoundNum() >= 750) bidThreshold = 0.05;
         bidByThreshold(bidThreshold);

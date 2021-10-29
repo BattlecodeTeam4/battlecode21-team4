@@ -1,10 +1,11 @@
 package robotbeta;
 
+import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotInfo;
 import battlecode.common.Team;
 
-@SuppressWarnings({"JavaDoc", "RedundantThrows", "unused", "UnusedReturnValue", "DuplicatedCode"})
+@SuppressWarnings({"RedundantThrows", "unused", "UnusedReturnValue", "DuplicatedCode"})
 public class Muckraker extends Robot {
 
     /**
@@ -25,6 +26,10 @@ public class Muckraker extends Robot {
         if(senseRadius == 0)
         {
             updateSenseRadius();
+        }
+        if(actionRadius == 0)
+        {
+            updateActionRadius();
         }
 
         // Muckraker resets flag if home EC already grabbed its flag
@@ -58,8 +63,6 @@ public class Muckraker extends Robot {
             }
         }
         // Simple movement and passability check
-        if (rc.isReady()) {
-            tryMove(randomDirection());
-        }
+        moveStraight();
     }
 }
