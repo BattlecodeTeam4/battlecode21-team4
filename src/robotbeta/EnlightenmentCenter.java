@@ -34,6 +34,8 @@ public class EnlightenmentCenter extends Robot {
     static Set<Integer> slaIDList = new HashSet<>();
     static Set<Integer> mucIDList = new HashSet<>();
 
+    static LinkedList<Integer> targetList = new LinkedList<>();
+
     /**
      * @return
      */
@@ -183,21 +185,39 @@ public class EnlightenmentCenter extends Robot {
         }
         bidThreshold = 0.005;
 
-        if(turnCount % 5 == 0)
-        {
-            rc.setFlag(0);
-        }
-
         // Scan for new muckraker flags
-        for (int id : mucIDList) {
+        // and add to target list if new
+        for (int id : mucIDList)
+        {
             if(rc.canGetFlag(id))
             {
-                if (rc.getFlag(id) != 0) {
-                    rc.setFlag(rc.getFlag(id));
-                    break;
+                int newTarget = rc.getFlag(id);
+                if (newTarget != 0 && !targetList.contains(newTarget))
+                {
+                    targetList.addLast(newTarget);
                 }
             }
         }
+
+        // Scan for new politicians flags
+        // and remove from target list if match exists
+        for (int id : polIDList) {
+            if(rc.canGetFlag(id)) {
+                int oldTarget = rc.getFlag(id);
+                if (oldTarget != 0 && targetList.contains(oldTarget)) {
+                    targetList.removeFirstOccurrence(oldTarget);
+                }
+            }
+        }
+
+        // Set flag to first target in targetList
+        if (!targetList.isEmpty())
+        {
+            rc.setFlag(targetList.getFirst());
+        } else {
+            rc.setFlag(0);
+        }
+
 
         MapLocation attackEC = null;
         RobotInfo[] near = rc.senseNearbyRobots(senseRadius, enemy);
