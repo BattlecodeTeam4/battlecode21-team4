@@ -209,6 +209,7 @@ public class EnlightenmentCenter extends Robot {
                 }
             }
         }
+        System.out.println("target: " + targetList);
 
         // Set flag to first target in targetList
         if (!targetList.isEmpty())

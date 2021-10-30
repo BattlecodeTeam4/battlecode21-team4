@@ -11,6 +11,13 @@ public class Politician extends Robot {
      * @throws GameActionException
      */
     static void runPolitician() throws GameActionException {
+        if(target == null && rc.canGetFlag(rc.getID()))
+        {
+            if(rc.getFlag(rc.getID()) != 0)
+            {
+                rc.setFlag(0);
+            }
+        }
         if(actionRadius == 0)
         {
             updateActionRadius();
@@ -53,14 +60,6 @@ public class Politician extends Robot {
             rc.empower(actionRadius);
             System.out.println("E m p o w e r e d . . .");
             return;
-        }
-
-        if(target == null && rc.canGetFlag(rc.getID()))
-        {
-            if(rc.getFlag(rc.getID()) == 0)
-            {
-                rc.setFlag(0);
-            }
         }
 
         if(rc.getFlag(rc.getID()) == 0)
