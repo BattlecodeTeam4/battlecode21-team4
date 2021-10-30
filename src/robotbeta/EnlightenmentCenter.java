@@ -198,23 +198,41 @@ public class EnlightenmentCenter extends Robot {
                 }
             }
         }
+
+        MapLocation attackEC = null;
         RobotInfo[] near = rc.senseNearbyRobots(senseRadius, enemy);
         for(RobotInfo r : near)
         {
-            int goForKill = r.getInfluence();
-            int muc = 50;
-            int pol = 50;
-            int sla = 0;
-            int polInf = 10;
-            if(rc.getInfluence() >= (r.getInfluence() + 50))
+            if(r.getType() == RobotType.ENLIGHTENMENT_CENTER)
             {
-                polInf = (r.getInfluence() + 25);
+                attackEC = r.getLocation();
+                int goForKill = r.getInfluence();
+                int muc = 50;
+                int pol = 50;
+                int sla = 0;
+                int polInf = 10;
+                if(rc.getInfluence() >= (r.getInfluence() + 50))
+                {
+                    polInf = (r.getInfluence() + 25);
+                    pol = 100;
+                    muc = 0;
+                }
+                spawnRandom(muc, pol, sla, mucInfluence, polInf, 10);
+                break;
             }
-            if(r.getType() == RobotType.ENLIGHTENMENT_CENTER) sendLocation(r.getLocation());
-            spawnRandom(muc, pol, sla, mucInfluence, polInf, 10);
-            break;
         }
-        if(rc.getInfluence() >= threshold && near.length == 0) {
+
+        boolean ourTeam = true;
+        if(attackEC != null)
+        {
+            if(rc.canSenseLocation(attackEC))
+            {
+                if(rc.getTeam() != rc.senseRobotAtLocation(attackEC).getTeam())
+                    ourTeam = false;
+            }
+        }
+
+        if(rc.getInfluence() >= threshold && ourTeam) {
             int influence = (int) (rc.getInfluence() * 0.50);
             if(rc.getRoundNum() <= 250) spawnRandom(50, 10, 40, mucInfluence, influence, influence);
             else{
