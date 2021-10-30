@@ -15,6 +15,10 @@ public class Politician extends Robot {
         {
             updateActionRadius();
         }
+        if(senseRadius == 0)
+        {
+            updateSenseRadius();
+        }
         RobotInfo[] attackable = rc.senseNearbyRobots(actionRadius, enemy);
         RobotInfo[] neutral = rc.senseNearbyRobots(actionRadius, Team.NEUTRAL);
 
@@ -22,31 +26,33 @@ public class Politician extends Robot {
         {
             if(rc.canSenseLocation(target))
             {
-                Team curr = rc.senseRobotAtLocation(target).getTeam();
-                RobotType currType = rc.senseRobotAtLocation(target).getType();
-                if(curr == rc.getTeam() && currType == RobotType.ENLIGHTENMENT_CENTER){
+                RobotInfo robotTarget = rc.senseRobotAtLocation(target);
+                if(robotTarget.getTeam() == rc.getTeam() && robotTarget.getType() == RobotType.ENLIGHTENMENT_CENTER){
                     rc.setFlag(0);
                     target = null;
                 }
-            }
-
-            if ((attackable.length != 0 || neutral.length != 0) && rc.canEmpower(actionRadius) && rc.canSenseLocation(target)) {
-                if(rc.senseRobotAtLocation(target).getType() == RobotType.ENLIGHTENMENT_CENTER)
+                else if(robotTarget.getType() == RobotType.ENLIGHTENMENT_CENTER)
                 {
-                    System.out.println("E m p o w e r i n g . . .");
-                    rc.empower(actionRadius);
-                    System.out.println("E m p o w e r e d . . .");
+                    if ((attackable.length != 0 || neutral.length != 0) && rc.canEmpower(actionRadius))
+                    {
+                        System.out.println("E m p o w e r i n g . . .");
+                        rc.empower(actionRadius);
+                        System.out.println("E m p o w e r e d . . .");
+                        return;
+                    }
+                    else
+                    {
+                        System.out.println("A p p r o a c h i n g   T a r g e t . . .");
+                    }
                 }
-                return;
             }
         }
-        else {
-            if ((attackable.length != 0 || neutral.length != 0) && rc.canEmpower(actionRadius)) {
-                System.out.println("E m p o w e r i n g . . .");
-                rc.empower(actionRadius);
-                System.out.println("E m p o w e r e d . . .");
-                return;
-            }
+
+        else if ((attackable.length != 0 || neutral.length != 0) && rc.canEmpower(actionRadius)) {
+            System.out.println("E m p o w e r i n g . . .");
+            rc.empower(actionRadius);
+            System.out.println("E m p o w e r e d . . .");
+            return;
         }
 
         if(target == null && rc.canGetFlag(rc.getID()))

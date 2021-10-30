@@ -24,6 +24,10 @@ public class EnlightenmentCenter extends Robot {
     static int threshold = 100;
     static double bidThreshold;
 
+    static int currPolChance = 0;
+    static int currSlaChance = 0;
+    static int currMucChance = 0;
+
     static ArrayList<String> chanceArr = new ArrayList<>();
 
     static Set<Integer> polIDList = new HashSet<>();
@@ -108,19 +112,26 @@ public class EnlightenmentCenter extends Robot {
      */
     static void spawnRandom (int mucCha, int polCha, int slaCha,
                              int mucInf, int polInf, int slaInf) throws GameActionException {
-        chanceArr.clear();
-        if((mucCha + polCha + slaCha) < 100) {
-            System.out.println("Expected Spawn Percentages totaling 100%!");
-            return;
-        }
-        for(int c = 1; c <= mucCha; c++) {
-            chanceArr.add("muc");
-        }
-        for(int a = 1; a <= polCha; a++) {
-            chanceArr.add("pol");
-        }
-        for(int b = 1; b <= slaCha; b++) {
-            chanceArr.add("sla");
+        if(mucCha != currMucChance || polCha != currPolChance || slaCha != currSlaChance)
+        {
+            chanceArr.clear();
+            if((mucCha + polCha + slaCha) < 100) {
+                System.out.println("Expected Spawn Percentages totaling 100%!");
+                return;
+            }
+            for(int c = 1; c <= mucCha; c++) {
+                chanceArr.add("muc");
+            }
+            for(int a = 1; a <= polCha; a++) {
+                chanceArr.add("pol");
+            }
+            for(int b = 1; b <= slaCha; b++) {
+                chanceArr.add("sla");
+            }
+            currMucChance = mucCha;
+            currPolChance = polCha;
+            currSlaChance = slaCha;
+            System.out.println("M: " + currMucChance + " P: " + currPolChance + " S: " + currSlaChance);
         }
 
         int a = (int) (Math.random() * 100);
@@ -190,16 +201,20 @@ public class EnlightenmentCenter extends Robot {
         RobotInfo[] near = rc.senseNearbyRobots(senseRadius, enemy);
         for(RobotInfo r : near)
         {
-            if(r.getType() == RobotType.ENLIGHTENMENT_CENTER)
+            int goForKill = r.getInfluence();
+            int muc = 50;
+            int pol = 50;
+            int sla = 0;
+            int polInf = 10;
+            if(rc.getInfluence() >= (r.getInfluence() + 50))
             {
-                int muc = 50;
-                int pol = 50;
-                int sla = 0;
-                spawnRandom(muc, pol, sla, mucInfluence, 10, 10);
-                break;
+                polInf = (r.getInfluence() + 25);
             }
+            if(r.getType() == RobotType.ENLIGHTENMENT_CENTER) sendLocation(r.getLocation());
+            spawnRandom(muc, pol, sla, mucInfluence, polInf, 10);
+            break;
         }
-        if(rc.getInfluence() >= threshold) {
+        if(rc.getInfluence() >= threshold && near.length == 0) {
             int influence = (int) (rc.getInfluence() * 0.50);
             if(rc.getRoundNum() <= 250) spawnRandom(50, 10, 40, mucInfluence, influence, influence);
             else{
