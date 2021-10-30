@@ -28,7 +28,7 @@ public class Politician extends Robot {
             {
                 RobotInfo robotTarget = rc.senseRobotAtLocation(target);
                 if(robotTarget.getTeam() == rc.getTeam() && robotTarget.getType() == RobotType.ENLIGHTENMENT_CENTER){
-                    rc.setFlag(0);
+                    sendLocation(target);
                     target = null;
                 }
                 else if(robotTarget.getType() == RobotType.ENLIGHTENMENT_CENTER)
@@ -57,7 +57,7 @@ public class Politician extends Robot {
 
         if(target == null && rc.canGetFlag(rc.getID()))
         {
-            if(rc.getFlag(rc.getID()) != 0)
+            if(rc.getFlag(rc.getID()) == 0)
             {
                 rc.setFlag(0);
             }
@@ -67,8 +67,7 @@ public class Politician extends Robot {
         {
             if(rc.canGetFlag(homeID)){
                 if(rc.getFlag(homeID) != 0) {
-                    rc.setFlag(rc.getFlag(homeID));
-                    target = getLocationFromFlag(rc.getFlag(rc.getID()));
+                    target = getLocationFromFlag(rc.getFlag(homeID));
                 }
             }
         }
