@@ -1,31 +1,40 @@
 package robotbeta;
 
-import battlecode.common.Direction;
-import battlecode.common.GameActionException;
+import battlecode.common.*;
+import org.junit.Assert;
 import org.junit.Test;
-
-import static junit.framework.TestCase.assertEquals;
+import org.mockito.*;
 import static org.mockito.Mockito.*;
-import static robotbeta.Robot.randomDirection;
 
 public class RobotTest {
+    @Mock
+    RobotController mockRC = mock(RobotController.class);
+    MapLocation flag = new MapLocation(100, 100);
 
     @Test
-    public void tryMovetest() throws GameActionException {
-        Robot robot = mock(Robot.class);
-        final Direction[] directions = {
-                Direction.NORTH,
-                Direction.NORTHEAST,
-                Direction.EAST,
-                Direction.SOUTHEAST,
-                Direction.SOUTH,
-                Direction.SOUTHWEST,
-                Direction.WEST,
-                Direction.NORTHWEST,
-        };
-        Direction dir = randomDirection();
-        doNothing().when(robot).tryMove(dir);
-        doReturn(false).when(robot).tryMove(dir);
-        assertEquals(false, robot.tryMove(dir));
+    public void tryMoveTest() throws GameActionException {
+
+    }
+
+    @Test
+    public void sendLocationTest() throws GameActionException {
+        when(mockRC.canSetFlag(12900)).thenReturn(true);
+        Robot.rc = mockRC;
+
+        Robot.sendLocation(flag);
+    }
+    @Test
+    public void getLocationFromFlagTest() throws GameActionException {
+        //Since RC is fake we have to define variables returned from method!
+        when(mockRC.canSetFlag(12900)).thenReturn(true);
+        when(mockRC.getLocation()).thenReturn(new MapLocation(100, 100));
+
+        //Have to set variable in Robot to mockRC otherwise nullptr!
+        Robot.rc = mockRC;
+
+        MapLocation result = Robot.getLocationFromFlag(12900);
+
+        //12900 is flag for MapLocation(100, 100)!
+        Assert.assertEquals(flag, result);
     }
 }

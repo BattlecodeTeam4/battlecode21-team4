@@ -1,19 +1,20 @@
 package robotbeta;
 
-import battlecode.common.GameActionException;
+import battlecode.common.*;
+import org.junit.Assert;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.anyDouble;
+import org.mockito.*;
 import static org.mockito.Mockito.*;
 
 public class EnlightenmentCenterTest {
+    @Mock
+    RobotController mockRC = mock(RobotController.class);
 
     @Test
-    public void checkIfExistMuckraker() throws GameActionException {
-        EnlightenmentCenter ec = mock(EnlightenmentCenter.class);
-        doNothing().when(ec).checkIfExistSlanderer();
-        ec.checkIfExistSlanderer();
-        verify(ec, times(1)).checkIfExistSlanderer();
+    public void sendLocationTest() throws GameActionException {
+        when(mockRC.canSetFlag(12900)).thenReturn(true);
+        MapLocation flag = new MapLocation(100, 100);
+        Robot.rc = mockRC;
+        Robot.sendLocation(flag);
     }
 }

@@ -8,7 +8,7 @@ public abstract class Robot extends RobotPlayer {
     static MapLocation homeLoc;
     static int homeID;
 
-    static Team enemy = rc.getTeam().opponent();
+    static Team enemy = null;
     static int actionRadius = 0;
     static int senseRadius = 0;
 
@@ -47,6 +47,7 @@ public abstract class Robot extends RobotPlayer {
      * @throws GameActionException
      */
     static void init() throws GameActionException {
+        enemy = rc.getTeam().opponent();
         findHome();
     }
 

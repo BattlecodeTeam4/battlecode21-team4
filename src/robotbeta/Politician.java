@@ -10,6 +10,7 @@ public class Politician extends Robot {
     /**
      * @throws GameActionException
      */
+
     static void runPolitician() throws GameActionException {
         if(target == null && rc.canGetFlag(rc.getID()))
         {
