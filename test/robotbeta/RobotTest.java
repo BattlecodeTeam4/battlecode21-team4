@@ -3,7 +3,8 @@ package robotbeta;
 import battlecode.common.*;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.*;
+import org.mockito.Mock;
+
 import static org.mockito.Mockito.*;
 
 public class RobotTest {
@@ -39,5 +40,21 @@ public class RobotTest {
         int actionRadius = 0;
         when(mockRC.getType()).thenReturn(RobotType.POLITICIAN);
         Robot.updateActionRadius();
+        verify(mockRC, times(1)).getType();
+    }
+
+   @Test
+    public void randomDirection() {
+        Robot.rc = mockRC;
+        Direction dir = Robot.randomDirection();
+        Assert.assertNotEquals(dir, Direction.CENTER);
+    }
+
+    @Test
+    public void tryMove() throws GameActionException {
+        Robot.rc = mockRC;
+        when(mockRC.canMove(any())).thenReturn(false);
+        verify(mockRC, times(0)).move(Direction.EAST);
+        Assert.assertEquals(Robot.tryMove(Direction.EAST), false);
     }
 }
