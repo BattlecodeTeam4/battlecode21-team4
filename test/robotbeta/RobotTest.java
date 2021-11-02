@@ -57,4 +57,12 @@ public class RobotTest {
         verify(mockRC, times(0)).move(Direction.EAST);
         Assert.assertEquals(Robot.tryMove(Direction.EAST), false);
     }
+
+    @Test
+    public void pathfindingTest() throws GameActionException {
+        Robot.rc = mockRC;
+        when(mockRC.canMove(any())).thenReturn(false);
+        verify(mockRC, times(0)).move(Direction.EAST);
+        Assert.assertEquals(Robot.pathfinding(Direction.EAST), false);
+    }
 }
