@@ -35,7 +35,7 @@ public class RobotTest {
     }
 
     @Test
-    public void updateActionRadius() {
+    public void updateActionRadiusTest() {
         Robot.rc = mockRC;
         int actionRadius = 0;
         when(mockRC.getType()).thenReturn(RobotType.POLITICIAN);
@@ -44,18 +44,18 @@ public class RobotTest {
     }
 
    @Test
-    public void randomDirection() {
+    public void randomDirectionTest() {
         Robot.rc = mockRC;
         Direction dir = Robot.randomDirection();
         Assert.assertNotEquals(dir, Direction.CENTER);
     }
 
     @Test
-    public void tryMove() throws GameActionException {
+    public void tryMoveTest() throws GameActionException {
         Robot.rc = mockRC;
         when(mockRC.canMove(any())).thenReturn(false);
         verify(mockRC, times(0)).move(Direction.EAST);
-        Assert.assertEquals(Robot.tryMove(Direction.EAST), false);
+        Assert.assertFalse(Robot.tryMove(Direction.EAST));
     }
 
     @Test
@@ -63,6 +63,6 @@ public class RobotTest {
         Robot.rc = mockRC;
         when(mockRC.canMove(any())).thenReturn(false);
         verify(mockRC, times(0)).move(Direction.EAST);
-        Assert.assertEquals(Robot.pathfinding(Direction.EAST), false);
+        Assert.assertFalse(Robot.pathfinding(Direction.EAST));
     }
 }

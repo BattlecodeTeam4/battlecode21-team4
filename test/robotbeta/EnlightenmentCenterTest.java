@@ -1,9 +1,6 @@
 package robotbeta;
 
-import battlecode.common.GameActionException;
-import battlecode.common.MapLocation;
-import battlecode.common.RobotController;
-import battlecode.common.RobotType;
+import battlecode.common.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -32,7 +29,7 @@ public class EnlightenmentCenterTest {
     @Test
     public void bidByThreshold() throws GameActionException {
         when(mockRC.getInfluence()).thenReturn(10);
-        when (mockRC.canBid(anyInt())).thenReturn(false);
+        when(mockRC.canBid(anyInt())).thenReturn(false);
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.bidByThreshold(100);
         verify(mockRC, times(1)).canBid(anyInt());
