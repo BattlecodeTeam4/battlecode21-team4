@@ -12,16 +12,11 @@ public class RobotTest {
     MapLocation flag = new MapLocation(100, 100);
 
     @Test
-    public void tryMoveTest() throws GameActionException {
-
-    }
-
-    @Test
     public void sendLocationTest() throws GameActionException {
         when(mockRC.canSetFlag(12900)).thenReturn(true);
         Robot.rc = mockRC;
-
         Robot.sendLocation(flag);
+        verify(mockRC, times(1)).canSetFlag(anyInt());
     }
     @Test
     public void getLocationFromFlagTest() throws GameActionException {
@@ -36,5 +31,13 @@ public class RobotTest {
 
         //12900 is flag for MapLocation(100, 100)!
         Assert.assertEquals(flag, result);
+    }
+
+    @Test
+    public void updateActionRadius() {
+        Robot.rc = mockRC;
+        int actionRadius = 0;
+        when(mockRC.getType()).thenReturn(RobotType.POLITICIAN);
+        Robot.updateActionRadius();
     }
 }

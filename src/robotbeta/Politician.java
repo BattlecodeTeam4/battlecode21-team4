@@ -56,11 +56,13 @@ public class Politician extends Robot {
             }
         }
 
-        else if ((attackable.length != 0 || neutral.length != 0) && rc.canEmpower(actionRadius)) {
-            System.out.println("E m p o w e r i n g . . .");
-            rc.empower(actionRadius);
-            System.out.println("E m p o w e r e d . . .");
-            return;
+        else if (rc.canEmpower(actionRadius)) {
+                if ((attackable.length != 0 || neutral.length != 0)) {
+                    System.out.println("E m p o w e r i n g . . .");
+                    rc.empower(actionRadius);
+                    System.out.println("E m p o w e r e d . . .");
+                    return;
+                }
         }
 
         if(rc.getFlag(rc.getID()) == 0)
