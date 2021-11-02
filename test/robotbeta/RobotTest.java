@@ -4,16 +4,34 @@ import battlecode.common.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.*;
+
+import java.util.Map;
+
 import static org.mockito.Mockito.*;
 
 public class RobotTest {
     @Mock
     RobotController mockRC = mock(RobotController.class);
     MapLocation flag = new MapLocation(100, 100);
+    MapLocation dummy = new MapLocation(0, 1);
+    RobotInfo info = new RobotInfo(69,Team.B,RobotType.SLANDERER,1,1,dummy);
+    RobotInfo[] infoArr = new RobotInfo[1];
 
     @Test
-    public void tryMoveTest() throws GameActionException {
-
+    public void tryMuckraker() throws GameActionException {
+        infoArr[0] = info;
+        Muckraker.rc = mockRC;
+        Muckraker.turnCount = 0;
+        Muckraker.homeID = 0;
+        Muckraker.senseRadius = 30;
+        Muckraker.actionRadius = 12;
+        Muckraker.enemy = Team.B;
+        Muckraker.homeLoc = new MapLocation(0, 0);
+        when(Muckraker.rc.getType()).thenReturn(RobotType.MUCKRAKER);
+        when(Muckraker.rc.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(infoArr);
+        when(Muckraker.rc.senseNearbyRobots(Muckraker.actionRadius, Muckraker.enemy)).thenReturn(infoArr);
+        System.out.println(Muckraker.rc.getType());
+        Muckraker.runMuckraker();
     }
 
     @Test
