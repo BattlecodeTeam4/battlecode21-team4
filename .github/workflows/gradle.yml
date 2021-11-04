@@ -27,3 +27,5 @@ jobs:
     - name: JUnit Report Action
       uses: mikepenz/action-junit-report@v2.6.0
       if: always()
+      with:
+          report_paths: '**/build/test-results/test/TEST-*.xml'
