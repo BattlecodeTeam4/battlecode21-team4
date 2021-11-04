@@ -25,5 +25,5 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
     - name: JUnit Report Action
-    - uses: mikepenz/action-junit-report@v2.6.0
-    if: always()
+      uses: mikepenz/action-junit-report@v2.6.0
+      if: always()
