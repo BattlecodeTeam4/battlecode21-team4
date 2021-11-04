@@ -66,6 +66,7 @@ public class Politician extends Robot {
      * @throws GameActionException
      */
     static void runPolitician() throws GameActionException {
+        resetIfTargetNullAndFlagNotZero();
         updateTarget();
         targetActions();
         moveLocation(target);
