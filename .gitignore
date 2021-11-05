@@ -21,7 +21,7 @@ src/lectureplayer
 *.ipr
 *.iws
 /.idea/
-
+*.zip
 
 # User-specific stuff:
 battlecode-scaffold.iws
@@ -31,9 +31,5 @@ battlecode-scaffold.iws
 .project
 .settings/
 
-access.txt
-*.zip
-*.zip
-*.zip
-src/robotbeta.zip
-src/robotbeta.zip
+
+
