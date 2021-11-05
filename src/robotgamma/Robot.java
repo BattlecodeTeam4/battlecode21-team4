@@ -16,8 +16,10 @@ public abstract class Robot extends RobotPlayer {
             Direction.WEST,
             Direction.NORTHWEST,
     };
+
     static MapLocation homeLoc;
     static int homeID;
+
     static Team enemy = null;
     static int actionRadius = 0;
     static int senseRadius = 0;
@@ -25,6 +27,10 @@ public abstract class Robot extends RobotPlayer {
     static int slaThreshold = 290;
     static MapLocation target = null;
     static Direction strDir = null;
+    static int influence = 0;
+    static int currRound = 0;
+    static int curr = 0;
+    static int conviction = 0;
 
     /**
      * @return
@@ -57,8 +63,10 @@ public abstract class Robot extends RobotPlayer {
         if (detectRadius == 0) updateDetectRadius();
         if (enemy == null) enemy = rc.getTeam().opponent();
         if (homeLoc == null) findHome();
-        if (!rc.canGetFlag(homeID)) homeID = 0;
-        homeLoc = null;
+        if (!rc.canGetFlag(homeID)) homeID = 0; homeLoc = null;
+        influence = rc.getInfluence();
+        currRound = rc.getRoundNum();
+        conviction = rc.getConviction();
     }
 
     /**

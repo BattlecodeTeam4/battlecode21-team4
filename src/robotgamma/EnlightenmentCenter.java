@@ -18,6 +18,7 @@ public class EnlightenmentCenter extends Robot {
 
     static int threshold = 100;
     static double bidThreshold = 0.005;
+    static int defaultInfGive = 0;
 
     static int currPolChance = 0;
     static int currSlaChance = 0;
@@ -52,6 +53,11 @@ public class EnlightenmentCenter extends Robot {
         if (mucIDList == null) mucIDList = new HashSet<>();
         if (chanceArr == null) chanceArr = new ArrayList<>();
         if (targetList == null) targetList = new LinkedList<>();
+        bidThreshold = 0.005;
+        influence = rc.getInfluence();
+        defaultInfGive = (int) (influence * 0.50);
+        currRound = rc.getRoundNum();
+        conviction = rc.getConviction();
     }
 
     /**
@@ -135,26 +141,37 @@ public class EnlightenmentCenter extends Robot {
         } else if (Objects.equals(chanceArr.get(a), "muc")) {
             spawnedRobot = RobotType.MUCKRAKER;
         }
-        Direction dir = randomDirection();
-        switch (Objects.requireNonNull(spawnedRobot)) {
-            case MUCKRAKER:
-                if (rc.canBuildRobot(RobotType.MUCKRAKER, dir, mucInf)) {
-                    rc.buildRobot(RobotType.MUCKRAKER, dir, mucInf);
-                    mucIDList.add(rc.senseRobotAtLocation(rc.adjacentLocation(dir)).getID());
-                }
+        Direction dir = null;
+        for(Direction findspot : directions)
+        {
+            if(rc.canBuildRobot(spawnedRobot, findspot, 1))
+            {
+                dir = findspot;
                 break;
-            case POLITICIAN:
-                if (rc.canBuildRobot(RobotType.POLITICIAN, dir, polInf)) {
-                    rc.buildRobot(RobotType.POLITICIAN, dir, polInf);
-                    polIDList.add(rc.senseRobotAtLocation(rc.adjacentLocation(dir)).getID());
-                }
-                break;
-            case SLANDERER:
-                if (rc.canBuildRobot(RobotType.SLANDERER, dir, slaInf)) {
-                    rc.buildRobot(RobotType.SLANDERER, dir, slaInf);
-                    slaIDList.add(rc.senseRobotAtLocation(rc.adjacentLocation(dir)).getID());
-                }
-                break;
+            }
+        }
+        if(dir != null)
+        {
+            switch (Objects.requireNonNull(spawnedRobot)) {
+                case MUCKRAKER:
+                    if (rc.canBuildRobot(RobotType.MUCKRAKER, dir, mucInf)) {
+                        rc.buildRobot(RobotType.MUCKRAKER, dir, mucInf);
+                        mucIDList.add(rc.senseRobotAtLocation(rc.adjacentLocation(dir)).getID());
+                    }
+                    break;
+                case POLITICIAN:
+                    if (rc.canBuildRobot(RobotType.POLITICIAN, dir, polInf)) {
+                        rc.buildRobot(RobotType.POLITICIAN, dir, polInf);
+                        polIDList.add(rc.senseRobotAtLocation(rc.adjacentLocation(dir)).getID());
+                    }
+                    break;
+                case SLANDERER:
+                    if (rc.canBuildRobot(RobotType.SLANDERER, dir, slaInf)) {
+                        rc.buildRobot(RobotType.SLANDERER, dir, slaInf);
+                        slaIDList.add(rc.senseRobotAtLocation(rc.adjacentLocation(dir)).getID());
+                    }
+                    break;
+            }
         }
         return spawnedRobot;
     }
@@ -206,40 +223,20 @@ public class EnlightenmentCenter extends Robot {
         }
     }
 
-
     /**
      * @return boolean
      * @throws GameActionException
      */
-    static boolean senseNearEC() throws GameActionException {
-        MapLocation attackEC = null;
+    static int senseNearEC() throws GameActionException {
+        int enemyInf = 0;
         RobotInfo[] near = rc.senseNearbyRobots(senseRadius, enemy);
         for (RobotInfo r : near) {
             if (r.getType() == RobotType.ENLIGHTENMENT_CENTER) {
-                attackEC = r.getLocation();
-                int goForKill = r.getInfluence();
-                int muc = 50;
-                int pol = 50;
-                int sla = 0;
-                int polInf = 10;
-                if (rc.getInfluence() >= (r.getInfluence() + 50)) {
-                    polInf = (r.getInfluence() + 25);
-                    pol = 100;
-                    muc = 0;
-                }
-                spawnRandom(muc, pol, sla, mucInfluence, polInf, 10);
+                enemyInf = r.getInfluence();
                 break;
             }
         }
-
-        boolean ourTeam = true;
-        if (attackEC != null) {
-            if (rc.canSenseLocation(attackEC)) {
-                if (rc.getTeam() != rc.senseRobotAtLocation(attackEC).getTeam())
-                    ourTeam = false;
-            }
-        }
-        return ourTeam;
+        return enemyInf;
     }
 
     /**
@@ -248,7 +245,7 @@ public class EnlightenmentCenter extends Robot {
      * @throws GameActionException
      */
     static boolean bidByThreshold(double thresh) throws GameActionException {
-        int bid = (int) (rc.getInfluence() * thresh);
+        int bid = (int) (influence * thresh);
         if (bid < 1) bid = 1;
         if (rc.canBid(bid)) {
             rc.bid(bid);
@@ -260,32 +257,73 @@ public class EnlightenmentCenter extends Robot {
     /**
      * @throws GameActionException
      */
-    static void runEnlightenmentCenter() throws GameActionException {
+    static void cleanData() throws GameActionException {
         if (turnCount % 5 == 0) checkIfExistSlanderer();
         if (turnCount % 50 == 0) checkIfExistPolitician();
         if (turnCount % 100 == 0) checkIfExistMuckraker();
+    }
 
+    static void setupProfile() throws GameActionException {
+        if (influence >= threshold) {
+            spawnRandom(50, 10, 40, mucInfluence, defaultInfGive, defaultInfGive);
+        }
+    }
+
+    static void nearbyEnemyECProfile(int enemyInfluence) throws GameActionException {
+        int muc = 50;
+        int pol = 50;
+        int sla = 0;
+        int polInf = 10;
+        if (influence >= (enemyInfluence + 50)) {
+            polInf = (enemyInfluence + 25);
+            pol = 100;
+            muc = 0;
+        }
+        spawnRandom(muc, pol, sla, mucInfluence, polInf, slaInfluence);
+    }
+
+    static void defaultProfile() throws GameActionException {
+        if (influence >= threshold)
+        {
+            int muc = mucChance;
+            int pol = polChance;
+            int sla = slaChance;
+            if (rc.getFlag(rc.getID()) != 0) {
+                pol += 20;
+                sla -= 20;
+            }
+            spawnRandom(muc, pol, sla, mucInfluence, defaultInfGive, defaultInfGive);
+        }
+    }
+
+    /**
+     * @throws GameActionException
+     */
+    static void runEnlightenmentCenter() throws GameActionException {
+
+        cleanData();
         mucScan();
         polScan();
 
         setFlagFromTargetList();
 
-        boolean ourTeam = senseNearEC();
+        int nearbyEnemyEC = senseNearEC();
 
-        if (rc.getInfluence() >= threshold && ourTeam) {
-            int influence = (int) (rc.getInfluence() * 0.50);
-            if (rc.getRoundNum() <= 250) spawnRandom(50, 10, 40, mucInfluence, influence, influence);
-            else {
-                int muc = mucChance;
-                int pol = polChance;
-                int sla = slaChance;
-                if (rc.getFlag(rc.getID()) != 0) {
-                    pol += 20;
-                    sla -= 20;
-                }
-                spawnRandom(muc, pol, sla, mucInfluence, influence, influence);
-            }
+        if(nearbyEnemyEC > 0)
+        {
+            System.out.println("Enemy EC");
+            nearbyEnemyECProfile(nearbyEnemyEC);
         }
+        else if(nearbyEnemyEC == 0 && currRound <= 250)
+        {
+            System.out.println("Setup");
+            setupProfile();
+        }
+        else if(nearbyEnemyEC == 0 && (currRound > 250 && currRound <= 1500)){
+            System.out.println("Default");
+            defaultProfile();
+        }
+
         if (rc.getRoundNum() >= 750) bidThreshold = 0.05;
         bidByThreshold(bidThreshold);
     }
