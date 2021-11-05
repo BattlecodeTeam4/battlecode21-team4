@@ -22,15 +22,10 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
-  reports:
-      runs-on: ubuntu-latest
-      steps:
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build with Gradle
-        run: ./gradlew build
-      - name: JUnit Report Action
-        uses: mikepenz/action-junit-report@v2.6.0
-        if: always()
-        with:
-            report_paths: '**/build/test-results/test/TEST-*.xml'
+    - name: JUnit Report Action
+      uses: mikepenz/action-junit-report@v2.6.0
+      if: always()
+      with:
+          report_paths: '**/build/test-results/test/TEST-*.xml'
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
