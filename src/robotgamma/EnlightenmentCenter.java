@@ -143,13 +143,7 @@ public class EnlightenmentCenter extends Robot {
         } else if (Objects.equals(chanceArr.get(a), "muc")) {
             spawnedRobot = RobotType.MUCKRAKER;
         }
-        Direction dir = null;
-        for (Direction findSpot : directions) {
-            if (rc.canBuildRobot(spawnedRobot, findSpot, 1)) {
-                dir = findSpot;
-                break;
-            }
-        }
+        Direction dir = randomDirection();
         if (dir != null) {
             switch (Objects.requireNonNull(spawnedRobot)) {
                 case MUCKRAKER:
@@ -268,7 +262,7 @@ public class EnlightenmentCenter extends Robot {
 
     public static void setupProfile() throws GameActionException {
         if (influence >= threshold) {
-            spawnRandom(50, 10, 40, mucInfluence, defaultInfGive, defaultInfGive);
+            spawnRandom(40, 10, 50, mucInfluence, defaultInfGive, defaultInfGive);
         }
     }
 
