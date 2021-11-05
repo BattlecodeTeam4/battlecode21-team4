@@ -14,9 +14,9 @@ public class EnlightenmentCenterTest {
 
     @Test
     public void sendLocationTest() throws GameActionException {
-        when(mockRC.canSetFlag(12900)).thenReturn(true);
+        //when(mockRC.canSetFlag(12900)).thenReturn(true);
         MapLocation flag = new MapLocation(100, 100);
-        Robot.rc = mockR;
+        Robot.rc = mockRC;
         Robot.sendLocation(flag);
     }
 
