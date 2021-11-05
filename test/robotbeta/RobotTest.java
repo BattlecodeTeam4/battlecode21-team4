@@ -38,7 +38,7 @@ public class RobotTest {
     public void updateActionRadiusTest() {
         Robot.rc = mockRC;
         int actionRadius = 0;
-        //when(mockRC.getType()).thenReturn(RobotType.POLITICIAN);
+        when(mockRC.getType()).thenReturn(RobotType.POLITICIAN);
         Robot.updateActionRadius();
         verify(mockRC, times(1)).getType();
     }
