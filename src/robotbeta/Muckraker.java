@@ -5,7 +5,7 @@ import battlecode.common.GameActionException;
 import battlecode.common.RobotInfo;
 import battlecode.common.Team;
 
-@SuppressWarnings({"RedundantThrows", "unused", "UnusedReturnValue", "DuplicatedCode"})
+@SuppressWarnings({"RedundantThrows", "unused", "UnusedReturnValue"})
 public class Muckraker extends Robot {
 
     /**

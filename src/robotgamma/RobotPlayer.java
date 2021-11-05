@@ -1,26 +1,26 @@
 package robotgamma;
 
-import battlecode.common.*;
+import battlecode.common.Clock;
+import battlecode.common.GameActionException;
+import battlecode.common.RobotController;
 
-@SuppressWarnings({"RedundantThrows", "unused", "InfiniteLoopStatement", "JavaDoc"})
+@SuppressWarnings({"RedundantThrows", "unused", "InfiniteLoopStatement"})
 public strictfp class RobotPlayer {
     static RobotController rc;
     static int turnCount;
 
     /**
-     * @param rc
-     * @throws GameActionException
+     * @param rc The RobotController provided to run.
+     * @throws GameActionException The Game Action Exception from battlecode.common
      * run() is the method that is called when a robot is instantiated in the BattleCode world.
      * If this method returns, the robot dies!
      **/
     public static void run(RobotController rc) throws GameActionException {
-
         // This is the RobotController object. You use it to perform actions from this robot,
         // and to get information on its current status.
         RobotPlayer.rc = rc;
         turnCount = 0;
 
-        //System.out.println("I'm a " + rc.getType() + " and I just got created!");
         while (true) {
             turnCount += 1;
             // Try/catch blocks stop unhandled exceptions, which cause your robot to freeze

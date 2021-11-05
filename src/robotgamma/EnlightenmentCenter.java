@@ -1,11 +1,14 @@
 package robotgamma;
 
-import battlecode.common.*;
+import battlecode.common.Direction;
+import battlecode.common.GameActionException;
+import battlecode.common.RobotInfo;
+import battlecode.common.RobotType;
+
 import java.util.*;
 
 @SuppressWarnings({"JavaDoc", "RedundantThrows", "unused", "UnusedReturnValue", "DuplicatedCode"})
 public class EnlightenmentCenter extends Robot {
-
     static final RobotType[] spawnableRobot = {RobotType.POLITICIAN, RobotType.SLANDERER, RobotType.MUCKRAKER,};
 
     static int polInfluence = 35;
@@ -33,17 +36,16 @@ public class EnlightenmentCenter extends Robot {
     static LinkedList<Integer> targetList = null;
 
     /**
-     * @return
+     * @return RobotType
      */
     static RobotType randomSpawnableRobotType() {
         return spawnableRobot[(int) (Math.random() * spawnableRobot.length)];
     }
 
-
     /**
      * @throws GameActionException
      */
-    static void init() throws GameActionException {
+    public static void init() throws GameActionException {
         if (actionRadius == 0) updateActionRadius();
         if (senseRadius == 0) updateSenseRadius();
         if (detectRadius == 0) updateDetectRadius();
@@ -64,7 +66,7 @@ public class EnlightenmentCenter extends Robot {
      * @return
      * @throws GameActionException
      */
-    static int checkIfExistMuckraker() throws GameActionException {
+    public static int checkIfExistMuckraker() throws GameActionException {
         mucIDList.removeIf(muc -> !rc.canGetFlag(muc));
         return mucIDList.size();
     }
@@ -73,7 +75,7 @@ public class EnlightenmentCenter extends Robot {
      * @return
      * @throws GameActionException
      */
-    static int checkIfExistPolitician() throws GameActionException {
+    public static int checkIfExistPolitician() throws GameActionException {
         polIDList.removeIf(pol -> !rc.canGetFlag(pol));
         return polIDList.size();
     }
@@ -83,7 +85,7 @@ public class EnlightenmentCenter extends Robot {
      * @return
      * @throws GameActionException
      */
-    static int checkIfExistSlanderer() throws GameActionException {
+    public static int checkIfExistSlanderer() throws GameActionException {
         Iterator<Integer> sla = slaIDList.iterator();
         while (sla.hasNext()) {
             int id = sla.next();
@@ -109,7 +111,7 @@ public class EnlightenmentCenter extends Robot {
      * @return RobotType
      * @throws GameActionException
      */
-    static RobotType spawnRandom(int mucCha, int polCha, int slaCha,
+    public static RobotType spawnRandom(int mucCha, int polCha, int slaCha,
                                  int mucInf, int polInf, int slaInf) throws GameActionException {
         if (mucCha != currMucChance || polCha != currPolChance || slaCha != currSlaChance) {
             if ((mucCha + polCha + slaCha) != 100) {
@@ -142,16 +144,13 @@ public class EnlightenmentCenter extends Robot {
             spawnedRobot = RobotType.MUCKRAKER;
         }
         Direction dir = null;
-        for(Direction findspot : directions)
-        {
-            if(rc.canBuildRobot(spawnedRobot, findspot, 1))
-            {
-                dir = findspot;
+        for (Direction findSpot : directions) {
+            if (rc.canBuildRobot(spawnedRobot, findSpot, 1)) {
+                dir = findSpot;
                 break;
             }
         }
-        if(dir != null)
-        {
+        if (dir != null) {
             switch (Objects.requireNonNull(spawnedRobot)) {
                 case MUCKRAKER:
                     if (rc.canBuildRobot(RobotType.MUCKRAKER, dir, mucInf)) {
@@ -180,7 +179,7 @@ public class EnlightenmentCenter extends Robot {
      * @return
      * @throws GameActionException
      */
-    static int mucScan() throws GameActionException {
+    public static int mucScan() throws GameActionException {
         // Scan for new muckraker flags
         // and add to target list if new
         for (int id : mucIDList) {
@@ -198,7 +197,7 @@ public class EnlightenmentCenter extends Robot {
      * @return
      * @throws GameActionException
      */
-    static int polScan() throws GameActionException {
+    public static int polScan() throws GameActionException {
         // Scan for new politicians flags
         // and remove from target list if match exists
         for (int id : polIDList) {
@@ -212,7 +211,11 @@ public class EnlightenmentCenter extends Robot {
         return polIDList.size();
     }
 
-    static int setFlagFromTargetList() throws GameActionException {
+    /**
+     * @return
+     * @throws GameActionException
+     */
+    public static int setFlagFromTargetList() throws GameActionException {
         // Set flag to first target in targetList
         if (!targetList.isEmpty()) {
             rc.setFlag(targetList.getFirst());
@@ -224,10 +227,10 @@ public class EnlightenmentCenter extends Robot {
     }
 
     /**
-     * @return boolean
+     * @return enemyInf
      * @throws GameActionException
      */
-    static int senseNearEC() throws GameActionException {
+    public static int senseNearEC() throws GameActionException {
         int enemyInf = 0;
         RobotInfo[] near = rc.senseNearbyRobots(senseRadius, enemy);
         for (RobotInfo r : near) {
@@ -244,7 +247,7 @@ public class EnlightenmentCenter extends Robot {
      * @return
      * @throws GameActionException
      */
-    static boolean bidByThreshold(double thresh) throws GameActionException {
+    public static boolean bidByThreshold(double thresh) throws GameActionException {
         int bid = (int) (influence * thresh);
         if (bid < 1) bid = 1;
         if (rc.canBid(bid)) {
@@ -257,19 +260,19 @@ public class EnlightenmentCenter extends Robot {
     /**
      * @throws GameActionException
      */
-    static void cleanData() throws GameActionException {
+    public static void cleanData() throws GameActionException {
         if (turnCount % 5 == 0) checkIfExistSlanderer();
         if (turnCount % 50 == 0) checkIfExistPolitician();
         if (turnCount % 100 == 0) checkIfExistMuckraker();
     }
 
-    static void setupProfile() throws GameActionException {
+    public static void setupProfile() throws GameActionException {
         if (influence >= threshold) {
             spawnRandom(50, 10, 40, mucInfluence, defaultInfGive, defaultInfGive);
         }
     }
 
-    static void nearbyEnemyECProfile(int enemyInfluence) throws GameActionException {
+    public static void nearbyEnemyECProfile(int enemyInfluence) throws GameActionException {
         int muc = 50;
         int pol = 50;
         int sla = 0;
@@ -282,9 +285,8 @@ public class EnlightenmentCenter extends Robot {
         spawnRandom(muc, pol, sla, mucInfluence, polInf, slaInfluence);
     }
 
-    static void defaultProfile() throws GameActionException {
-        if (influence >= threshold)
-        {
+    public static void defaultProfile() throws GameActionException {
+        if (influence >= threshold) {
             int muc = mucChance;
             int pol = polChance;
             int sla = slaChance;
@@ -299,7 +301,7 @@ public class EnlightenmentCenter extends Robot {
     /**
      * @throws GameActionException
      */
-    static void runEnlightenmentCenter() throws GameActionException {
+    public static void runEnlightenmentCenter() throws GameActionException {
 
         cleanData();
         mucScan();
@@ -309,17 +311,13 @@ public class EnlightenmentCenter extends Robot {
 
         int nearbyEnemyEC = senseNearEC();
 
-        if(nearbyEnemyEC > 0)
-        {
+        if (nearbyEnemyEC > 0) {
             System.out.println("Enemy EC");
             nearbyEnemyECProfile(nearbyEnemyEC);
-        }
-        else if(nearbyEnemyEC == 0 && currRound <= 250)
-        {
+        } else if (nearbyEnemyEC == 0 && currRound <= 250) {
             System.out.println("Setup");
             setupProfile();
-        }
-        else if(nearbyEnemyEC == 0 && (currRound > 250 && currRound <= 1500)){
+        } else if (nearbyEnemyEC == 0 && (currRound > 250 && currRound <= 1500)) {
             System.out.println("Default");
             defaultProfile();
         }

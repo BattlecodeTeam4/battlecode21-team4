@@ -1,14 +1,16 @@
 package robotgamma;
 
-import battlecode.common.*;
+import battlecode.common.GameActionException;
+import battlecode.common.RobotInfo;
+import battlecode.common.Team;
 
-@SuppressWarnings({"RedundantThrows", "unused", "UnusedReturnValue", "DuplicatedCode"})
+@SuppressWarnings({"RedundantThrows", "unused", "UnusedReturnValue"})
 public class Muckraker extends Robot {
     /**
      * @return int
      * @throws GameActionException
      */
-    static int resetFlag() throws GameActionException {
+    public static int resetFlag() throws GameActionException {
         // Muckraker resets flag if home EC already grabbed its flag
         if (rc.canGetFlag(homeID)) {
             if (rc.getFlag(homeID) == rc.getFlag(rc.getID())) {
@@ -25,7 +27,7 @@ public class Muckraker extends Robot {
      * @return
      * @throws GameActionException
      */
-    static int scanForTarget() throws GameActionException {
+    public static int scanForTarget() throws GameActionException {
         // Sense neutral robots
         RobotInfo[] targets = rc.senseNearbyRobots(senseRadius);
         for (RobotInfo robot : targets) {
@@ -36,7 +38,7 @@ public class Muckraker extends Robot {
         return targets.length;
     }
 
-    static int scanAndEmpower() throws GameActionException {
+    public static int scanAndEmpower() throws GameActionException {
         // Sense enemy robots
         RobotInfo[] targets = rc.senseNearbyRobots(actionRadius, enemy);
         for (RobotInfo robot : targets) {
@@ -58,7 +60,7 @@ public class Muckraker extends Robot {
     /**
      * @throws GameActionException
      */
-    static void runMuckraker() throws GameActionException {
+    public static void runMuckraker() throws GameActionException {
         resetFlag();
         scanForTarget();
         scanAndEmpower();

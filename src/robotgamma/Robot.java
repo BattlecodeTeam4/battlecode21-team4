@@ -35,35 +35,38 @@ public abstract class Robot extends RobotPlayer {
     /**
      * @return
      */
-    static Direction randomDirection() {
+    public static Direction randomDirection() {
         return directions[(int) (Math.random() * directions.length)];
     }
 
     /**
      *
      */
-    static void updateActionRadius() {
+    public static void updateActionRadius() {
         actionRadius = rc.getType().actionRadiusSquared;
     }
 
-    static void updateSenseRadius() {
+    public static void updateSenseRadius() {
         senseRadius = rc.getType().sensorRadiusSquared;
     }
 
-    static void updateDetectRadius() {
+    public static void updateDetectRadius() {
         detectRadius = rc.getType().detectionRadiusSquared;
     }
 
     /**
      * @throws GameActionException
      */
-    static void init() throws GameActionException {
+    public static void init() throws GameActionException {
         if (actionRadius == 0) updateActionRadius();
         if (senseRadius == 0) updateSenseRadius();
         if (detectRadius == 0) updateDetectRadius();
         if (enemy == null) enemy = rc.getTeam().opponent();
         if (homeLoc == null) findHome();
-        if (!rc.canGetFlag(homeID)) homeID = 0; homeLoc = null;
+        if (!rc.canGetFlag(homeID)) {
+            homeID = 0;
+            homeLoc = null;
+        }
         influence = rc.getInfluence();
         currRound = rc.getRoundNum();
         conviction = rc.getConviction();
@@ -72,7 +75,7 @@ public abstract class Robot extends RobotPlayer {
     /**
      * @throws GameActionException
      */
-    static void findHome() throws GameActionException {
+    public static void findHome() throws GameActionException {
         MapLocation curr = rc.getLocation();
         for (int i = directions.length; --i >= 0; ) {
             MapLocation parseLoc = curr.add(directions[i]);
@@ -93,7 +96,7 @@ public abstract class Robot extends RobotPlayer {
      * @return
      * @throws GameActionException
      */
-    static boolean tryMove(Direction dir) throws GameActionException {
+    public static boolean tryMove(Direction dir) throws GameActionException {
         if (rc.canMove(dir)) {
             rc.move(dir);
             return true;
@@ -106,7 +109,7 @@ public abstract class Robot extends RobotPlayer {
      * @return
      * @throws GameActionException
      */
-    static boolean pathfinding(Direction dir) throws GameActionException {
+    public static boolean pathfinding(Direction dir) throws GameActionException {
         if (rc.canMove(dir)) {
             if (rc.sensePassability(rc.getLocation().add(dir)) >= passAbilityLimit) {
                 rc.move(dir);
@@ -125,7 +128,7 @@ public abstract class Robot extends RobotPlayer {
      * @return
      * @throws GameActionException
      */
-    static boolean moveLocation(MapLocation loc) throws GameActionException {
+    public static boolean moveLocation(MapLocation loc) throws GameActionException {
         if (loc == null) {
             tryMove(randomDirection());
             return true;
@@ -141,7 +144,7 @@ public abstract class Robot extends RobotPlayer {
         return false;
     }
 
-    static void moveStraight() throws GameActionException {
+    public static void moveStraight() throws GameActionException {
         if (strDir == null) {
             strDir = randomDirection();
         }
@@ -157,7 +160,7 @@ public abstract class Robot extends RobotPlayer {
      * @param loc location to send
      * @throws GameActionException
      */
-    static int sendLocation(MapLocation loc) throws GameActionException {
+    public static int sendLocation(MapLocation loc) throws GameActionException {
         int x = loc.x, y = loc.y;
         int encodedLocation = 0;
         if (rc.canSetFlag(encodedLocation)) {
@@ -174,7 +177,7 @@ public abstract class Robot extends RobotPlayer {
      * @return location
      * @throws GameActionException
      */
-    static MapLocation getLocationFromFlag(int flag) throws GameActionException {
+    public static MapLocation getLocationFromFlag(int flag) throws GameActionException {
         int y = flag % 128;
         int x = (flag / 128) % 128;
 

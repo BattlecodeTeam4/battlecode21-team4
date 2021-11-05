@@ -8,7 +8,7 @@ public class Slanderer extends Robot {
      * @return
      * @throws GameActionException
      */
-    static int convertFlag() throws GameActionException {
+    public static int convertFlag() throws GameActionException {
         if (turnCount >= slaThreshold) {
             if (rc.canSetFlag(turnCount)) {
                 rc.setFlag(turnCount);
@@ -17,7 +17,7 @@ public class Slanderer extends Robot {
         return turnCount;
     }
 
-    static Direction moveAway() throws GameActionException {
+    public static Direction moveAway() throws GameActionException {
         // checking if Muckraker's found, if found, then move
         int moveX = 0;
         int moveY = 0;
@@ -49,7 +49,7 @@ public class Slanderer extends Robot {
     /**
      * @throws GameActionException
      */
-    static void runSlanderer() throws GameActionException {
+    public static void runSlanderer() throws GameActionException {
         convertFlag();
         tryMove(moveAway());
     }
