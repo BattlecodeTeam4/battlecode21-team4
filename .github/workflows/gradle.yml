@@ -29,3 +29,5 @@ jobs:
       if: always()
       with:
           report_paths: '**/build/test-results/test/TEST-*.xml'
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
