@@ -45,9 +45,7 @@ public class Muckraker extends Robot {
             if (robot.getType().canBeExposed()) {
                 // It's a slanderer... go get them!
                 if (rc.canExpose(robot.getLocation())) {
-                    System.out.println("E x p o s i n g . . .");
                     rc.expose(robot.getLocation());
-                    System.out.println("E x p o s e d . . .");
                 }
                 if (rc.isReady()) {
                     moveLocation(robot.getLocation());

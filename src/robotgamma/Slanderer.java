@@ -24,7 +24,6 @@ public class Slanderer extends Robot {
         Direction direct = randomDirection();
         for (RobotInfo enemy : rc.senseNearbyRobots(senseRadius, enemy)) {
             if (enemy.getType() == RobotType.MUCKRAKER) {
-                System.out.println("R u n n i n g  A w a y ! ! !");
                 MapLocation enemyLoc = enemy.location;
                 if (enemyLoc.x > rc.getLocation().x) {
                     moveX--;
@@ -37,11 +36,10 @@ public class Slanderer extends Robot {
                 } else {
                     moveY++;
                 }
-
+                MapLocation destination = rc.getLocation().translate(moveX, moveY);
+                direct = rc.getLocation().directionTo(destination);
+                break;
             }
-            MapLocation destination = rc.getLocation().translate(moveX, moveY);
-            direct = rc.getLocation().directionTo(destination);
-            break;
         }
         return direct;
     }

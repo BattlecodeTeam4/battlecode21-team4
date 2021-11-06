@@ -24,7 +24,7 @@ public abstract class Robot extends RobotPlayer {
     static int actionRadius = 0;
     static int senseRadius = 0;
     static int detectRadius = 0;
-    static int slaThreshold = 290;
+    static int slaThreshold = 0;
     static MapLocation target = null;
     static Direction strDir = null;
     static int influence = 0;
@@ -70,6 +70,7 @@ public abstract class Robot extends RobotPlayer {
         influence = rc.getInfluence();
         currRound = rc.getRoundNum();
         conviction = rc.getConviction();
+        slaThreshold = 290;
     }
 
     /**
@@ -144,6 +145,9 @@ public abstract class Robot extends RobotPlayer {
         return false;
     }
 
+    /**
+     * @throws GameActionException
+     */
     public static void moveStraight() throws GameActionException {
         if (strDir == null) {
             strDir = randomDirection();

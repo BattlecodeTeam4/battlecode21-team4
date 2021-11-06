@@ -101,18 +101,7 @@ public class EnlightenmentCenter extends Robot {
         return slaIDList.size();
     }
 
-    /**
-     * @param mucCha
-     * @param polCha
-     * @param slaCha
-     * @param mucInf
-     * @param polInf
-     * @param slaInf
-     * @return RobotType
-     * @throws GameActionException
-     */
-    public static RobotType spawnRandom(int mucCha, int polCha, int slaCha,
-                                 int mucInf, int polInf, int slaInf) throws GameActionException {
+    public static RobotType spawnRobot(int mucCha, int polCha, int slaCha) throws GameActionException {
         if (mucCha != currMucChance || polCha != currPolChance || slaCha != currSlaChance) {
             if ((mucCha + polCha + slaCha) != 100) {
                 System.out.println("Expected Spawn Percentages totaling 100%!");
@@ -132,6 +121,7 @@ public class EnlightenmentCenter extends Robot {
             currMucChance = mucCha;
             currPolChance = polCha;
             currSlaChance = slaCha;
+            System.out.println("M: " + currMucChance + "P: " + currPolChance + "S: " + currSlaChance);
         }
 
         RobotType spawnedRobot = null;
@@ -143,13 +133,27 @@ public class EnlightenmentCenter extends Robot {
         } else if (Objects.equals(chanceArr.get(a), "muc")) {
             spawnedRobot = RobotType.MUCKRAKER;
         }
+        return spawnedRobot;
+    }
+
+    /**
+     * @param mucInf
+     * @param polInf
+     * @param slaInf
+     * @return RobotType
+     * @throws GameActionException
+     */
+    public static RobotType buildRobot(RobotType toBuild, int mucInf, int polInf, int slaInf) throws GameActionException {
         Direction dir = randomDirection();
         if (dir != null) {
-            switch (Objects.requireNonNull(spawnedRobot)) {
+            switch (Objects.requireNonNull(toBuild)) {
                 case MUCKRAKER:
                     if (rc.canBuildRobot(RobotType.MUCKRAKER, dir, mucInf)) {
                         rc.buildRobot(RobotType.MUCKRAKER, dir, mucInf);
                         mucIDList.add(rc.senseRobotAtLocation(rc.adjacentLocation(dir)).getID());
+                    }
+                    else {
+                        toBuild = null;
                     }
                     break;
                 case POLITICIAN:
@@ -157,16 +161,26 @@ public class EnlightenmentCenter extends Robot {
                         rc.buildRobot(RobotType.POLITICIAN, dir, polInf);
                         polIDList.add(rc.senseRobotAtLocation(rc.adjacentLocation(dir)).getID());
                     }
+                    else {
+                        toBuild = null;
+                    }
                     break;
                 case SLANDERER:
                     if (rc.canBuildRobot(RobotType.SLANDERER, dir, slaInf)) {
                         rc.buildRobot(RobotType.SLANDERER, dir, slaInf);
                         slaIDList.add(rc.senseRobotAtLocation(rc.adjacentLocation(dir)).getID());
                     }
+                    else {
+                        toBuild = null;
+                    }
                     break;
             }
         }
-        return spawnedRobot;
+        if(dir == null)
+        {
+            toBuild = null;
+        }
+        return toBuild;
     }
 
     /**
@@ -242,7 +256,7 @@ public class EnlightenmentCenter extends Robot {
      * @throws GameActionException
      */
     public static boolean bidByThreshold(double thresh) throws GameActionException {
-        int bid = (int) (influence * thresh);
+        int bid = (int) (rc.getInfluence() * thresh);
         if (bid < 1) bid = 1;
         if (rc.canBid(bid)) {
             rc.bid(bid);
@@ -260,13 +274,21 @@ public class EnlightenmentCenter extends Robot {
         if (turnCount % 100 == 0) checkIfExistMuckraker();
     }
 
-    public static void setupProfile() throws GameActionException {
+    /**
+     * @return
+     * @throws GameActionException
+     */
+    public static RobotType setupProfile() throws GameActionException {
+        RobotType toBuild;
         if (influence >= threshold) {
-            spawnRandom(40, 10, 50, mucInfluence, defaultInfGive, defaultInfGive);
+            toBuild = spawnRobot(50, 10, 40);
+            return buildRobot(toBuild, mucInfluence, defaultInfGive, defaultInfGive);
         }
+        return null;
     }
 
-    public static void nearbyEnemyECProfile(int enemyInfluence) throws GameActionException {
+    public static RobotType nearbyEnemyECProfile(int enemyInfluence) throws GameActionException {
+        RobotType toBuild;
         int muc = 50;
         int pol = 50;
         int sla = 0;
@@ -276,10 +298,12 @@ public class EnlightenmentCenter extends Robot {
             pol = 100;
             muc = 0;
         }
-        spawnRandom(muc, pol, sla, mucInfluence, polInf, slaInfluence);
+        toBuild = spawnRobot(muc, pol, sla);
+        return buildRobot(toBuild, mucInfluence, polInf, slaInfluence);
     }
 
-    public static void defaultProfile() throws GameActionException {
+    public static RobotType defaultProfile() throws GameActionException {
+        RobotType toBuild;
         if (influence >= threshold) {
             int muc = mucChance;
             int pol = polChance;
@@ -288,15 +312,16 @@ public class EnlightenmentCenter extends Robot {
                 pol += 20;
                 sla -= 20;
             }
-            spawnRandom(muc, pol, sla, mucInfluence, defaultInfGive, defaultInfGive);
+            toBuild = spawnRobot(muc, pol, sla);
+            return buildRobot(toBuild, mucInfluence, defaultInfGive, defaultInfGive);
         }
+        return null;
     }
 
     /**
      * @throws GameActionException
      */
     public static void runEnlightenmentCenter() throws GameActionException {
-
         cleanData();
         mucScan();
         polScan();
@@ -306,17 +331,19 @@ public class EnlightenmentCenter extends Robot {
         int nearbyEnemyEC = senseNearEC();
 
         if (nearbyEnemyEC > 0) {
-            System.out.println("Enemy EC");
             nearbyEnemyECProfile(nearbyEnemyEC);
-        } else if (nearbyEnemyEC == 0 && currRound <= 250) {
-            System.out.println("Setup");
+        } else if (nearbyEnemyEC == 0 && currRound < 250) {
             setupProfile();
-        } else if (nearbyEnemyEC == 0 && (currRound > 250 && currRound <= 1500)) {
-            System.out.println("Default");
+        } else if (nearbyEnemyEC == 0 && currRound <= 1500) {
             defaultProfile();
         }
 
-        if (rc.getRoundNum() >= 750) bidThreshold = 0.05;
+        if(currRound >= 400 && currRound < 750) {
+            bidThreshold = 0.0275;
+        }
+        else if (currRound >= 750){
+            bidThreshold = 0.05;
+        }
         bidByThreshold(bidThreshold);
     }
 }

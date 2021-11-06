@@ -20,29 +20,38 @@ public class Politician extends Robot {
         return 0;
     }
 
+    /**
+     * @return
+     * @throws GameActionException
+     */
     public static MapLocation updateTarget() throws GameActionException {
-        if (rc.getFlag(rc.getID()) == 0) {
-            if (rc.canGetFlag(homeID)) {
-                if (rc.getFlag(homeID) != 0) {
-                    target = getLocationFromFlag(rc.getFlag(homeID));
+        if(target == null)
+        {
+            if (rc.getFlag(rc.getID()) == 0) {
+                if (rc.canGetFlag(homeID)) {
+                    if (rc.getFlag(homeID) != 0) {
+                        target = getLocationFromFlag(rc.getFlag(homeID));
+                    }
                 }
             }
         }
         return target;
     }
 
+    /**
+     * @throws GameActionException
+     */
     public static void empowerEnemy() throws GameActionException {
         RobotInfo[] attackable = rc.senseNearbyRobots(actionRadius, enemy);
         RobotInfo[] neutral = rc.senseNearbyRobots(actionRadius, Team.NEUTRAL);
         if ((attackable.length != 0 || neutral.length != 0) && rc.canEmpower(actionRadius)) {
-            System.out.println("E m p o w e r i n g . . .");
             rc.empower(actionRadius);
-            System.out.println("E m p o w e r e d . . .");
-        } else {
-            System.out.println("A p p r o a c h i n g   T a r g e t . . .");
         }
     }
 
+    /**
+     * @throws GameActionException
+     */
     public static void targetActions() throws GameActionException {
         if (target != null) {
             if (rc.canSenseLocation(target)) {
@@ -64,8 +73,8 @@ public class Politician extends Robot {
      */
     public static void runPolitician() throws GameActionException {
         resetIfTargetNullAndFlagNotZero();
-        updateTarget();
         targetActions();
+        updateTarget();
         moveLocation(target);
     }
 }
