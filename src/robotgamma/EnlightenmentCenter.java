@@ -55,7 +55,6 @@ public class EnlightenmentCenter extends Robot {
         if (mucIDList == null) mucIDList = new HashSet<>();
         if (chanceArr == null) chanceArr = new ArrayList<>();
         if (targetList == null) targetList = new LinkedList<>();
-        bidThreshold = 0.005;
         influence = rc.getInfluence();
         defaultInfGive = (int) (influence * 0.50);
         currRound = rc.getRoundNum();
@@ -255,9 +254,26 @@ public class EnlightenmentCenter extends Robot {
      * @return
      * @throws GameActionException
      */
-    public static boolean bidByThreshold(double thresh) throws GameActionException {
-        int bid = (int) (rc.getInfluence() * thresh);
-        if (bid < 1) bid = 1;
+    public static boolean bidByThreshold() throws GameActionException {
+        if(currRound <= 100)
+        {
+            bidThreshold = 0.005;
+        }
+        else if (currRound <= 400)
+        {
+            bidThreshold = 0.010;
+        }
+        else if(currRound <= 750) {
+            bidThreshold = 0.0275;
+        }
+        else if (currRound <= 1000){
+            bidThreshold = 0.05;
+        }
+        else if (currRound <= 1500){
+            bidThreshold = 0.075;
+        }
+        int bid = (int) (rc.getInfluence() * bidThreshold);
+        if(bid < 1) bid = 1;
         if (rc.canBid(bid)) {
             rc.bid(bid);
             return true;
@@ -337,13 +353,6 @@ public class EnlightenmentCenter extends Robot {
         } else if (nearbyEnemyEC == 0 && currRound <= 1500) {
             defaultProfile();
         }
-
-        if(currRound >= 400 && currRound < 750) {
-            bidThreshold = 0.0275;
-        }
-        else if (currRound >= 750){
-            bidThreshold = 0.05;
-        }
-        bidByThreshold(bidThreshold);
+        bidByThreshold();
     }
 }
