@@ -23,7 +23,7 @@ public class RobotTest {
         Robot.rc = mockRC;
         Robot.moveLocation(newLoc);
         MapLocation result = Robot.getLocationFromFlag(12900);
-
+//
         // Check if robot with flag 12900 is moved to the new loc
         Assert.assertEquals(newLoc, result);
     }
