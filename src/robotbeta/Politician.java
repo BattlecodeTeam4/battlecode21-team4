@@ -5,7 +5,7 @@ import battlecode.common.RobotInfo;
 import battlecode.common.RobotType;
 import battlecode.common.Team;
 
-@SuppressWarnings({"JavaDoc", "RedundantThrows", "unused", "UnusedReturnValue", "DuplicatedCode"})
+@SuppressWarnings({"JavaDoc", "RedundantThrows", "unused", "UnusedReturnValue"})
 public class Politician extends Robot {
     /**
      * @throws GameActionException
