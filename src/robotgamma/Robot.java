@@ -26,6 +26,7 @@ public abstract class Robot extends RobotPlayer {
     static int detectRadius = 0;
     static int slaThreshold = 0;
     static MapLocation target = null;
+    static int targetTeam = 0;
     static Direction strDir = null;
     static int influence = 0;
     static int currRound = 0;
@@ -158,17 +159,34 @@ public abstract class Robot extends RobotPlayer {
         }
     }
 
+//    /**
+//     * Encodes location info into a flag
+//     *
+//     * @param loc location to send
+//     * @throws GameActionException
+//     */
+//    public static int sendLocation(MapLocation loc) throws GameActionException {
+//        int x = loc.x, y = loc.y;
+//        int encodedLocation = 0;
+//        if (rc.canSetFlag(encodedLocation)) {
+//            encodedLocation = (x % 128) * 128 + (y % 128);
+//            rc.setFlag((encodedLocation));
+//        }
+//        return encodedLocation;
+//    }
+
     /**
-     * Encodes location info into a flag
+     * Encodes location and team info into a flag
      *
      * @param loc location to send
+     * @param team team for EC at the location
      * @throws GameActionException
      */
-    public static int sendLocation(MapLocation loc) throws GameActionException {
+    public static int sendLocation(MapLocation loc, int team) throws GameActionException {
         int x = loc.x, y = loc.y;
         int encodedLocation = 0;
         if (rc.canSetFlag(encodedLocation)) {
-            encodedLocation = (x % 128) * 128 + (y % 128);
+            encodedLocation = (x % 128) * 128 + (y % 128) + team * 128 * 128;
             rc.setFlag((encodedLocation));
         }
         return encodedLocation;
@@ -211,5 +229,17 @@ public abstract class Robot extends RobotPlayer {
         }
 
         return actualLocation;
+    }
+
+    /**
+     * Decodes team info from flag
+     *
+     * @param flag flag received
+     * @return int representing team
+     * @throws GameActionException
+     */
+    public static int getTeamFromFlag(int flag) throws GameActionException {
+        int team = flag / 128 / 128;
+        return team;
     }
 }

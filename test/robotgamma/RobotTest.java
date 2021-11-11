@@ -15,7 +15,7 @@ public class RobotTest {
     public void sendLocationTest() throws GameActionException {
         when(mockRC.canSetFlag(12900)).thenReturn(true);
         Robot.rc = mockRC;
-        Robot.sendLocation(flag);
+        Robot.sendLocation(flag, 1);
         verify(mockRC, times(1)).canSetFlag(anyInt());
     }
     @Test

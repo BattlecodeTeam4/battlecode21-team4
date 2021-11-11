@@ -192,8 +192,24 @@ public class EnlightenmentCenter extends Robot {
         for (int id : mucIDList) {
             if (rc.canGetFlag(id)) {
                 int newTarget = rc.getFlag(id);
+                int newTargetTeam = getTeamFromFlag(newTarget);
+
                 if (newTarget != 0 && !targetList.contains(newTarget)) {
-                    targetList.addLast(newTarget);
+                    if (newTargetTeam == 2) { // enemy
+                        targetList.addLast(newTarget);
+                    } else { // neutral (1)
+                        ListIterator<Integer> iter = targetList.listIterator();
+                        if (!iter.hasNext()) {
+                            iter.add(newTarget);
+                        } else {
+                            while (iter.hasNext()) {
+                                if (iter.next() == 2 || !iter.hasNext()) {
+                                    iter.add(newTarget);
+                                }
+                            }
+                        }
+                    }
+
                 }
             }
         }
@@ -250,7 +266,6 @@ public class EnlightenmentCenter extends Robot {
     }
 
     /**
-     * @param thresh
      * @return
      * @throws GameActionException
      */
