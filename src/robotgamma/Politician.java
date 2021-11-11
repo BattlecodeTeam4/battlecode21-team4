@@ -25,12 +25,13 @@ public class Politician extends Robot {
      * @throws GameActionException
      */
     public static MapLocation updateTarget() throws GameActionException {
-        if(target == null)
+        if(target == null && targetTeam == 0)
         {
             if (rc.getFlag(rc.getID()) == 0) {
                 if (rc.canGetFlag(homeID)) {
                     if (rc.getFlag(homeID) != 0) {
                         target = getLocationFromFlag(rc.getFlag(homeID));
+                        targetTeam = getTeamFromFlag(rc.getFlag(homeID));
                     }
                 }
             }
@@ -53,12 +54,13 @@ public class Politician extends Robot {
      * @throws GameActionException
      */
     public static void targetActions() throws GameActionException {
-        if (target != null) {
+        if (target != null && targetTeam != 0) {
             if (rc.canSenseLocation(target)) {
                 RobotInfo robotTarget = rc.senseRobotAtLocation(target);
                 if (robotTarget.getTeam() == rc.getTeam() && robotTarget.getType() == RobotType.ENLIGHTENMENT_CENTER) {
-                    sendLocation(target);
+                    sendLocation(target, targetTeam);
                     target = null;
+                    targetTeam = 0;
                 } else if (robotTarget.getType() == RobotType.ENLIGHTENMENT_CENTER) {
                     empowerEnemy();
                 }

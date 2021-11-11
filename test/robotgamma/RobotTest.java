@@ -9,13 +9,15 @@ import static org.mockito.Mockito.*;
 public class RobotTest {
     @Mock
     RobotController mockRC = mock(RobotController.class);
-    MapLocation flag = new MapLocation(100, 100);
+    MapLocation loc = new MapLocation(100, 100);
+    int neutralTeam = 1;
+    int enemyTeam = 2;
 
     @Test
     public void sendLocationTest() throws GameActionException {
         when(mockRC.canSetFlag(12900)).thenReturn(true);
         Robot.rc = mockRC;
-        Robot.sendLocation(flag);
+        Robot.sendLocation(loc, 1);
         verify(mockRC, times(1)).canSetFlag(anyInt());
     }
     @Test
@@ -30,7 +32,20 @@ public class RobotTest {
         MapLocation result = Robot.getLocationFromFlag(12900);
 
         //12900 is flag for MapLocation(100, 100)!
-        Assert.assertEquals(flag, result);
+        Assert.assertEquals(loc, result);
+    }
+
+    @Test
+    public void getTeamFromFlagTest() throws GameActionException{
+        when(mockRC.canSetFlag(29284)).thenReturn(true);
+        Robot.rc = mockRC;
+        int resultNeutral = Robot.getTeamFromFlag(29284);
+        Assert.assertEquals(resultNeutral, neutralTeam);
+
+        when(mockRC.canSetFlag(45668)).thenReturn(true);
+        Robot.rc = mockRC;
+        int resultEnemy = Robot.getTeamFromFlag(45668);
+        Assert.assertEquals(resultEnemy, enemyTeam);
     }
 
     @Test

@@ -32,7 +32,11 @@ public class Muckraker extends Robot {
         RobotInfo[] targets = rc.senseNearbyRobots(senseRadius);
         for (RobotInfo robot : targets) {
             if (robot.getType().canBid() && ((robot.getTeam() == enemy) || (robot.getTeam() == Team.NEUTRAL))) {
-                sendLocation(robot.getLocation());
+                if (robot.getTeam() == enemy) {
+                    sendLocation(robot.getLocation(), 2); // team 2 is enemy
+                } else {
+                    sendLocation(robot.getLocation(), 1); // team 1 is neutral
+                }
             }
         }
         return targets.length;
