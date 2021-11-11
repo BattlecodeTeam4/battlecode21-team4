@@ -159,22 +159,6 @@ public abstract class Robot extends RobotPlayer {
         }
     }
 
-//    /**
-//     * Encodes location info into a flag
-//     *
-//     * @param loc location to send
-//     * @throws GameActionException
-//     */
-//    public static int sendLocation(MapLocation loc) throws GameActionException {
-//        int x = loc.x, y = loc.y;
-//        int encodedLocation = 0;
-//        if (rc.canSetFlag(encodedLocation)) {
-//            encodedLocation = (x % 128) * 128 + (y % 128);
-//            rc.setFlag((encodedLocation));
-//        }
-//        return encodedLocation;
-//    }
-
     /**
      * Encodes location and team info into a flag
      *

@@ -60,6 +60,7 @@ public class Politician extends Robot {
                 if (robotTarget.getTeam() == rc.getTeam() && robotTarget.getType() == RobotType.ENLIGHTENMENT_CENTER) {
                     sendLocation(target, targetTeam);
                     target = null;
+                    targetTeam = 0;
                 } else if (robotTarget.getType() == RobotType.ENLIGHTENMENT_CENTER) {
                     empowerEnemy();
                 }
