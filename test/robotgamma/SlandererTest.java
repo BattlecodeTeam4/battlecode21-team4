@@ -85,6 +85,21 @@ public class SlandererTest {
     }
 
     @Test
-    public void runSlandererTest() {
+    public void runSlandererTest() throws GameActionException {
+        Slanderer.slaThreshold = 2;
+        Slanderer.turnCount = 3;
+        when(mockRC.canSetFlag(3)).thenReturn(true);
+        Slanderer.senseRadius = 12;
+        Slanderer.enemy = Team.B;
+
+        RobotInfo fakeSla = new RobotInfo(100, Team.B, RobotType.MUCKRAKER, 100,
+                100, target);
+        when(mockRC.senseNearbyRobots(Slanderer.senseRadius, Slanderer.enemy)).thenReturn(new RobotInfo[]
+                {fakeSla});
+        when(mockRC.getLocation()).thenReturn(new MapLocation(50, 50));
+        Slanderer.rc = mockRC;
+        Slanderer.runSlanderer();
+        verify(mockRC, times(4)).getLocation();
+        Assert.assertEquals(3, Slanderer.convertFlag());
     }
 }
