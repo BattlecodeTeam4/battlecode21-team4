@@ -25,6 +25,19 @@ public class EnlightenmentCenterTest {
         Assert.assertEquals(0 ,EnlightenmentCenter.checkIfExistMuckraker());
     }
 
+    @Test
+    public void checkIfExistPolitician() throws GameActionException {
+        EnlightenmentCenter.rc = mockRC;
+        EnlightenmentCenter.polIDList= new HashSet<>();
+        Assert.assertEquals(0 ,EnlightenmentCenter.checkIfExistPolitician());
+    }
+
+    @Test
+    public void checkIfExistSlanderer() throws GameActionException {
+        EnlightenmentCenter.rc = mockRC;
+        EnlightenmentCenter.slaIDList= new HashSet<>();
+        Assert.assertEquals(0 ,EnlightenmentCenter.checkIfExistSlanderer());
+    }
 
     @Test
     public void bidByThreshold() throws GameActionException {
