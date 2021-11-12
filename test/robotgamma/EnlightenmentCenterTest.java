@@ -4,6 +4,8 @@ import battlecode.common.*;
 import org.junit.*;
 import org.mockito.*;
 
+import java.util.HashSet;
+
 import static org.mockito.Mockito.*;
 
 public class EnlightenmentCenterTest {
@@ -15,6 +17,14 @@ public class EnlightenmentCenterTest {
         RobotType rob = EnlightenmentCenter.randomSpawnableRobotType();
         Assert.assertNotNull(rob);
     }
+
+    @Test
+    public void checkIfExistMuckraker() throws GameActionException {
+        EnlightenmentCenter.rc = mockRC;
+        EnlightenmentCenter.mucIDList = new HashSet<>();
+        Assert.assertEquals(0 ,EnlightenmentCenter.checkIfExistMuckraker());
+    }
+
 
     @Test
     public void bidByThreshold() throws GameActionException {
