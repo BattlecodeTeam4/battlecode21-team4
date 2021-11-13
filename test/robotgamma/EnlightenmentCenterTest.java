@@ -22,21 +22,38 @@ public class EnlightenmentCenterTest {
     public void checkIfExistMuckraker() throws GameActionException {
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.mucIDList = new HashSet<>();
-        Assert.assertEquals(0 ,EnlightenmentCenter.checkIfExistMuckraker());
+        EnlightenmentCenter.mucIDList.add(200);
+        when(mockRC.canGetFlag(200)).thenReturn(true);
+        Assert.assertEquals(1,EnlightenmentCenter.checkIfExistMuckraker());
     }
 
     @Test
     public void checkIfExistPolitician() throws GameActionException {
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.polIDList= new HashSet<>();
-        Assert.assertEquals(0 ,EnlightenmentCenter.checkIfExistPolitician());
+        EnlightenmentCenter.polIDList.add(200);
+        EnlightenmentCenter.polIDList.add(300);
+        when(mockRC.canGetFlag(200)).thenReturn(true);
+        when(mockRC.canGetFlag(300)).thenReturn(true);
+        Assert.assertEquals(2 ,EnlightenmentCenter.checkIfExistPolitician());
     }
 
     @Test
-    public void checkIfExistSlanderer() throws GameActionException {
+    public void checkIfExistSlandererNot() throws GameActionException {
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.slaIDList= new HashSet<>();
-        Assert.assertEquals(0 ,EnlightenmentCenter.checkIfExistSlanderer());
+        EnlightenmentCenter.slaIDList.add(200);
+        when(mockRC.canGetFlag(200)).thenReturn(false);
+        Assert.assertEquals(0,EnlightenmentCenter.checkIfExistSlanderer());
+    }
+
+    @Test
+    public void checkIfExistSlandererYes() throws GameActionException {
+        EnlightenmentCenter.rc = mockRC;
+        EnlightenmentCenter.slaIDList= new HashSet<>();
+        EnlightenmentCenter.slaIDList.add(100000);
+        when(mockRC.canGetFlag(100000)).thenReturn(true);
+        Assert.assertEquals(1,EnlightenmentCenter.checkIfExistSlanderer());
     }
 
     @Test
