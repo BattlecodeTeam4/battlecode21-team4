@@ -5,6 +5,7 @@ import org.junit.*;
 import org.mockito.*;
 
 import java.util.HashSet;
+import java.util.Map;
 
 import static org.mockito.Mockito.*;
 
@@ -39,20 +40,37 @@ public class EnlightenmentCenterTest {
     }
 
     @Test
+    public void checkIfExistSlandererRmSlanderer() throws GameActionException {
+        EnlightenmentCenter.rc = mockRC;
+        EnlightenmentCenter.slaIDList= new HashSet<>();
+        EnlightenmentCenter.slaThreshold = 290;
+        EnlightenmentCenter.slaIDList.add(295);
+        when(mockRC.canGetFlag(295)).thenReturn(false);
+        when(mockRC.getFlag(295)).thenReturn(295);
+        Assert.assertEquals(0,EnlightenmentCenter.checkIfExistSlanderer());
+    }
+
+    @Test
     public void checkIfExistSlandererNot() throws GameActionException {
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.slaIDList= new HashSet<>();
-        EnlightenmentCenter.slaIDList.add(200);
-        when(mockRC.canGetFlag(200)).thenReturn(false);
+        EnlightenmentCenter.polIDList = new HashSet<>();
+        EnlightenmentCenter.slaThreshold = 290;
+        EnlightenmentCenter.slaIDList.add(295);
+        when(mockRC.canGetFlag(295)).thenReturn(true);
+        when(mockRC.getFlag(295)).thenReturn(295);
         Assert.assertEquals(0,EnlightenmentCenter.checkIfExistSlanderer());
+        Assert.assertEquals(1,EnlightenmentCenter.checkIfExistPolitician());
     }
 
     @Test
     public void checkIfExistSlandererYes() throws GameActionException {
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.slaIDList= new HashSet<>();
-        EnlightenmentCenter.slaIDList.add(100000);
-        when(mockRC.canGetFlag(100000)).thenReturn(true);
+        EnlightenmentCenter.slaThreshold = 290;
+        EnlightenmentCenter.slaIDList.add(285);
+        when(mockRC.canGetFlag(285)).thenReturn(true);
+        when(mockRC.getFlag(285)).thenReturn(285);
         Assert.assertEquals(1,EnlightenmentCenter.checkIfExistSlanderer());
     }
 
