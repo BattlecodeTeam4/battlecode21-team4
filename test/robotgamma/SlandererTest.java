@@ -51,7 +51,7 @@ public class SlandererTest {
         when(mockRC.senseNearbyRobots(Slanderer.senseRadius, Slanderer.enemy)).thenReturn(new RobotInfo[]
                 {fakeSla});
         Slanderer.rc = mockRC;
-        Direction direction = Slanderer.moveAway();
+        Assert.assertNotEquals(Direction.CENTER, Slanderer.moveAway());
     }
 
     @Test
