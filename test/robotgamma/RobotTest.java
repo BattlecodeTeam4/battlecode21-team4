@@ -79,4 +79,29 @@ public class RobotTest {
         verify(mockRC, times(0)).move(Direction.EAST);
         Assert.assertFalse(Robot.pathfinding(Direction.EAST));
     }
+
+    @Test
+    public void initTest() throws GameActionException {
+        Robot.rc = mockRC;
+
+        Robot.actionRadius = 0;
+        Robot.senseRadius = 0;
+        Robot.detectRadius = 0;
+        when(mockRC.getType()).thenReturn(RobotType.MUCKRAKER);
+
+        Robot.enemy = null;
+        when(mockRC.getTeam()).thenReturn(Team.A);
+        when(mockRC.getTeam().opponent()).thenReturn(Team.B);
+
+        Robot.homeLoc = new MapLocation(1, 1);
+
+        Robot.homeID = 10800;
+        when(mockRC.canGetFlag(Robot.homeID)).thenReturn(false);
+
+        when(mockRC.getInfluence()).thenReturn(100);
+        when(mockRC.getRoundNum()).thenReturn(100);
+        when(mockRC.getConviction()).thenReturn(100);
+
+        Robot.init();
+    }
 }

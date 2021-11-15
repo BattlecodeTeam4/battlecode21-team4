@@ -56,12 +56,24 @@ public class MuckrakerTest {
     }
 
     @Test
-    public void scanForTargetEntryTest() throws GameActionException {
+    public void scanForTargetEEnemyTest() throws GameActionException {
         Muckraker.senseRadius = 30;
         when(mockRC.getTeam()).thenReturn(Team.A);
         when(mockRC.getTeam().opponent()).thenReturn(Team.B);
         when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[] {new RobotInfo(100, Team.B,
                 RobotType.ENLIGHTENMENT_CENTER, 100, 100, target)});
+        when(mockRC.canSetFlag(12900)).thenReturn(true);
+        Muckraker.rc = mockRC;
+        Muckraker.scanForTarget();
+    }
+
+    @Test
+    public void scanForTargetNeutralTest() throws GameActionException {
+        Muckraker.senseRadius = 30;
+        when(mockRC.getTeam()).thenReturn(Team.A);
+        when(mockRC.getTeam().opponent()).thenReturn(Team.B);
+        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[] {new RobotInfo(100,
+                Team.NEUTRAL, RobotType.ENLIGHTENMENT_CENTER, 100, 100, target)});
         when(mockRC.canSetFlag(12900)).thenReturn(true);
         Muckraker.rc = mockRC;
         Muckraker.scanForTarget();

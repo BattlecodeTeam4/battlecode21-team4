@@ -20,6 +20,30 @@ public class EnlightenmentCenterTest {
     }
 
     @Test
+    public void initTest() throws GameActionException {
+        Robot.rc = mockRC;
+
+        Robot.actionRadius = 0;
+        Robot.senseRadius = 0;
+        Robot.detectRadius = 0;
+        when(mockRC.getType()).thenReturn(RobotType.ENLIGHTENMENT_CENTER);
+
+        Robot.enemy = null;
+        when(mockRC.getTeam()).thenReturn(Team.A);
+        when(mockRC.getTeam().opponent()).thenReturn(Team.B);
+
+        EnlightenmentCenter.slaIDList = null;
+        EnlightenmentCenter.polIDList = null;
+        EnlightenmentCenter.mucIDList = null;
+
+        when(mockRC.getInfluence()).thenReturn(100);
+        when(mockRC.getRoundNum()).thenReturn(100);
+        when(mockRC.getConviction()).thenReturn(100);
+
+        EnlightenmentCenter.init();
+    }
+
+    @Test
     public void checkIfExistMuckraker() throws GameActionException {
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.mucIDList = new HashSet<>();
