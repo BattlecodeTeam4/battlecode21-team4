@@ -112,6 +112,7 @@ public abstract class Robot extends RobotPlayer {
      * @throws GameActionException
      */
     public static boolean pathfinding(Direction dir) throws GameActionException {
+        /*
         if (rc.canMove(dir)) {
             if (rc.sensePassability(rc.getLocation().add(dir)) >= passAbilityLimit) {
                 rc.move(dir);
@@ -121,7 +122,7 @@ public abstract class Robot extends RobotPlayer {
                 return true;
             } else
                 return false;
-        }
+        }*/
         return false;
     }
 

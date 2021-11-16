@@ -59,10 +59,10 @@ public class SlandererTest {
         Slanderer.senseRadius = 12;
         Slanderer.enemy = Team.B;
 
-        RobotInfo fakeSla = new RobotInfo(100, Team.B, RobotType.MUCKRAKER, 100,
+        RobotInfo fakeMuck = new RobotInfo(100, Team.B, RobotType.MUCKRAKER, 100,
                 100, target);
         when(mockRC.senseNearbyRobots(Slanderer.senseRadius, Slanderer.enemy)).thenReturn(new RobotInfo[]
-                {fakeSla});
+                {fakeMuck});
         when(mockRC.getLocation()).thenReturn(new MapLocation(200, 200));
         Slanderer.rc = mockRC;
         Direction direction = Slanderer.moveAway();

@@ -9,7 +9,6 @@ import static org.mockito.Mockito.*;
 public class MuckrakerTest {
     @Mock
     RobotController mockRC = mock(RobotController.class);
-
     MapLocation target = new MapLocation(100, 100);
 
     @Test
@@ -22,7 +21,8 @@ public class MuckrakerTest {
         when(mockRC.getFlag(mockRC.getID())).thenReturn(1);
 
         Muckraker.rc = mockRC;
-        Muckraker.resetFlag();
+
+        Assert.assertEquals(0, Muckraker.resetFlag());
     }
 
     @Test
@@ -36,6 +36,7 @@ public class MuckrakerTest {
 
         Muckraker.rc = mockRC;
         Muckraker.resetFlag();
+        Assert.assertEquals(1, Muckraker.resetFlag());
     }
 
     @Test
@@ -45,6 +46,8 @@ public class MuckrakerTest {
 
         Muckraker.rc = mockRC;
         Muckraker.resetFlag();
+
+        Assert.assertEquals(0, Muckraker.resetFlag());
     }
 
     @Test
@@ -52,11 +55,12 @@ public class MuckrakerTest {
         Muckraker.senseRadius = 30;
         when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[] {});
         Muckraker.rc = mockRC;
-        Muckraker.scanForTarget();
+
+        Assert.assertEquals(0, Muckraker.scanForTarget());
     }
 
     @Test
-    public void scanForTargetEEnemyTest() throws GameActionException {
+    public void scanForTargetEnemyTest() throws GameActionException {
         Muckraker.senseRadius = 30;
         when(mockRC.getTeam()).thenReturn(Team.A);
         when(mockRC.getTeam().opponent()).thenReturn(Team.B);
@@ -64,7 +68,7 @@ public class MuckrakerTest {
                 RobotType.ENLIGHTENMENT_CENTER, 100, 100, target)});
         when(mockRC.canSetFlag(12900)).thenReturn(true);
         Muckraker.rc = mockRC;
-        Muckraker.scanForTarget();
+        Assert.assertEquals(1, Muckraker.scanForTarget());
     }
 
     @Test
@@ -76,7 +80,7 @@ public class MuckrakerTest {
                 Team.NEUTRAL, RobotType.ENLIGHTENMENT_CENTER, 100, 100, target)});
         when(mockRC.canSetFlag(12900)).thenReturn(true);
         Muckraker.rc = mockRC;
-        Muckraker.scanForTarget();
+        Assert.assertEquals(1, Muckraker.scanForTarget());
     }
 
     @Test
@@ -92,7 +96,8 @@ public class MuckrakerTest {
         when(mockRC.isReady()).thenReturn(true);
         when(mockRC.getLocation()).thenReturn(new MapLocation(200, 200));
         Muckraker.rc = mockRC;
-        Muckraker.scanAndEmpower();
+
+        Assert.assertEquals(1, Muckraker.scanAndEmpower());
     }
 
     @Test

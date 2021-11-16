@@ -120,7 +120,6 @@ public class EnlightenmentCenter extends Robot {
             currMucChance = mucCha;
             currPolChance = polCha;
             currSlaChance = slaCha;
-            System.out.println("M: " + currMucChance + "P: " + currPolChance + "S: " + currSlaChance);
         }
 
         RobotType spawnedRobot = null;

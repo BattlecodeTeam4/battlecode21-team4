@@ -21,7 +21,7 @@ public class PoliticianTest {
         when(mockRC.canGetFlag(100)).thenReturn(true);
         when(mockRC.getFlag(100)).thenReturn(200);
 
-        Politician.resetIfTargetNullAndFlagNotZero();
+        Assert.assertEquals(200, Politician.resetIfTargetNullAndFlagNotZero());
     }
 
     @Test
@@ -33,7 +33,7 @@ public class PoliticianTest {
         when(mockRC.canGetFlag(100)).thenReturn(false);
         when(mockRC.getFlag(100)).thenReturn(200);
 
-        Politician.resetIfTargetNullAndFlagNotZero();
+        Assert.assertEquals(0, Politician.resetIfTargetNullAndFlagNotZero());
     }
 
     @Test
