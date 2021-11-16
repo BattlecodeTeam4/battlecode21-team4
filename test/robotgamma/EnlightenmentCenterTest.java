@@ -324,7 +324,7 @@ public class EnlightenmentCenterTest {
                 100, 100, new MapLocation(100, 100));
         when(mockRC.senseNearbyRobots(EnlightenmentCenter.senseRadius, Team.B))
                 .thenReturn(new RobotInfo[] {fakeEnemy});
-        EnlightenmentCenter.rc = mockRC;
+        //EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.runEnlightenmentCenter();
     }
 }
