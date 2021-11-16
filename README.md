@@ -1,17 +1,17 @@
 # GitHub Statistics
 
-**Build Status: ** ![Current Build](https://github.com/BattlecodeTeam4/battlecode21-team4/actions/workflows/gradle.yml/badge.svg)
+### Build Status ![Current Build](https://github.com/BattlecodeTeam4/battlecode21-team4/actions/workflows/gradle.yml/badge.svg)
 
 # Our Strategy
 
-**Enlightenment Centers**
+### Enlightenment Centers
 
 - Bid if influence is above a certain threshold (maybe enough influence to make a certain bot?) after creating specified amount of bots
 - Bot creation priority: muckrakers, politicians, slanderers?
 - need to decide how much influence to allocate each robot
 - inform politician about location
 
-**Muckrakers**
+### Muckrakers
 
 - send muckrakers in first to find as many slanderers as possible
 - if a muckraker detects a robot, move closer to it
@@ -19,12 +19,12 @@
 - if a muckraker finds a politician, set a flag
 - if a muckraker finds a muckraker, set a flag
 
-**Slanderers**
+### Slanderers
 
 - hide slanderers (can they sense other robots?)
 - move away from muckraker flags
 
-**Politicians**
+### Politicians
 
 - send politicians to flag
 - priority: neutral enlightenment center, other politicians, muckrakers, enemy enlightenment centers
