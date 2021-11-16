@@ -1,8 +1,8 @@
-## GitHub Statistics
+# GitHub Statistics
 
-**Build Status** ![Current Build](https://github.com/BattlecodeTeam4/battlecode21-team4/actions/workflows/gradle.yml/badge.svg)
+**Build Status: ** ![Current Build](https://github.com/BattlecodeTeam4/battlecode21-team4/actions/workflows/gradle.yml/badge.svg)
 
-## Our Strategy
+# Our Strategy
 
 **Enlightenment Centers**
 
