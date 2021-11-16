@@ -191,24 +191,8 @@ public class EnlightenmentCenter extends Robot {
         for (int id : mucIDList) {
             if (rc.canGetFlag(id)) {
                 int newTarget = rc.getFlag(id);
-                int newTargetTeam = getTeamFromFlag(newTarget);
-
-                if (newTarget != 0 && !targetList.contains(newTarget)) {
-                    if (newTargetTeam == 2) { // enemy
-                        targetList.addLast(newTarget);
-                    } else { // neutral (1)
-                        ListIterator<Integer> iter = targetList.listIterator();
-                        if (!iter.hasNext()) {
-                            iter.add(newTarget);
-                        } else {
-                            while (iter.hasNext()) {
-                                if (iter.next() == 2 || !iter.hasNext()) {
-                                    iter.add(newTarget);
-                                }
-                            }
-                        }
-                    }
-
+                if (newTarget != 0) {
+                    addTargetToTargetList(newTarget);
                 }
             }
         }
@@ -368,5 +352,31 @@ public class EnlightenmentCenter extends Robot {
             defaultProfile();
         }
         bidByThreshold();
+    }
+
+    /**
+     * @throws GameActionException
+     */
+    public static void addTargetToTargetList(int newTarget) throws GameActionException {
+        int newTargetTeam = getTeamFromFlag(newTarget);
+
+        if (targetList.isEmpty()) {
+            targetList.addFirst(newTarget);
+        } else if (!targetList.contains(newTarget)) {
+            if (newTargetTeam == 2) { // enemy
+                targetList.addLast(newTarget);
+            } else { // neutral (1)
+                ListIterator<Integer> iter = targetList.listIterator();
+                while (iter.hasNext()) {
+                    if (getTeamFromFlag(iter.next()) == 2) {
+                        targetList.add(iter.previousIndex(), newTarget);
+                        break;
+                    } else if (!iter.hasNext()) {
+                        iter.add(newTarget);
+                        break;
+                    }
+                }
+            }
+        }
     }
 }
