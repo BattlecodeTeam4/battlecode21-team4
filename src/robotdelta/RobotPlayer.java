@@ -3,11 +3,14 @@ package robotdelta;
 import battlecode.common.Clock;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
+import battlecode.common.RobotType;
 
-@SuppressWarnings({"RedundantThrows", "unused", "InfiniteLoopStatement"})
+@SuppressWarnings({"RedundantThrows", "unused"})
 public strictfp class RobotPlayer {
     static RobotController rc;
     static int turnCount;
+    static boolean robot = true;
+    static boolean robotTest = false;
 
     /**
      * @param rc The RobotController provided to run.
@@ -16,43 +19,41 @@ public strictfp class RobotPlayer {
      * If this method returns, the robot dies!
      **/
     public static void run(RobotController rc) throws GameActionException {
-        // This is the RobotController object. You use it to perform actions from this robot,
-        // and to get information on its current status.
         RobotPlayer.rc = rc;
         turnCount = 0;
 
-        while (true) {
+        while (robot) {
             turnCount += 1;
             // Try/catch blocks stop unhandled exceptions, which cause your robot to freeze
             try {
-                // Here, we've separated the controls into a different method for each RobotType.
-                // You may rewrite this into your own control structure if you wish.
-                //System.out.println("I'm a " + rc.getType() + "! Location " + rc.getLocation());
-                switch (rc.getType()) {
-                    case ENLIGHTENMENT_CENTER:
-                        EnlightenmentCenter.init();
-                        EnlightenmentCenter.runEnlightenmentCenter();
-                        break;
-                    case POLITICIAN:
-                        Politician.init();
-                        Politician.runPolitician();
-                        break;
-                    case SLANDERER:
-                        Slanderer.init();
-                        Slanderer.runSlanderer();
-                        break;
-                    case MUCKRAKER:
-                        Muckraker.init();
-                        Muckraker.runMuckraker();
-                        break;
+                RobotType type = rc.getType();
+                if (type == RobotType.ENLIGHTENMENT_CENTER) {
+                    EnlightenmentCenter.init();
+                    EnlightenmentCenter.runEnlightenmentCenter();
+                } else if (type == RobotType.POLITICIAN) {
+                    Politician.init();
+                    Politician.runPolitician();
+                } else if (type == RobotType.SLANDERER) {
+                    Slanderer.init();
+                    Slanderer.runSlanderer();
+                } else if (type == RobotType.MUCKRAKER) {
+                    Muckraker.init();
+                    Muckraker.runMuckraker();
                 }
 
                 // Clock.yield() makes the robot wait until the next turn, then it will perform this loop again
-                Clock.yield();
+                if(!robotTest) Clock.yield();
 
             } catch (Exception e) {
-                System.out.println(rc.getType() + " Exception");
-                e.printStackTrace();
+                if(!robotTest)
+                {
+                    System.out.println(rc.getType() + " Exception");
+                    e.printStackTrace();
+                }
+            }
+            if(robotTest)
+            {
+                robot = false;
             }
         }
     }
