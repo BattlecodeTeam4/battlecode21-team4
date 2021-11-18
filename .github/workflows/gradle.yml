@@ -25,4 +25,3 @@ jobs:
       if: always()
       with:
           report_paths: '**/build/test-results/test/TEST-*.xml'
-          summary: True
