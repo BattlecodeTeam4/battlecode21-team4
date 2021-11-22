@@ -100,13 +100,13 @@ public class EnlightenmentCenterTest {
     @Test
     public void createMuckrakerNot() throws GameActionException {
         for(Direction d : EnlightenmentCenter.directions){
-            when(mockRC.canBuildRobot(RobotType.POLITICIAN, d, 35)).thenReturn(false);
+            when(mockRC.canBuildRobot(RobotType.MUCKRAKER, d, 35)).thenReturn(false);
             when(mockRC.senseRobotAtLocation(mockRC.adjacentLocation(d))).thenReturn(new RobotInfo(2, Team.A, RobotType.POLITICIAN, 35, 1, new MapLocation(103, 103) ));
         }
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.polIDList = new HashSet<>();
 
-        RobotType test = EnlightenmentCenter.buildRobot(RobotType.POLITICIAN, 0, 35, 0);
+        RobotType test = EnlightenmentCenter.buildRobot(RobotType.MUCKRAKER, 0, 35, 0);
         Assert.assertEquals(null, test);
     }
 
@@ -154,13 +154,13 @@ public class EnlightenmentCenterTest {
     @Test
     public void createSlandererNot() throws GameActionException {
         for(Direction d : EnlightenmentCenter.directions){
-            when(mockRC.canBuildRobot(RobotType.POLITICIAN, d, 35)).thenReturn(false);
+            when(mockRC.canBuildRobot(RobotType.SLANDERER, d, 35)).thenReturn(false);
             when(mockRC.senseRobotAtLocation(mockRC.adjacentLocation(d))).thenReturn(new RobotInfo(2, Team.A, RobotType.POLITICIAN, 35, 1, new MapLocation(103, 103) ));
         }
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.polIDList = new HashSet<>();
 
-        RobotType test = EnlightenmentCenter.buildRobot(RobotType.POLITICIAN, 0, 35, 0);
+        RobotType test = EnlightenmentCenter.buildRobot(RobotType.SLANDERER, 0, 35, 0);
         Assert.assertEquals(null, test);
     }
 

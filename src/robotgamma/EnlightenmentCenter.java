@@ -175,10 +175,7 @@ public class EnlightenmentCenter extends Robot {
                     break;
             }
         }
-        if(dir == null)
-        {
-            toBuild = null;
-        }
+
         return toBuild;
     }
 
