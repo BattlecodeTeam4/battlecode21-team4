@@ -209,8 +209,8 @@ public class EnlightenmentCenter extends Robot {
         for (int id : polIDList) {
             if (rc.canGetFlag(id)) {
                 int oldTarget = rc.getFlag(id);
-                if (oldTarget != 0 && targetList.contains(oldTarget)) {
-                    targetList.removeFirstOccurrence(oldTarget);
+                if (oldTarget != 0) {
+                    removeTargetFromTargetList(oldTarget);
                 }
             }
         }
@@ -377,6 +377,15 @@ public class EnlightenmentCenter extends Robot {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * @throws GameActionException
+     */
+    public static void removeTargetFromTargetList(int oldTarget) throws GameActionException {
+        if (targetList.contains(oldTarget)) {
+            targetList.removeFirstOccurrence(oldTarget);
         }
     }
 }
