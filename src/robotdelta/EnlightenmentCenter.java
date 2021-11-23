@@ -141,8 +141,7 @@ public class EnlightenmentCenter extends Robot {
      * @return RobotType
      * @throws GameActionException
      */
-    public static RobotType buildRobot(RobotType toBuild, int mucInf, int polInf, int slaInf) throws GameActionException {
-        Direction dir = randomDirection();
+    public static RobotType buildRobot(RobotType toBuild, Direction dir, int mucInf, int polInf, int slaInf) throws GameActionException {
         if (dir != null) {
             switch (Objects.requireNonNull(toBuild)) {
                 case MUCKRAKER:
@@ -296,7 +295,7 @@ public class EnlightenmentCenter extends Robot {
         RobotType toBuild;
         if (influence >= threshold) {
             toBuild = spawnRobot(50, 10, 40);
-            return buildRobot(toBuild, mucInfluence, defaultInfGive, defaultInfGive);
+            return buildRobot(toBuild, randomDirection(), mucInfluence, defaultInfGive, defaultInfGive);
         }
         return null;
     }
@@ -313,7 +312,7 @@ public class EnlightenmentCenter extends Robot {
             muc = 0;
         }
         toBuild = spawnRobot(muc, pol, sla);
-        return buildRobot(toBuild, mucInfluence, polInf, slaInfluence);
+        return buildRobot(toBuild, randomDirection(), mucInfluence, polInf, slaInfluence);
     }
 
     public static RobotType defaultProfile() throws GameActionException {
@@ -327,7 +326,7 @@ public class EnlightenmentCenter extends Robot {
                 sla -= 20;
             }
             toBuild = spawnRobot(muc, pol, sla);
-            return buildRobot(toBuild, mucInfluence, defaultInfGive, defaultInfGive);
+            return buildRobot(toBuild, randomDirection(), mucInfluence, defaultInfGive, defaultInfGive);
         }
         return null;
     }
