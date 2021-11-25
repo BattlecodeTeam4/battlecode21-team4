@@ -541,4 +541,36 @@ public class EnlightenmentCenterTest {
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.runEnlightenmentCenter();
     }
+
+    @Test
+    public void addTargetToTargetListEmptyTest() throws GameActionException {
+        EnlightenmentCenter.targetList = new LinkedList<>();
+        EnlightenmentCenter.rc = mockRC;
+        EnlightenmentCenter.addTargetToTargetList(45668);
+    }
+
+    @Test
+    public void addTargetToTargetListEnemyTest() throws GameActionException {
+        EnlightenmentCenter.targetList = new LinkedList<>();
+        EnlightenmentCenter.targetList.add(29284);
+        EnlightenmentCenter.rc = mockRC;
+        EnlightenmentCenter.addTargetToTargetList(45668);
+    }
+
+    @Test
+    public void addTargetToTargetListNeutralTest() throws GameActionException {
+        EnlightenmentCenter.targetList = new LinkedList<>();
+        EnlightenmentCenter.targetList.add(45668);
+        EnlightenmentCenter.rc = mockRC;
+        EnlightenmentCenter.addTargetToTargetList(29284);
+    }
+
+    @Test
+    public void addTargetToTargetListFilledTest() throws GameActionException {
+        EnlightenmentCenter.targetList = new LinkedList<>();
+        System.out.println(EnlightenmentCenter.sendLocation(new MapLocation( 24678, 24678), 1));
+        EnlightenmentCenter.targetList.add(29542);
+        EnlightenmentCenter.rc = mockRC;
+        EnlightenmentCenter.addTargetToTargetList(29284);
+    }
 }

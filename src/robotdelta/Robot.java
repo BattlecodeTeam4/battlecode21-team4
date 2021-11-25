@@ -224,7 +224,6 @@ public abstract class Robot extends RobotPlayer {
      * @throws GameActionException
      */
     public static int getTeamFromFlag(int flag) throws GameActionException {
-        int team = flag / 128 / 128;
-        return team;
+        return flag / 128 / 128;
     }
 }
