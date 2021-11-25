@@ -163,7 +163,7 @@ public abstract class Robot extends RobotPlayer {
     /**
      * Encodes location and team info into a flag
      *
-     * @param loc location to send
+     * @param loc  location to send
      * @param team team for EC at the location
      * @throws GameActionException
      */

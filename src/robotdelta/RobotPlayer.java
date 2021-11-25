@@ -15,8 +15,8 @@ public strictfp class RobotPlayer {
     /**
      * @param rc The RobotController provided to run.
      * @throws GameActionException The Game Action Exception from battlecode.common
-     * run() is the method that is called when a robot is instantiated in the BattleCode world.
-     * If this method returns, the robot dies!
+     *                             run() is the method that is called when a robot is instantiated in the BattleCode world.
+     *                             If this method returns, the robot dies!
      **/
     public static void run(RobotController rc) throws GameActionException {
         RobotPlayer.rc = rc;
@@ -42,17 +42,15 @@ public strictfp class RobotPlayer {
                 }
 
                 // Clock.yield() makes the robot wait until the next turn, then it will perform this loop again
-                if(!robotTest) Clock.yield();
+                if (!robotTest) Clock.yield();
 
             } catch (Exception e) {
-                if(!robotTest)
-                {
+                if (!robotTest) {
                     System.out.println(rc.getType() + " Exception");
                     e.printStackTrace();
                 }
             }
-            if(robotTest)
-            {
+            if (robotTest) {
                 robot = false;
             }
         }

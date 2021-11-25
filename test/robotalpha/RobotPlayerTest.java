@@ -5,7 +5,7 @@ import org.junit.Test;
 
 public class RobotPlayerTest {
 
-    public RobotPlayerTest(){
+    public RobotPlayerTest() {
 
     }
 

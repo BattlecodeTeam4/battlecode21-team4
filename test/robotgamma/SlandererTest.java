@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 public class SlandererTest {
     @Mock

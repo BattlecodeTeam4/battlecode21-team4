@@ -25,8 +25,7 @@ public class Politician extends Robot {
      * @throws GameActionException
      */
     public static MapLocation updateTarget() throws GameActionException {
-        if(target == null && targetTeam == 0)
-        {
+        if (target == null && targetTeam == 0) {
             if (rc.getFlag(rc.getID()) == 0) {
                 if (rc.canGetFlag(homeID)) {
                     if (rc.getFlag(homeID) != 0) {
@@ -70,10 +69,20 @@ public class Politician extends Robot {
         }
     }
 
+    public static void defendHome() throws GameActionException {
+        if (homeLoc != null) {
+            if (rc.canSenseLocation(homeLoc)) {
+                RobotInfo[] list = rc.senseNearbyRobots(actionRadius, enemy);
+                if (list.length >= 1) empowerEnemy();
+            }
+        }
+    }
+
     /**
      * @throws GameActionException
      */
     public static void runPolitician() throws GameActionException {
+        defendHome();
         resetIfTargetNullAndFlagNotZero();
         targetActions();
         updateTarget();

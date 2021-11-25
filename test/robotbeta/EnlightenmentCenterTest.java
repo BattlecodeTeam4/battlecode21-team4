@@ -1,6 +1,9 @@
 package robotbeta;
 
-import battlecode.common.*;
+import battlecode.common.GameActionException;
+import battlecode.common.MapLocation;
+import battlecode.common.RobotController;
+import battlecode.common.RobotType;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mock;

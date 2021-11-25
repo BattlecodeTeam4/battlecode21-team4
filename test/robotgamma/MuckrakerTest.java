@@ -1,10 +1,12 @@
 package robotgamma;
 
 import battlecode.common.*;
-import org.junit.*;
-import org.mockito.*;
+import org.junit.Assert;
+import org.junit.Test;
+import org.mockito.Mock;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class MuckrakerTest {
     @Mock
@@ -53,7 +55,7 @@ public class MuckrakerTest {
     @Test
     public void scanForTargetEmptyTest() throws GameActionException {
         Muckraker.senseRadius = 30;
-        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[] {});
+        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[]{});
         Muckraker.rc = mockRC;
 
         Assert.assertEquals(0, Muckraker.scanForTarget());
@@ -64,7 +66,7 @@ public class MuckrakerTest {
         Muckraker.senseRadius = 30;
         when(mockRC.getTeam()).thenReturn(Team.A);
         when(mockRC.getTeam().opponent()).thenReturn(Team.B);
-        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[] {new RobotInfo(100, Team.B,
+        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[]{new RobotInfo(100, Team.B,
                 RobotType.ENLIGHTENMENT_CENTER, 100, 100, target)});
         when(mockRC.canSetFlag(12900)).thenReturn(true);
         Muckraker.rc = mockRC;
@@ -76,7 +78,7 @@ public class MuckrakerTest {
         Muckraker.senseRadius = 30;
         when(mockRC.getTeam()).thenReturn(Team.A);
         when(mockRC.getTeam().opponent()).thenReturn(Team.B);
-        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[] {new RobotInfo(100,
+        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[]{new RobotInfo(100,
                 Team.NEUTRAL, RobotType.ENLIGHTENMENT_CENTER, 100, 100, target)});
         when(mockRC.canSetFlag(12900)).thenReturn(true);
         Muckraker.rc = mockRC;
@@ -104,12 +106,12 @@ public class MuckrakerTest {
     public void RunMuckrakerTest() throws GameActionException {
         //Set to Run no code
         Muckraker.senseRadius = 30;
-        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[] {});
+        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[]{});
 
         //Set to Run no code
         Muckraker.actionRadius = 12;
         Muckraker.enemy = Team.B;
-        when(mockRC.senseNearbyRobots(Muckraker.actionRadius, Muckraker.enemy)).thenReturn(new RobotInfo[] {});
+        when(mockRC.senseNearbyRobots(Muckraker.actionRadius, Muckraker.enemy)).thenReturn(new RobotInfo[]{});
 
         Muckraker.rc = mockRC;
         Muckraker.runMuckraker();

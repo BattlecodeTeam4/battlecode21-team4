@@ -148,8 +148,7 @@ public class EnlightenmentCenter extends Robot {
                     if (rc.canBuildRobot(RobotType.MUCKRAKER, dir, mucInf)) {
                         rc.buildRobot(RobotType.MUCKRAKER, dir, mucInf);
                         mucIDList.add(rc.senseRobotAtLocation(rc.adjacentLocation(dir)).getID());
-                    }
-                    else {
+                    } else {
                         toBuild = null;
                     }
                     break;
@@ -157,8 +156,7 @@ public class EnlightenmentCenter extends Robot {
                     if (rc.canBuildRobot(RobotType.POLITICIAN, dir, polInf)) {
                         rc.buildRobot(RobotType.POLITICIAN, dir, polInf);
                         polIDList.add(rc.senseRobotAtLocation(rc.adjacentLocation(dir)).getID());
-                    }
-                    else {
+                    } else {
                         toBuild = null;
                     }
                     break;
@@ -166,15 +164,13 @@ public class EnlightenmentCenter extends Robot {
                     if (rc.canBuildRobot(RobotType.SLANDERER, dir, slaInf)) {
                         rc.buildRobot(RobotType.SLANDERER, dir, slaInf);
                         slaIDList.add(rc.senseRobotAtLocation(rc.adjacentLocation(dir)).getID());
-                    }
-                    else {
+                    } else {
                         toBuild = null;
                     }
                     break;
             }
         }
-        if(dir == null)
-        {
+        if (dir == null) {
             toBuild = null;
         }
         return toBuild;
@@ -252,25 +248,19 @@ public class EnlightenmentCenter extends Robot {
      * @throws GameActionException
      */
     public static boolean bidByThreshold() throws GameActionException {
-        if(currRound <= 100)
-        {
+        if (currRound <= 100) {
             bidThreshold = 0.005;
-        }
-        else if (currRound <= 400)
-        {
+        } else if (currRound <= 400) {
             bidThreshold = 0.010;
-        }
-        else if(currRound <= 750) {
+        } else if (currRound <= 750) {
             bidThreshold = 0.0275;
-        }
-        else if (currRound <= 1000){
+        } else if (currRound <= 1000) {
             bidThreshold = 0.05;
-        }
-        else if (currRound <= 1500){
+        } else if (currRound <= 1500) {
             bidThreshold = 0.075;
         }
         int bid = (int) (rc.getInfluence() * bidThreshold);
-        if(bid < 1) bid = 1;
+        if (bid < 1) bid = 1;
         if (rc.canBid(bid)) {
             rc.bid(bid);
             return true;
@@ -302,14 +292,15 @@ public class EnlightenmentCenter extends Robot {
 
     public static RobotType nearbyEnemyECProfile(int enemyInfluence) throws GameActionException {
         RobotType toBuild;
-        int muc = 50;
+        int muc = 30;
         int pol = 50;
-        int sla = 0;
+        int sla = 20;
         int polInf = 10;
         if (influence >= (enemyInfluence + 50)) {
             polInf = (enemyInfluence + 25);
             pol = 100;
             muc = 0;
+            sla = 0;
         }
         toBuild = spawnRobot(muc, pol, sla);
         return buildRobot(toBuild, randomDirection(), mucInfluence, polInf, slaInfluence);
@@ -331,6 +322,28 @@ public class EnlightenmentCenter extends Robot {
         return null;
     }
 
+    public static RobotType balanceProfile() throws GameActionException {
+        RobotType toBuild = null;
+        if (mucIDList.size() >= 25 && polIDList.size() >= 50 && slaIDList.size() >= 50) {
+            toBuild = defaultProfile();
+        } else if (polIDList.size() < 50 || slaIDList.size() < 50) {
+            toBuild = spawnRobot(20, 40, 40);
+            return buildRobot(toBuild, randomDirection(), mucInfluence, defaultInfGive, defaultInfGive);
+        }
+        return toBuild;
+    }
+
+    public static RobotType endGameProfile() throws GameActionException {
+        RobotType toBuild;
+        if (polIDList.size() < 50 || slaIDList.size() < 50) {
+            toBuild = spawnRobot(0, 30, 70);
+            return buildRobot(toBuild, randomDirection(), mucInfluence, defaultInfGive, defaultInfGive);
+        } else {
+            toBuild = defaultProfile();
+        }
+        return toBuild;
+    }
+
     /**
      * @throws GameActionException
      */
@@ -347,8 +360,10 @@ public class EnlightenmentCenter extends Robot {
             nearbyEnemyECProfile(nearbyEnemyEC);
         } else if (nearbyEnemyEC == 0 && currRound < 250) {
             setupProfile();
+        } else if (nearbyEnemyEC == 0 && currRound <= 1000) {
+            balanceProfile();
         } else if (nearbyEnemyEC == 0 && currRound <= 1500) {
-            defaultProfile();
+            endGameProfile();
         }
         bidByThreshold();
     }

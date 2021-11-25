@@ -1,15 +1,16 @@
 package robotdelta;
 
 import battlecode.common.*;
-import org.junit.*;
-import org.mockito.*;
+import org.junit.Assert;
+import org.junit.Test;
+import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Map;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class EnlightenmentCenterTest {
     @Mock
@@ -51,53 +52,53 @@ public class EnlightenmentCenterTest {
         EnlightenmentCenter.mucIDList = new HashSet<>();
         EnlightenmentCenter.mucIDList.add(200);
         when(mockRC.canGetFlag(200)).thenReturn(true);
-        Assert.assertEquals(1,EnlightenmentCenter.checkIfExistMuckraker());
+        Assert.assertEquals(1, EnlightenmentCenter.checkIfExistMuckraker());
     }
 
     @Test
     public void checkIfExistPolitician() throws GameActionException {
         EnlightenmentCenter.rc = mockRC;
-        EnlightenmentCenter.polIDList= new HashSet<>();
+        EnlightenmentCenter.polIDList = new HashSet<>();
         EnlightenmentCenter.polIDList.add(200);
         EnlightenmentCenter.polIDList.add(300);
         when(mockRC.canGetFlag(200)).thenReturn(true);
         when(mockRC.canGetFlag(300)).thenReturn(true);
-        Assert.assertEquals(2 ,EnlightenmentCenter.checkIfExistPolitician());
+        Assert.assertEquals(2, EnlightenmentCenter.checkIfExistPolitician());
     }
 
     @Test
     public void checkIfExistSlandererRmSlanderer() throws GameActionException {
         EnlightenmentCenter.rc = mockRC;
-        EnlightenmentCenter.slaIDList= new HashSet<>();
+        EnlightenmentCenter.slaIDList = new HashSet<>();
         EnlightenmentCenter.slaThreshold = 290;
         EnlightenmentCenter.slaIDList.add(295);
         when(mockRC.canGetFlag(295)).thenReturn(false);
         when(mockRC.getFlag(295)).thenReturn(295);
-        Assert.assertEquals(0,EnlightenmentCenter.checkIfExistSlanderer());
+        Assert.assertEquals(0, EnlightenmentCenter.checkIfExistSlanderer());
     }
 
     @Test
     public void checkIfExistSlandererNot() throws GameActionException {
         EnlightenmentCenter.rc = mockRC;
-        EnlightenmentCenter.slaIDList= new HashSet<>();
+        EnlightenmentCenter.slaIDList = new HashSet<>();
         EnlightenmentCenter.polIDList = new HashSet<>();
         EnlightenmentCenter.slaThreshold = 290;
         EnlightenmentCenter.slaIDList.add(295);
         when(mockRC.canGetFlag(295)).thenReturn(true);
         when(mockRC.getFlag(295)).thenReturn(295);
-        Assert.assertEquals(0,EnlightenmentCenter.checkIfExistSlanderer());
-        Assert.assertEquals(1,EnlightenmentCenter.checkIfExistPolitician());
+        Assert.assertEquals(0, EnlightenmentCenter.checkIfExistSlanderer());
+        Assert.assertEquals(1, EnlightenmentCenter.checkIfExistPolitician());
     }
 
     @Test
     public void checkIfExistSlandererYes() throws GameActionException {
         EnlightenmentCenter.rc = mockRC;
-        EnlightenmentCenter.slaIDList= new HashSet<>();
+        EnlightenmentCenter.slaIDList = new HashSet<>();
         EnlightenmentCenter.slaThreshold = 290;
         EnlightenmentCenter.slaIDList.add(285);
         when(mockRC.canGetFlag(285)).thenReturn(true);
         when(mockRC.getFlag(285)).thenReturn(285);
-        Assert.assertEquals(1,EnlightenmentCenter.checkIfExistSlanderer());
+        Assert.assertEquals(1, EnlightenmentCenter.checkIfExistSlanderer());
     }
 
     @Test
@@ -124,101 +125,101 @@ public class EnlightenmentCenterTest {
     }
 
     @Test
-    public void createRobotNoDirection() throws  GameActionException {
+    public void createRobotNoDirection() throws GameActionException {
         when(mockRC.getInfluence()).thenReturn(100);
         for (Direction d : EnlightenmentCenter.directions) {
             when(mockRC.canBuildRobot(RobotType.MUCKRAKER, d, 10)).thenReturn(true);
             when(mockRC.senseRobotAtLocation(mockRC.adjacentLocation(d))).thenReturn(new RobotInfo(1,
-                    Team.A, RobotType.MUCKRAKER, 10, 1, new MapLocation(102,102)));
+                    Team.A, RobotType.MUCKRAKER, 10, 1, new MapLocation(102, 102)));
         }
 
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.mucIDList = new HashSet<>();
 
-        RobotType test = EnlightenmentCenter.buildRobot(RobotType.MUCKRAKER, null,10,0,0);
+        RobotType test = EnlightenmentCenter.buildRobot(RobotType.MUCKRAKER, null, 10, 0, 0);
         Assert.assertNull(test);
     }
 
     @Test
-    public void createMuckraker() throws  GameActionException {
+    public void createMuckraker() throws GameActionException {
         when(mockRC.getInfluence()).thenReturn(100);
         for (Direction d : EnlightenmentCenter.directions) {
             when(mockRC.canBuildRobot(RobotType.MUCKRAKER, d, 10)).thenReturn(true);
             when(mockRC.senseRobotAtLocation(mockRC.adjacentLocation(d))).thenReturn(new RobotInfo(1,
-                    Team.A, RobotType.MUCKRAKER, 10, 1, new MapLocation(102,102)));
+                    Team.A, RobotType.MUCKRAKER, 10, 1, new MapLocation(102, 102)));
         }
 
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.mucIDList = new HashSet<>();
 
-        RobotType test = EnlightenmentCenter.buildRobot(RobotType.MUCKRAKER, Direction.NORTH,10,0,0);
+        RobotType test = EnlightenmentCenter.buildRobot(RobotType.MUCKRAKER, Direction.NORTH, 10, 0, 0);
         Assert.assertEquals(RobotType.MUCKRAKER, test);
     }
 
     @Test
     public void createMuckrakerNot() throws GameActionException {
-        for(Direction d : EnlightenmentCenter.directions){
+        for (Direction d : EnlightenmentCenter.directions) {
             when(mockRC.canBuildRobot(RobotType.MUCKRAKER, d, 35)).thenReturn(false);
-            when(mockRC.senseRobotAtLocation(mockRC.adjacentLocation(d))).thenReturn(new RobotInfo(2, Team.A, RobotType.POLITICIAN, 35, 1, new MapLocation(103, 103) ));
+            when(mockRC.senseRobotAtLocation(mockRC.adjacentLocation(d))).thenReturn(new RobotInfo(2, Team.A, RobotType.POLITICIAN, 35, 1, new MapLocation(103, 103)));
         }
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.polIDList = new HashSet<>();
 
-        RobotType test = EnlightenmentCenter.buildRobot(RobotType.MUCKRAKER, Direction.NORTH,0, 0, 0);
+        RobotType test = EnlightenmentCenter.buildRobot(RobotType.MUCKRAKER, Direction.NORTH, 0, 0, 0);
         Assert.assertNull(test);
     }
 
     @Test
     public void createPolitician() throws GameActionException {
-        for(Direction d : EnlightenmentCenter.directions){
+        for (Direction d : EnlightenmentCenter.directions) {
             when(mockRC.canBuildRobot(RobotType.POLITICIAN, d, 35)).thenReturn(true);
-            when(mockRC.senseRobotAtLocation(mockRC.adjacentLocation(d))).thenReturn(new RobotInfo(2, Team.A, RobotType.POLITICIAN, 35, 1, new MapLocation(103, 103) ));
+            when(mockRC.senseRobotAtLocation(mockRC.adjacentLocation(d))).thenReturn(new RobotInfo(2, Team.A, RobotType.POLITICIAN, 35, 1, new MapLocation(103, 103)));
         }
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.polIDList = new HashSet<>();
 
-        RobotType test = EnlightenmentCenter.buildRobot(RobotType.POLITICIAN, Direction.NORTH,0, 35, 0);
+        RobotType test = EnlightenmentCenter.buildRobot(RobotType.POLITICIAN, Direction.NORTH, 0, 35, 0);
         Assert.assertEquals(RobotType.POLITICIAN, test);
     }
 
     @Test
     public void createPoliticianNot() throws GameActionException {
-        for(Direction d : EnlightenmentCenter.directions){
+        for (Direction d : EnlightenmentCenter.directions) {
             when(mockRC.canBuildRobot(RobotType.POLITICIAN, d, 35)).thenReturn(false);
-            when(mockRC.senseRobotAtLocation(mockRC.adjacentLocation(d))).thenReturn(new RobotInfo(2, Team.A, RobotType.POLITICIAN, 35, 1, new MapLocation(103, 103) ));
+            when(mockRC.senseRobotAtLocation(mockRC.adjacentLocation(d))).thenReturn(new RobotInfo(2, Team.A, RobotType.POLITICIAN, 35, 1, new MapLocation(103, 103)));
         }
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.polIDList = new HashSet<>();
 
-        RobotType test = EnlightenmentCenter.buildRobot(RobotType.POLITICIAN, Direction.NORTH,0, 0, 0);
+        RobotType test = EnlightenmentCenter.buildRobot(RobotType.POLITICIAN, Direction.NORTH, 0, 0, 0);
         Assert.assertNull(test);
     }
 
     @Test
-    public void createSlanderer() throws  GameActionException {
+    public void createSlanderer() throws GameActionException {
         when(mockRC.getInfluence()).thenReturn(100);
         for (Direction d : EnlightenmentCenter.directions) {
-            when(mockRC.canBuildRobot(RobotType.SLANDERER, d , 50)).thenReturn(true);
-            when(mockRC.senseRobotAtLocation(mockRC.adjacentLocation(d))).thenReturn(new RobotInfo(0, Team.A, RobotType.SLANDERER, 50, 1, new MapLocation(101,101)));
+            when(mockRC.canBuildRobot(RobotType.SLANDERER, d, 50)).thenReturn(true);
+            when(mockRC.senseRobotAtLocation(mockRC.adjacentLocation(d))).thenReturn(new RobotInfo(0, Team.A, RobotType.SLANDERER, 50, 1, new MapLocation(101, 101)));
         }
 
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.slaIDList = new HashSet<>();
 
-        RobotType test = EnlightenmentCenter.buildRobot(RobotType.SLANDERER, Direction.NORTH,0,0,50);
+        RobotType test = EnlightenmentCenter.buildRobot(RobotType.SLANDERER, Direction.NORTH, 0, 0, 50);
         Assert.assertEquals(RobotType.SLANDERER, test);
     }
 
     @Test
     public void createSlandererNot() throws GameActionException {
-        for(Direction d : EnlightenmentCenter.directions){
+        for (Direction d : EnlightenmentCenter.directions) {
             when(mockRC.canBuildRobot(RobotType.SLANDERER, d, 35)).thenReturn(false);
-            when(mockRC.senseRobotAtLocation(mockRC.adjacentLocation(d))).thenReturn(new RobotInfo(2, Team.A, RobotType.POLITICIAN, 35, 1, new MapLocation(103, 103) ));
+            when(mockRC.senseRobotAtLocation(mockRC.adjacentLocation(d))).thenReturn(new RobotInfo(2, Team.A, RobotType.POLITICIAN, 35, 1, new MapLocation(103, 103)));
         }
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.polIDList = new HashSet<>();
 
-        RobotType test = EnlightenmentCenter.buildRobot(RobotType.SLANDERER, Direction.NORTH,0, 0, 0);
+        RobotType test = EnlightenmentCenter.buildRobot(RobotType.SLANDERER, Direction.NORTH, 0, 0, 0);
         Assert.assertNull(test);
     }
 
@@ -242,7 +243,7 @@ public class EnlightenmentCenterTest {
         RobotInfo fakeEnemy = new RobotInfo(100, Team.B, RobotType.ENLIGHTENMENT_CENTER,
                 100, 100, new MapLocation(100, 100));
         when(mockRC.senseNearbyRobots(EnlightenmentCenter.senseRadius, Team.B))
-                .thenReturn(new RobotInfo[] {fakeEnemy});
+                .thenReturn(new RobotInfo[]{fakeEnemy});
         EnlightenmentCenter.rc = mockRC;
         Assert.assertEquals(100, EnlightenmentCenter.senseNearEC());
     }
@@ -301,6 +302,7 @@ public class EnlightenmentCenterTest {
         EnlightenmentCenter.rc = mockRC;
         Assert.assertTrue(EnlightenmentCenter.bidByThreshold());
     }
+
     @Test
     public void bidByThresholdLargeInfluence() throws GameActionException {
         EnlightenmentCenter.currRound = 1500;
@@ -361,6 +363,9 @@ public class EnlightenmentCenterTest {
     @Test
     public void nearbyEnemyECProfileTest() throws GameActionException {
         EnlightenmentCenter.influence = 1000;
+        EnlightenmentCenter.polIDList = new HashSet<>();
+        EnlightenmentCenter.slaIDList = new HashSet<>();
+        EnlightenmentCenter.mucIDList = new HashSet<>();
         Assert.assertNull(EnlightenmentCenter.nearbyEnemyECProfile(500));
     }
 
@@ -380,6 +385,82 @@ public class EnlightenmentCenterTest {
     }
 
     @Test
+    public void balanceProfile2DefaultTest() throws GameActionException {
+        EnlightenmentCenter.polIDList = new HashSet<>();
+        EnlightenmentCenter.slaIDList = new HashSet<>();
+        EnlightenmentCenter.mucIDList = new HashSet<>();
+        EnlightenmentCenter.targetList = new LinkedList<>();
+        EnlightenmentCenter.chanceArr = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            EnlightenmentCenter.mucIDList.add(i);
+        }
+        for (int i = 0; i < 60; i++) {
+            EnlightenmentCenter.polIDList.add(i);
+        }
+        for (int i = 0; i < 60; i++) {
+            EnlightenmentCenter.slaIDList.add(i);
+        }
+        EnlightenmentCenter.balanceProfile();
+    }
+
+    @Test
+    public void balanceProfilePolSlaTest() throws GameActionException {
+        EnlightenmentCenter.polIDList = new HashSet<>();
+        EnlightenmentCenter.slaIDList = new HashSet<>();
+        EnlightenmentCenter.mucIDList = new HashSet<>();
+        EnlightenmentCenter.targetList = new LinkedList<>();
+        EnlightenmentCenter.chanceArr = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            EnlightenmentCenter.mucIDList.add(i);
+        }
+        for (int i = 0; i < 40; i++) {
+            EnlightenmentCenter.polIDList.add(i);
+        }
+        for (int i = 0; i < 40; i++) {
+            EnlightenmentCenter.slaIDList.add(i);
+        }
+        EnlightenmentCenter.balanceProfile();
+    }
+
+    @Test
+    public void endGameProfilePolSlaTest() throws GameActionException {
+        EnlightenmentCenter.polIDList = new HashSet<>();
+        EnlightenmentCenter.slaIDList = new HashSet<>();
+        EnlightenmentCenter.mucIDList = new HashSet<>();
+        EnlightenmentCenter.targetList = new LinkedList<>();
+        EnlightenmentCenter.chanceArr = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            EnlightenmentCenter.mucIDList.add(i);
+        }
+        for (int i = 0; i < 40; i++) {
+            EnlightenmentCenter.polIDList.add(i);
+        }
+        for (int i = 0; i < 40; i++) {
+            EnlightenmentCenter.slaIDList.add(i);
+        }
+        EnlightenmentCenter.endGameProfile();
+    }
+
+    @Test
+    public void endGameProfilePolSlaGreaterTest() throws GameActionException {
+        EnlightenmentCenter.polIDList = new HashSet<>();
+        EnlightenmentCenter.slaIDList = new HashSet<>();
+        EnlightenmentCenter.mucIDList = new HashSet<>();
+        EnlightenmentCenter.targetList = new LinkedList<>();
+        EnlightenmentCenter.chanceArr = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            EnlightenmentCenter.mucIDList.add(i);
+        }
+        for (int i = 0; i < 60; i++) {
+            EnlightenmentCenter.polIDList.add(i);
+        }
+        for (int i = 0; i < 60; i++) {
+            EnlightenmentCenter.slaIDList.add(i);
+        }
+        EnlightenmentCenter.endGameProfile();
+    }
+
+    @Test
     public void runEnlightenmentCenterTest() throws GameActionException {
         EnlightenmentCenter.turnCount = 100;
         EnlightenmentCenter.currRound = 100;
@@ -388,8 +469,9 @@ public class EnlightenmentCenterTest {
         EnlightenmentCenter.slaIDList = new HashSet<>();
         EnlightenmentCenter.mucIDList = new HashSet<>();
         EnlightenmentCenter.targetList = new LinkedList<>();
+        EnlightenmentCenter.chanceArr = new ArrayList<>();
         Muckraker.enemy = Team.B;
-        when(mockRC.senseNearbyRobots(EnlightenmentCenter.senseRadius, Team.B)).thenReturn(new RobotInfo[] {});
+        when(mockRC.senseNearbyRobots(EnlightenmentCenter.senseRadius, Team.B)).thenReturn(new RobotInfo[]{});
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.runEnlightenmentCenter();
     }
@@ -403,8 +485,41 @@ public class EnlightenmentCenterTest {
         EnlightenmentCenter.slaIDList = new HashSet<>();
         EnlightenmentCenter.mucIDList = new HashSet<>();
         EnlightenmentCenter.targetList = new LinkedList<>();
+        EnlightenmentCenter.chanceArr = new ArrayList<>();
         Muckraker.enemy = Team.B;
-        when(mockRC.senseNearbyRobots(EnlightenmentCenter.senseRadius, Team.B)).thenReturn(new RobotInfo[] {});
+        when(mockRC.senseNearbyRobots(EnlightenmentCenter.senseRadius, Team.B)).thenReturn(new RobotInfo[]{});
+        EnlightenmentCenter.rc = mockRC;
+        EnlightenmentCenter.runEnlightenmentCenter();
+    }
+
+    @Test
+    public void runEnlightenmentCenter500PlusPlusTest() throws GameActionException {
+        EnlightenmentCenter.turnCount = 100;
+        EnlightenmentCenter.currRound = 750;
+        EnlightenmentCenter.senseRadius = 40;
+        EnlightenmentCenter.polIDList = new HashSet<>();
+        EnlightenmentCenter.slaIDList = new HashSet<>();
+        EnlightenmentCenter.mucIDList = new HashSet<>();
+        EnlightenmentCenter.targetList = new LinkedList<>();
+        EnlightenmentCenter.chanceArr = new ArrayList<>();
+        Muckraker.enemy = Team.B;
+        when(mockRC.senseNearbyRobots(EnlightenmentCenter.senseRadius, Team.B)).thenReturn(new RobotInfo[]{});
+        EnlightenmentCenter.rc = mockRC;
+        EnlightenmentCenter.runEnlightenmentCenter();
+    }
+
+    @Test
+    public void runEnlightenmentCenter1000PlusPlusTest() throws GameActionException {
+        EnlightenmentCenter.turnCount = 100;
+        EnlightenmentCenter.currRound = 1250;
+        EnlightenmentCenter.senseRadius = 40;
+        EnlightenmentCenter.polIDList = new HashSet<>();
+        EnlightenmentCenter.slaIDList = new HashSet<>();
+        EnlightenmentCenter.mucIDList = new HashSet<>();
+        EnlightenmentCenter.targetList = new LinkedList<>();
+        EnlightenmentCenter.chanceArr = new ArrayList<>();
+        Muckraker.enemy = Team.B;
+        when(mockRC.senseNearbyRobots(EnlightenmentCenter.senseRadius, Team.B)).thenReturn(new RobotInfo[]{});
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.runEnlightenmentCenter();
     }
@@ -422,7 +537,7 @@ public class EnlightenmentCenterTest {
         RobotInfo fakeEnemy = new RobotInfo(100, Team.B, RobotType.ENLIGHTENMENT_CENTER,
                 100, 100, new MapLocation(100, 100));
         when(mockRC.senseNearbyRobots(EnlightenmentCenter.senseRadius, Team.B))
-                .thenReturn(new RobotInfo[] {fakeEnemy});
+                .thenReturn(new RobotInfo[]{fakeEnemy});
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.runEnlightenmentCenter();
     }

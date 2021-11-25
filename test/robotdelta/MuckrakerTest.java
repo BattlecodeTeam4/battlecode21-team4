@@ -1,10 +1,12 @@
 package robotdelta;
 
 import battlecode.common.*;
-import org.junit.*;
-import org.mockito.*;
+import org.junit.Assert;
+import org.junit.Test;
+import org.mockito.Mock;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class MuckrakerTest {
     @Mock
@@ -53,7 +55,7 @@ public class MuckrakerTest {
     @Test
     public void scanForTargetEmptyTest() throws GameActionException {
         Muckraker.senseRadius = 30;
-        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[] {});
+        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[]{});
         Muckraker.rc = mockRC;
 
         Assert.assertEquals(0, Muckraker.scanForTarget());
@@ -64,7 +66,7 @@ public class MuckrakerTest {
         Muckraker.senseRadius = 30;
         when(mockRC.getTeam()).thenReturn(Team.A);
         when(mockRC.getTeam().opponent()).thenReturn(Team.B);
-        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[] {new RobotInfo(100, Team.B,
+        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[]{new RobotInfo(100, Team.B,
                 RobotType.ENLIGHTENMENT_CENTER, 100, 100, target)});
         when(mockRC.canSetFlag(12900)).thenReturn(true);
         Muckraker.rc = mockRC;
@@ -76,7 +78,7 @@ public class MuckrakerTest {
         Muckraker.senseRadius = 30;
         when(mockRC.getTeam()).thenReturn(Team.A);
         when(mockRC.getTeam().opponent()).thenReturn(Team.B);
-        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[] {new RobotInfo(100,
+        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[]{new RobotInfo(100,
                 Team.NEUTRAL, RobotType.ENLIGHTENMENT_CENTER, 100, 100, target)});
         when(mockRC.canSetFlag(12900)).thenReturn(true);
         Muckraker.rc = mockRC;
@@ -101,15 +103,103 @@ public class MuckrakerTest {
     }
 
     @Test
+    public void hoverAroundTargetSameTeamTest() throws GameActionException {
+        Muckraker.enemy = Team.B;
+        Muckraker.target = target;
+        when(mockRC.getTeam()).thenReturn(Team.A);
+        when(mockRC.canSenseLocation(target)).thenReturn(true);
+        when(mockRC.senseRobotAtLocation(target)).thenReturn(new RobotInfo(100, Team.A,
+                RobotType.SLANDERER, 100, 100, target));
+        Muckraker.rc = mockRC;
+        Muckraker.hoverAroundTarget();
+    }
+
+    @Test
+    public void lastTargetMathGreaterTest() throws GameActionException {
+        Muckraker.roundSinceLastTarget = Muckraker.lastHoverRoundThresh + 1;
+        Muckraker.lastTargetMath();
+    }
+
+    @Test
+    public void lastTargetMathLesserTest() throws GameActionException {
+        Muckraker.roundSinceLastTarget = Muckraker.lastHoverRoundThresh - 1;
+        Muckraker.lastTargetMath();
+    }
+
+
+    @Test
+    public void hoverAroundTargetTest() throws GameActionException {
+        when(mockRC.getTeam()).thenReturn(Team.A);
+        Muckraker.enemy = Team.B;
+        Muckraker.target = target;
+        when(mockRC.canSenseLocation(target)).thenReturn(true);
+        when(mockRC.senseRobotAtLocation(target)).thenReturn(new RobotInfo(100, Muckraker.enemy,
+                RobotType.ENLIGHTENMENT_CENTER, 100, 100, target));
+        when(mockRC.getLocation()).thenReturn(new MapLocation(150, 150));
+        Muckraker.rc = mockRC;
+        Muckraker.hoverAroundTarget();
+    }
+
+    @Test
+    public void findSpotTest() throws GameActionException {
+        Muckraker.target = target;
+        for (Direction dir : Muckraker.directions) {
+            when(mockRC.canSenseLocation(target.add(dir))).thenReturn(true);
+        }
+        when(mockRC.senseRobotAtLocation(target.add(Direction.NORTH))).thenReturn(new RobotInfo(100, Team.A,
+                RobotType.MUCKRAKER, 1, 1, target.add(Direction.NORTH)));
+        when(mockRC.getType()).thenReturn(RobotType.MUCKRAKER);
+        when(mockRC.getTeam()).thenReturn(Team.A);
+        when(mockRC.getLocation()).thenReturn(target.add(Direction.NORTH));
+        Muckraker.rc = mockRC;
+        Muckraker.findSpot();
+    }
+
+    @Test
+    public void findSpotSurroundedTest() throws GameActionException {
+        Muckraker.target = target;
+        for (Direction dir : Muckraker.directions) {
+            when(mockRC.canSenseLocation(target.add(dir))).thenReturn(true);
+            when(mockRC.senseRobotAtLocation(target.add(dir))).thenReturn(new RobotInfo(100, Team.A,
+                    RobotType.MUCKRAKER, 1, 1, target.add(dir)));
+            when(mockRC.getType()).thenReturn(RobotType.MUCKRAKER);
+            when(mockRC.getTeam()).thenReturn(Team.A);
+            when(mockRC.getLocation()).thenReturn(target.add(dir));
+        }
+
+
+        Muckraker.rc = mockRC;
+        Muckraker.findSpot();
+    }
+
+    @Test
     public void RunMuckrakerTest() throws GameActionException {
         //Set to Run no code
         Muckraker.senseRadius = 30;
-        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[] {});
+        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[]{});
 
         //Set to Run no code
         Muckraker.actionRadius = 12;
         Muckraker.enemy = Team.B;
-        when(mockRC.senseNearbyRobots(Muckraker.actionRadius, Muckraker.enemy)).thenReturn(new RobotInfo[] {});
+        when(mockRC.senseNearbyRobots(Muckraker.actionRadius, Muckraker.enemy)).thenReturn(new RobotInfo[]{});
+
+        Muckraker.rc = mockRC;
+        Muckraker.runMuckraker();
+    }
+
+    @Test
+    public void RunMuckrakerTargetTest() throws GameActionException {
+        //Set to Run no code
+        Muckraker.senseRadius = 30;
+        Muckraker.target = new MapLocation(100, 100);
+        when(mockRC.canSenseLocation(target)).thenReturn(false);
+        when(mockRC.getLocation()).thenReturn(new MapLocation(200, 200));
+        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[]{});
+
+        //Set to Run no code
+        Muckraker.actionRadius = 12;
+        Muckraker.enemy = Team.B;
+        when(mockRC.senseNearbyRobots(Muckraker.actionRadius, Muckraker.enemy)).thenReturn(new RobotInfo[]{});
 
         Muckraker.rc = mockRC;
         Muckraker.runMuckraker();

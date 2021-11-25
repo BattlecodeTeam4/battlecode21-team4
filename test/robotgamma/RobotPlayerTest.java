@@ -1,10 +1,9 @@
 package robotgamma;
 
-import battlecode.common.*;
-import org.junit.*;
-import org.mockito.*;
+import battlecode.common.RobotController;
+import org.mockito.Mock;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 public class RobotPlayerTest {
 
