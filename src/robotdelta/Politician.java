@@ -78,12 +78,24 @@ public class Politician extends Robot {
         }
     }
 
+    public static void attack() throws GameActionException {
+        if(target == null)
+        {
+            RobotInfo [] enemyList = rc.senseNearbyRobots(senseRadius, enemy);
+            for (RobotInfo en : enemyList)
+            {
+                moveLocation(en.getLocation());
+            }
+        }
+    }
+
     /**
      * @throws GameActionException
      */
     public static void runPolitician() throws GameActionException {
         defendHome();
         resetIfTargetNullAndFlagNotZero();
+        attack();
         targetActions();
         updateTarget();
         moveLocation(target);

@@ -4,7 +4,7 @@ import battlecode.common.*;
 
 @SuppressWarnings({"RedundantThrows", "unused", "UnusedReturnValue"})
 public class Muckraker extends Robot {
-    static int lastHoverRoundThresh = 5;
+    static int lastHoverRoundThresh = 20;
     static int roundSinceLastTarget = 0;
 
     /**

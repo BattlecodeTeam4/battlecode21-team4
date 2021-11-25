@@ -326,7 +326,11 @@ public class EnlightenmentCenter extends Robot {
         RobotType toBuild = null;
         if (mucIDList.size() >= 25 && polIDList.size() >= 50 && slaIDList.size() >= 50) {
             toBuild = defaultProfile();
-        } else if (polIDList.size() < 50 || slaIDList.size() < 50) {
+        } else if (mucIDList.size() < 25){
+            toBuild = spawnRobot(60, 20, 20);
+            return buildRobot(toBuild, randomDirection(), mucInfluence, defaultInfGive, defaultInfGive);
+        }
+        else {
             toBuild = spawnRobot(20, 40, 40);
             return buildRobot(toBuild, randomDirection(), mucInfluence, defaultInfGive, defaultInfGive);
         }

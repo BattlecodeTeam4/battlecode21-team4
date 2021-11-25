@@ -163,6 +163,16 @@ public class PoliticianTest {
     }
 
     @Test
+    public void attackTest() throws GameActionException {
+        Politician.senseRadius = 25;
+        Politician.enemy = Team.B;
+        when(mockRC.senseNearbyRobots(Politician.senseRadius, Politician.enemy)).thenReturn(new RobotInfo[]
+                {new RobotInfo(100,Team.B, RobotType.MUCKRAKER, 1,1,new MapLocation(100, 100))});
+        Politician.rc = mockRC;
+        Politician.attack();
+    }
+
+    @Test
     public void runPoliticianTest() throws GameActionException {
         Politician.rc = mockRC;
         Politician.homeLoc = null;
@@ -171,6 +181,7 @@ public class PoliticianTest {
 
         Politician.actionRadius = 9;
         Politician.enemy = Team.B;
+        when(mockRC.senseNearbyRobots(Politician.senseRadius, Politician.enemy)).thenReturn(new RobotInfo[]{});
         when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(new RobotInfo[]{});
         when(mockRC.senseNearbyRobots(Politician.actionRadius, Team.NEUTRAL)).thenReturn(new RobotInfo[]{});
 
