@@ -95,9 +95,15 @@ public class Politician extends Robot {
     public static void runPolitician() throws GameActionException {
         defendHome();
         resetIfTargetNullAndFlagNotZero();
-        attack();
-        targetActions();
-        updateTarget();
+        if(rc.getInfluence() >= 100) {
+            attack();
+            targetActions();
+            updateTarget();
+        }
+        else {
+            attack();
+            targetActions();
+        }
         moveLocation(target);
     }
 }

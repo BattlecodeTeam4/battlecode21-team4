@@ -95,8 +95,8 @@ public class Muckraker extends Robot {
             MapLocation toTest = target.add(dir);
             if (rc.canSenseLocation(toTest)) {
                 RobotInfo test = rc.senseRobotAtLocation(toTest);
-                if (test != null && test.getLocation() != rc.getLocation()) {
-                    if (test.getType() == rc.getType() && test.getTeam() == rc.getTeam()) {
+                if (test != null) {
+                    if (test.getType() == rc.getType() && test.getTeam() == rc.getTeam() && test.getLocation() != rc.getLocation()) {
                         senseTotal += 1;
                     }
                     moveLocation(toTest);
