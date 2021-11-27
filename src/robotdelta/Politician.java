@@ -64,6 +64,15 @@ public class Politician extends Robot {
                     empowerEnemy();
                 }
             }
+            else {
+                for (RobotInfo rf : rc.senseNearbyRobots(actionRadius))
+                {
+                    if(rf.getType() == RobotType.ENLIGHTENMENT_CENTER && rf.getTeam() != rc.getTeam())
+                    {
+                        empowerEnemy();
+                    }
+                }
+            }
         } else {
             empowerEnemy();
         }
@@ -96,13 +105,13 @@ public class Politician extends Robot {
         defendHome();
         resetIfTargetNullAndFlagNotZero();
         if(rc.getInfluence() >= 100) {
-            attack();
             targetActions();
+            attack();
             updateTarget();
         }
         else {
-            attack();
             targetActions();
+            attack();
         }
         moveLocation(target);
     }

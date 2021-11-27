@@ -4,7 +4,7 @@ import battlecode.common.*;
 
 @SuppressWarnings({"RedundantThrows", "unused", "UnusedReturnValue"})
 public class Muckraker extends Robot {
-    static int lastHoverRoundThresh = 20;
+    static int lastHoverRoundThresh = 25;
     static int roundSinceLastTarget = 0;
 
     /**
@@ -30,7 +30,6 @@ public class Muckraker extends Robot {
      */
     public static int scanForTarget() throws GameActionException {
         // Sense neutral robots
-        int targetsCount = 0;
         RobotInfo[] targets = rc.senseNearbyRobots(senseRadius);
         for (RobotInfo robot : targets) {
             if (robot.getType().canBid() && ((robot.getTeam() == enemy) || (robot.getTeam() == Team.NEUTRAL))) {
@@ -81,7 +80,7 @@ public class Muckraker extends Robot {
                 roundSinceLastTarget = 0;
                 moveStraight();
             } else if (!rc.getLocation().isAdjacentTo(target)) {
-                return findSpot();
+                findSpot();
             }
         } else {
             return moveLocation(target);
@@ -90,26 +89,29 @@ public class Muckraker extends Robot {
     }
 
     public static boolean findSpot() throws GameActionException {
-        int senseTotal = 0;
-        for (Direction dir : directions) {
-            MapLocation toTest = target.add(dir);
-            if (rc.canSenseLocation(toTest)) {
-                RobotInfo test = rc.senseRobotAtLocation(toTest);
-                if (test != null) {
-                    if (test.getType() == rc.getType() && test.getTeam() == rc.getTeam() && test.getLocation() != rc.getLocation()) {
-                        senseTotal += 1;
+        if(target != null)
+        {
+            int senseTotal = 0;
+            for (Direction dir : directions) {
+                MapLocation toTest = target.add(dir);
+                if (rc.canSenseLocation(toTest)) {
+                    RobotInfo test = rc.senseRobotAtLocation(toTest);
+                    if (test != null) {
+                        if (test.getType() == rc.getType() && test.getTeam() == rc.getTeam() && test.getLocation() != rc.getLocation()) {
+                            senseTotal += 1;
+                        }
+                        moveLocation(toTest);
                     }
-                    moveLocation(toTest);
-                }
 
+                }
+            }
+            if (senseTotal >= 8) {
+                target = null;
+                roundSinceLastTarget = 0;
+                moveStraight();
             }
         }
-        if (senseTotal >= 8) {
-            target = null;
-            roundSinceLastTarget = 0;
-            moveStraight();
-        }
-        return false;
+        return true;
     }
 
     /**
