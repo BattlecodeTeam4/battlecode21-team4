@@ -581,18 +581,6 @@ public class EnlightenmentCenterTest {
     }
 
     @Test
-    public void polScanTest() throws GameActionException {
-        EnlightenmentCenter.polIDList = new HashSet<>();
-        EnlightenmentCenter.polIDList.add(100);
-        EnlightenmentCenter.targetList = new LinkedList<>();
-        EnlightenmentCenter.targetList.add(200);
-        when(mockRC.canGetFlag(100)).thenReturn(true);
-        when(mockRC.getFlag(100)).thenReturn(200);
-        EnlightenmentCenter.rc = mockRC;
-        EnlightenmentCenter.polScan();
-    }
-
-    @Test
     public void mucScanTest() throws GameActionException {
         EnlightenmentCenter.mucIDList = new HashSet<>();
         EnlightenmentCenter.mucIDList.add(100);
@@ -603,6 +591,7 @@ public class EnlightenmentCenterTest {
         EnlightenmentCenter.mucScan();
     }
 
+    @Test
     public void polScanZeroTest() throws GameActionException {
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.polIDList= new HashSet<>();
@@ -611,6 +600,20 @@ public class EnlightenmentCenterTest {
                 .thenReturn(true);
         when(mockRC.getFlag(300))
                 .thenReturn(0);
+        int result = EnlightenmentCenter.polScan();
+        Assert.assertEquals(1, result);
+    }
+
+    @Test
+    public void polScanTest() throws GameActionException {
+        EnlightenmentCenter.rc = mockRC;
+        EnlightenmentCenter.polIDList= new HashSet<>();
+        EnlightenmentCenter.polIDList.add(300);
+
+        when(mockRC.canGetFlag(300))
+                .thenReturn(true);
+        when(mockRC.getFlag(300))
+                .thenReturn(100);
         int result = EnlightenmentCenter.polScan();
         Assert.assertEquals(1, result);
     }
