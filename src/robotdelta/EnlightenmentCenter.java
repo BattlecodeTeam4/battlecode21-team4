@@ -256,8 +256,10 @@ public class EnlightenmentCenter extends Robot {
             bidThreshold = 0.0275;
         } else if (currRound <= 1000) {
             bidThreshold = 0.05;
-        } else if (currRound <= 1500) {
+        } else if (currRound <= 1250) {
             bidThreshold = 0.075;
+        } else if (currRound <= 1500) {
+            bidThreshold = 0.01;
         }
         int bid = (int) (rc.getInfluence() * bidThreshold);
         if (bid < 1) bid = 1;
@@ -284,21 +286,17 @@ public class EnlightenmentCenter extends Robot {
     public static RobotType setupProfile() throws GameActionException {
         RobotType toBuild;
         if (influence >= threshold) {
-            toBuild = spawnRobot(20, 10, 70);
+            toBuild = spawnRobot(30, 10, 60);
             return buildRobot(toBuild, randomDirection(), mucInfluence, defaultInfGive, defaultInfGive);
         }
-        else {
-            toBuild = spawnRobot(70, 30, 0);
-            return buildRobot(toBuild, randomDirection(), mucInfluence, 15, defaultInfGive);
-        }
-
+        return null;
     }
 
     public static RobotType nearbyEnemyECProfile(int enemyInfluence) throws GameActionException {
         RobotType toBuild;
-        int muc = 30;
+        int muc = 40;
         int pol = 50;
-        int sla = 20;
+        int sla = 10;
         int polInf = 50;
         if (influence >= (enemyInfluence + 50)) {
             polInf = (enemyInfluence + 25);

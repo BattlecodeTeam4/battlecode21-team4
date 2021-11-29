@@ -72,6 +72,18 @@ public class Muckraker extends Robot {
         }
     }
 
+    public static void moveAdjacent() throws GameActionException {
+        for(Direction dire : directions)
+        {
+            MapLocation toTry = rc.getLocation().add(dire);
+            if(rc.canSenseLocation(toTry)){
+                if(toTry.isAdjacentTo(target) && rc.senseRobotAtLocation(toTry) == null){
+                    moveLocation(toTry);
+                }
+            }
+        }
+    }
+
     public static boolean hoverAroundTarget() throws GameActionException {
         if (rc.canSenseLocation(target)) {
             if (rc.senseRobotAtLocation(target).getTeam() != enemy) {
@@ -82,15 +94,7 @@ public class Muckraker extends Robot {
                 findSpot();
             } else if (rc.getLocation().isAdjacentTo(target))
             {
-                for(Direction dire : directions)
-                {
-                    MapLocation toTry = rc.getLocation().add(dire);
-                    if(rc.canSenseLocation(toTry)){
-                        if(toTry.isAdjacentTo(target) && rc.senseRobotAtLocation(toTry) == null){
-                            moveLocation(toTry);
-                        }
-                    }
-                }
+                moveAdjacent();
             }
         } else {
             return moveLocation(target);
@@ -123,6 +127,7 @@ public class Muckraker extends Robot {
                 target = null;
                 roundSinceLastTarget = 0;
                 moveStraight();
+                return false;
             }
         }
         return true;

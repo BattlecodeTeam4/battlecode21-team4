@@ -4,7 +4,6 @@ import battlecode.common.*;
 
 @SuppressWarnings({"JavaDoc", "RedundantThrows", "unused", "UnusedReturnValue"})
 public class Politician extends Robot {
-    public static int followID;
     /**
      * @return
      * @throws GameActionException

@@ -163,16 +163,29 @@ public class PoliticianTest {
     }
 
     @Test
-    public void attackTest() throws GameActionException {
+    public void followSlaTest() throws GameActionException {
         Politician.senseRadius = 25;
         Politician.target = null;
         Politician.enemy = Team.B;
         RobotInfo[] enemies = new RobotInfo[] {new RobotInfo(100,Politician.enemy, RobotType.MUCKRAKER,
                 1,1,new MapLocation(21900, 21900)), new RobotInfo(100,Politician.enemy,
                 RobotType.MUCKRAKER, 1,1,new MapLocation(21901, 21901))};
-        when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(enemies);
-        when(mockRC.getLocation()).thenReturn(new MapLocation(21903, 21903));
+        when(mockRC.senseNearbyRobots(Politician.senseRadius, Politician.enemy)).thenReturn(enemies);
         Politician.rc = mockRC;
+        Politician.follow();
+    }
+
+    @Test
+    public void followPolTest() throws GameActionException {
+        Politician.senseRadius = 25;
+        Politician.target = null;
+        Politician.enemy = Team.B;
+        RobotInfo[] enemies = new RobotInfo[] {new RobotInfo(100,Politician.enemy, RobotType.MUCKRAKER,
+                1,1,new MapLocation(21900, 21900)), new RobotInfo(100,Politician.enemy,
+                RobotType.POLITICIAN, 1,1,new MapLocation(21901, 21901))};
+        when(mockRC.senseNearbyRobots(Politician.senseRadius, Politician.enemy)).thenReturn(enemies);
+        Politician.rc = mockRC;
+        Politician.follow();
     }
 
     @Test
@@ -188,6 +201,31 @@ public class PoliticianTest {
         when(mockRC.senseNearbyRobots(Politician.senseRadius, Politician.enemy)).thenReturn(new RobotInfo[]{});
         when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(new RobotInfo[]{});
         when(mockRC.senseNearbyRobots(Politician.actionRadius, Team.NEUTRAL)).thenReturn(new RobotInfo[]{});
+
+        Politician.runPolitician();
+    }
+
+    @Test
+    public void runPoliticianFollowTest() throws GameActionException {
+        Politician.rc = mockRC;
+        Politician.homeLoc = null;
+        Politician.target = null;
+        when(mockRC.canGetFlag(100)).thenReturn(false);
+        when(mockRC.getInfluence()).thenReturn(300);
+
+        Politician.senseRadius = 25;
+        Politician.actionRadius = 9;
+        Politician.enemy = Team.B;
+        RobotInfo pol = new RobotInfo(100,Politician.enemy,
+                RobotType.POLITICIAN, 1,1,new MapLocation(21901, 21901));
+        RobotInfo[] enemies = new RobotInfo[] {pol};
+        when(mockRC.senseNearbyRobots(Politician.senseRadius, Politician.enemy)).thenReturn(enemies);
+        when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(new RobotInfo[]{});
+        when(mockRC.senseNearbyRobots(Politician.actionRadius, Team.NEUTRAL)).thenReturn(new RobotInfo[]{});
+
+        when(mockRC.canSenseRobot(100)).thenReturn(true);
+        when(mockRC.senseRobot(100)).thenReturn(pol);
+        when(mockRC.getLocation()).thenReturn(new MapLocation(21908, 21908));
 
         Politician.runPolitician();
     }
