@@ -35,14 +35,13 @@ public class Muckraker extends Robot {
             if (robot.getType().canBid() && ((robot.getTeam() == enemy) || (robot.getTeam() == Team.NEUTRAL))) {
                 if (robot.getTeam() == enemy) {
                     sendLocation(robot.getLocation(), 2); // team 2 is enemy
-                    if (lastTargetMath())
                         target = robot.getLocation();
                 } else {
                     sendLocation(robot.getLocation(), 1); // team 1 is neutral
                 }
-
             }
         }
+
         return targets.length;
     }
 
@@ -81,6 +80,17 @@ public class Muckraker extends Robot {
                 moveStraight();
             } else if (!rc.getLocation().isAdjacentTo(target)) {
                 findSpot();
+            } else if (rc.getLocation().isAdjacentTo(target))
+            {
+                for(Direction dire : directions)
+                {
+                    MapLocation toTry = rc.getLocation().add(dire);
+                    if(rc.canSenseLocation(toTry)){
+                        if(toTry.isAdjacentTo(target) && rc.senseRobotAtLocation(toTry) == null){
+                            moveLocation(toTry);
+                        }
+                    }
+                }
             }
         } else {
             return moveLocation(target);
@@ -89,6 +99,7 @@ public class Muckraker extends Robot {
     }
 
     public static boolean findSpot() throws GameActionException {
+        boolean foundSpot = false;
         if(target != null)
         {
             int senseTotal = 0;
@@ -96,22 +107,36 @@ public class Muckraker extends Robot {
                 MapLocation toTest = target.add(dir);
                 if (rc.canSenseLocation(toTest)) {
                     RobotInfo test = rc.senseRobotAtLocation(toTest);
-                    if (test != null) {
-                        if (test.getType() == rc.getType() && test.getTeam() == rc.getTeam() && test.getLocation() != rc.getLocation()) {
-                            senseTotal += 1;
-                        }
+                    if (test == null) {
                         moveLocation(toTest);
+                        foundSpot = true;
+                        break;
                     }
-
+                    else if(test.getLocation() == rc.getLocation())
+                    {
+                        foundSpot = true;
+                        break;
+                    }
                 }
             }
-            if (senseTotal >= 8) {
+            if (!foundSpot) {
                 target = null;
                 roundSinceLastTarget = 0;
                 moveStraight();
             }
         }
         return true;
+    }
+
+    public static MapLocation findSlanderer() throws GameActionException {
+        RobotInfo[] enemies = rc.senseNearbyRobots(senseRadius, enemy);
+        for (RobotInfo e : enemies){
+            if(e.getType().canBeExposed())
+            {
+                return e.getLocation();
+            }
+        }
+        return null;
     }
 
     /**
@@ -123,6 +148,10 @@ public class Muckraker extends Robot {
         scanAndEmpower();
         if (target != null) {
             hoverAroundTarget();
-        } else moveStraight();
+        } else if (findSlanderer() != null)
+        {
+            moveLocation(findSlanderer());
+        }
+        else moveStraight();
     }
 }

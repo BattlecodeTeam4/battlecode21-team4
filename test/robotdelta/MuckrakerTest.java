@@ -182,6 +182,7 @@ public class MuckrakerTest {
         Muckraker.actionRadius = 12;
         Muckraker.enemy = Team.B;
         when(mockRC.senseNearbyRobots(Muckraker.actionRadius, Muckraker.enemy)).thenReturn(new RobotInfo[]{});
+        when(mockRC.senseNearbyRobots(Muckraker.senseRadius, Muckraker.enemy)).thenReturn(new RobotInfo[]{});
 
         Muckraker.rc = mockRC;
         Muckraker.runMuckraker();

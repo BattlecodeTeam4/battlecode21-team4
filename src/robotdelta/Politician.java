@@ -4,6 +4,7 @@ import battlecode.common.*;
 
 @SuppressWarnings({"JavaDoc", "RedundantThrows", "unused", "UnusedReturnValue"})
 public class Politician extends Robot {
+    public static int followID;
     /**
      * @return
      * @throws GameActionException
@@ -64,15 +65,6 @@ public class Politician extends Robot {
                     empowerEnemy();
                 }
             }
-            else {
-                for (RobotInfo rf : rc.senseNearbyRobots(actionRadius))
-                {
-                    if(rf.getType() == RobotType.ENLIGHTENMENT_CENTER && rf.getTeam() != rc.getTeam())
-                    {
-                        empowerEnemy();
-                    }
-                }
-            }
         } else {
             empowerEnemy();
         }
@@ -87,32 +79,37 @@ public class Politician extends Robot {
         }
     }
 
-    public static void attack() throws GameActionException {
-        if(target == null)
-        {
-            RobotInfo [] enemyList = rc.senseNearbyRobots(senseRadius, enemy);
-            for (RobotInfo en : enemyList)
+    public static int follow() throws GameActionException {
+        RobotInfo[] attackable = rc.senseNearbyRobots(senseRadius, enemy);
+        for(RobotInfo a : attackable) {
+            if(a.getType() == RobotType.MUCKRAKER || a.getType() == RobotType.POLITICIAN)
             {
-                moveLocation(en.getLocation());
+                return a.getID();
             }
         }
+        return 0;
     }
 
     /**
      * @throws GameActionException
      */
     public static void runPolitician() throws GameActionException {
+        int id = follow();
+        MapLocation found;
+
         defendHome();
-        resetIfTargetNullAndFlagNotZero();
-        if(rc.getInfluence() >= 100) {
+        if(id != 0 && rc.canSenseRobot(id))
+        {
+            found = rc.senseRobot(id).getLocation();
+            empowerEnemy();
+        }
+        else
+        {
+            found = target;
+            resetIfTargetNullAndFlagNotZero();
             targetActions();
-            attack();
             updateTarget();
         }
-        else {
-            targetActions();
-            attack();
-        }
-        moveLocation(target);
+        moveLocation(found);
     }
 }

@@ -471,6 +471,9 @@ public class EnlightenmentCenterTest {
         EnlightenmentCenter.mucIDList = new HashSet<>();
         EnlightenmentCenter.targetList = new LinkedList<>();
         EnlightenmentCenter.chanceArr = new ArrayList<>();
+        EnlightenmentCenter.currMucChance = 0;
+        EnlightenmentCenter.currPolChance = 0;
+        EnlightenmentCenter.currSlaChance = 0;
         EnlightenmentCenter.influence = 1000;
         Muckraker.enemy = Team.B;
         when(mockRC.senseNearbyRobots(EnlightenmentCenter.senseRadius, Team.B)).thenReturn(new RobotInfo[]{});

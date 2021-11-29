@@ -170,10 +170,9 @@ public class PoliticianTest {
         RobotInfo[] enemies = new RobotInfo[] {new RobotInfo(100,Politician.enemy, RobotType.MUCKRAKER,
                 1,1,new MapLocation(21900, 21900)), new RobotInfo(100,Politician.enemy,
                 RobotType.MUCKRAKER, 1,1,new MapLocation(21901, 21901))};
-        when(mockRC.senseNearbyRobots(Politician.senseRadius, Politician.enemy)).thenReturn(enemies);
+        when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(enemies);
         when(mockRC.getLocation()).thenReturn(new MapLocation(21903, 21903));
         Politician.rc = mockRC;
-        Politician.attack();
     }
 
     @Test

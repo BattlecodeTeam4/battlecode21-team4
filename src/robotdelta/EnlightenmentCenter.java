@@ -299,7 +299,7 @@ public class EnlightenmentCenter extends Robot {
         int muc = 30;
         int pol = 50;
         int sla = 20;
-        int polInf = 10;
+        int polInf = 50;
         if (influence >= (enemyInfluence + 50)) {
             polInf = (enemyInfluence + 25);
             pol = 100;
