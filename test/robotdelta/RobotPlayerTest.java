@@ -1,13 +1,14 @@
 package robotdelta;
 
 import battlecode.common.*;
-import org.junit.*;
-import org.mockito.*;
+import org.junit.Test;
+import org.mockito.Mock;
 
 import java.util.HashSet;
 import java.util.LinkedList;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class RobotPlayerTest {
 
@@ -28,7 +29,7 @@ public class RobotPlayerTest {
         EnlightenmentCenter.mucIDList = new HashSet<>();
         EnlightenmentCenter.targetList = new LinkedList<>();
         Muckraker.enemy = Team.B;
-        when(mockRC.senseNearbyRobots(EnlightenmentCenter.senseRadius, Team.B)).thenReturn(new RobotInfo[] {});
+        when(mockRC.senseNearbyRobots(EnlightenmentCenter.senseRadius, Team.B)).thenReturn(new RobotInfo[]{});
         RobotPlayer.run(mockRC);
     }
 
@@ -44,8 +45,8 @@ public class RobotPlayerTest {
 
         Politician.actionRadius = 9;
         Politician.enemy = Team.B;
-        when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(new RobotInfo[] {});
-        when(mockRC.senseNearbyRobots(Politician.actionRadius, Team.NEUTRAL)).thenReturn(new RobotInfo[] {});
+        when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(new RobotInfo[]{});
+        when(mockRC.senseNearbyRobots(Politician.actionRadius, Team.NEUTRAL)).thenReturn(new RobotInfo[]{});
         RobotPlayer.run(mockRC);
     }
 
@@ -68,6 +69,7 @@ public class RobotPlayerTest {
                 {fakeSla});
         RobotPlayer.run(mockRC);
     }
+
     @Test
     public void runTestMuc() throws GameActionException {
         Robot.robot = true;
@@ -76,11 +78,11 @@ public class RobotPlayerTest {
         when(mockRC.getLocation()).thenReturn(target);
 
         Muckraker.senseRadius = 30;
-        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[] {});
+        when(mockRC.senseNearbyRobots(Muckraker.senseRadius)).thenReturn(new RobotInfo[]{});
 
         Muckraker.actionRadius = 12;
         Muckraker.enemy = Team.B;
-        when(mockRC.senseNearbyRobots(Muckraker.actionRadius, Muckraker.enemy)).thenReturn(new RobotInfo[] {});
+        when(mockRC.senseNearbyRobots(Muckraker.actionRadius, Muckraker.enemy)).thenReturn(new RobotInfo[]{});
         RobotPlayer.run(mockRC);
     }
 

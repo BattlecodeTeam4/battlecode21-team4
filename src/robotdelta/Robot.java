@@ -163,7 +163,7 @@ public abstract class Robot extends RobotPlayer {
     /**
      * Encodes location and team info into a flag
      *
-     * @param loc location to send
+     * @param loc  location to send
      * @param team team for EC at the location
      * @throws GameActionException
      */
@@ -224,7 +224,6 @@ public abstract class Robot extends RobotPlayer {
      * @throws GameActionException
      */
     public static int getTeamFromFlag(int flag) throws GameActionException {
-        int team = flag / 128 / 128;
-        return team;
+        return flag / 128 / 128;
     }
 }

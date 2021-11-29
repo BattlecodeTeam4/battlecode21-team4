@@ -1,8 +1,9 @@
 package robotgamma;
 
 import battlecode.common.*;
-import org.junit.*;
-import org.mockito.*;
+import org.junit.Assert;
+import org.junit.Test;
+import org.mockito.Mock;
 
 import static org.mockito.Mockito.*;
 
@@ -44,6 +45,7 @@ public class RobotTest {
         Robot.rc = mockRC;
         Assert.assertEquals(29284, Robot.sendLocation(loc, 1));
     }
+
     @Test
     public void getLocationFromFlagTest() throws GameActionException {
         //Since RC is fake we have to define variables returned from method!
@@ -60,7 +62,7 @@ public class RobotTest {
     }
 
     @Test
-    public void getNeutralTeamFromFlagTest() throws GameActionException{
+    public void getNeutralTeamFromFlagTest() throws GameActionException {
         when(mockRC.canSetFlag(29284)).thenReturn(true);
         Robot.rc = mockRC;
         int resultNeutral = Robot.getTeamFromFlag(29284);
@@ -68,7 +70,7 @@ public class RobotTest {
     }
 
     @Test
-    public void getEnemyTeamFromFlagTest() throws GameActionException{
+    public void getEnemyTeamFromFlagTest() throws GameActionException {
         when(mockRC.canSetFlag(45668)).thenReturn(true);
         Robot.rc = mockRC;
         int resultEnemy = Robot.getTeamFromFlag(45668);
@@ -99,7 +101,7 @@ public class RobotTest {
         verify(mockRC, times(1)).getType();
     }
 
-   @Test
+    @Test
     public void randomDirectionTest() {
         Robot.rc = mockRC;
         Direction dir = robotgamma.Robot.randomDirection();
@@ -119,6 +121,7 @@ public class RobotTest {
         Robot.rc = mockRC;
         Assert.assertFalse(Robot.moveLocation(loc));
     }
+
     @Test
     public void moveLocationNoTargetTest() throws GameActionException {
         when(mockRC.getLocation()).thenReturn(new MapLocation(101, 100));
@@ -150,7 +153,7 @@ public class RobotTest {
             MapLocation parseLoc = loc.add(Robot.directions[i]);
             when(mockRC.onTheMap(parseLoc)).thenReturn(true);
             when(mockRC.senseRobotAtLocation(parseLoc)).thenReturn(new RobotInfo(100, Team.A,
-                    RobotType.ENLIGHTENMENT_CENTER,100, 100, new MapLocation(200, 200)));
+                    RobotType.ENLIGHTENMENT_CENTER, 100, 100, new MapLocation(200, 200)));
         }
         Robot.findHome();
     }

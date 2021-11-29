@@ -19,6 +19,7 @@ public class RobotTest {
         Robot.sendLocation(flag);
         verify(mockRC, times(1)).canSetFlag(anyInt());
     }
+
     @Test
     public void getLocationFromFlagTest() throws GameActionException {
         //Since RC is fake we have to define variables returned from method!
@@ -43,7 +44,7 @@ public class RobotTest {
         verify(mockRC, times(1)).getType();
     }
 
-   @Test
+    @Test
     public void randomDirectionTest() {
         Robot.rc = mockRC;
         Direction dir = Robot.randomDirection();

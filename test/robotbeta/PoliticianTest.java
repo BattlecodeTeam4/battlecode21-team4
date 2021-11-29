@@ -1,14 +1,14 @@
 package robotbeta;
 
-import battlecode.common.*;
-import org.junit.Test;
-import org.mockito.*;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
 import battlecode.common.GameActionException;
+import battlecode.common.MapLocation;
+import battlecode.common.RobotController;
+import battlecode.common.RobotType;
+import org.junit.Test;
+import org.mockito.Mock;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class PoliticianTest {
 

@@ -25,8 +25,7 @@ public class Politician extends Robot {
      * @throws GameActionException
      */
     public static MapLocation updateTarget() throws GameActionException {
-        if(target == null && targetTeam == 0)
-        {
+        if (target == null && targetTeam == 0) {
             if (rc.getFlag(rc.getID()) == 0) {
                 if (rc.canGetFlag(homeID)) {
                     if (rc.getFlag(homeID) != 0) {
@@ -70,13 +69,46 @@ public class Politician extends Robot {
         }
     }
 
+    public static void defendHome() throws GameActionException {
+        if (homeLoc != null) {
+            if (rc.canSenseLocation(homeLoc)) {
+                RobotInfo[] list = rc.senseNearbyRobots(actionRadius, enemy);
+                if (list.length >= 1) empowerEnemy();
+            }
+        }
+    }
+
+    public static int follow() throws GameActionException {
+        RobotInfo[] attackable = rc.senseNearbyRobots(senseRadius, enemy);
+        for(RobotInfo a : attackable) {
+            if(a.getType() == RobotType.MUCKRAKER || a.getType() == RobotType.POLITICIAN)
+            {
+                return a.getID();
+            }
+        }
+        return 0;
+    }
+
     /**
      * @throws GameActionException
      */
     public static void runPolitician() throws GameActionException {
-        resetIfTargetNullAndFlagNotZero();
-        targetActions();
-        updateTarget();
-        moveLocation(target);
+        int id = follow();
+        MapLocation found;
+
+        defendHome();
+        if(id != 0 && rc.canSenseRobot(id))
+        {
+            found = rc.senseRobot(id).getLocation();
+            empowerEnemy();
+        }
+        else
+        {
+            found = target;
+            resetIfTargetNullAndFlagNotZero();
+            targetActions();
+            updateTarget();
+        }
+        moveLocation(found);
     }
 }

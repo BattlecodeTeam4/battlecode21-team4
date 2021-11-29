@@ -1,10 +1,12 @@
 package robotdelta;
 
 import battlecode.common.*;
-import org.junit.*;
-import org.mockito.*;
+import org.junit.Assert;
+import org.junit.Test;
+import org.mockito.Mock;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class PoliticianTest {
 
@@ -13,8 +15,7 @@ public class PoliticianTest {
     MapLocation flag = new MapLocation(100, 100);
 
     @Test
-    public void resetIfTargetNullAndFlagNotZeroTest() throws GameActionException
-    {
+    public void resetIfTargetNullAndFlagNotZeroTest() throws GameActionException {
         Politician.rc = mockRC;
         Robot.target = null;
         when(mockRC.getID()).thenReturn(100);
@@ -25,8 +26,7 @@ public class PoliticianTest {
     }
 
     @Test
-    public void resetIfTargetNullAndFlagNotZeroCantGetFlagTest() throws GameActionException
-    {
+    public void resetIfTargetNullAndFlagNotZeroCantGetFlagTest() throws GameActionException {
         Politician.rc = mockRC;
         Robot.target = null;
         when(mockRC.getID()).thenReturn(100);
@@ -37,8 +37,7 @@ public class PoliticianTest {
     }
 
     @Test
-    public void updateTargetTest() throws GameActionException
-    {
+    public void updateTargetTest() throws GameActionException {
         Politician.rc = mockRC;
         Robot.target = null;
         Robot.targetTeam = 0;
@@ -56,8 +55,7 @@ public class PoliticianTest {
     }
 
     @Test
-    public void empowerEnemyTest() throws GameActionException
-    {
+    public void empowerEnemyTest() throws GameActionException {
         Politician.actionRadius = 9;
         Politician.enemy = Team.B;
         Politician.rc = mockRC;
@@ -66,31 +64,29 @@ public class PoliticianTest {
                 100, new MapLocation(100, 100));
         when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(new RobotInfo[]
                 {fakeEC});
-        when(mockRC.senseNearbyRobots(Politician.actionRadius, Team.NEUTRAL)).thenReturn(new RobotInfo[] {});
+        when(mockRC.senseNearbyRobots(Politician.actionRadius, Team.NEUTRAL)).thenReturn(new RobotInfo[]{});
         when(mockRC.canEmpower(Politician.actionRadius)).thenReturn(true);
 
         Politician.empowerEnemy();
     }
 
     @Test
-    public void empowerEnemyNeutralTest() throws GameActionException
-    {
+    public void empowerEnemyNeutralTest() throws GameActionException {
         Politician.actionRadius = 9;
         Politician.enemy = Team.B;
         Politician.rc = mockRC;
 
         RobotInfo fakeEC = new RobotInfo(100, Team.NEUTRAL, RobotType.ENLIGHTENMENT_CENTER, 100,
                 100, new MapLocation(100, 100));
-        when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(new RobotInfo[] {});
-        when(mockRC.senseNearbyRobots(Politician.actionRadius, Team.NEUTRAL)).thenReturn(new RobotInfo[] {fakeEC});
+        when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(new RobotInfo[]{});
+        when(mockRC.senseNearbyRobots(Politician.actionRadius, Team.NEUTRAL)).thenReturn(new RobotInfo[]{fakeEC});
         when(mockRC.canEmpower(Politician.actionRadius)).thenReturn(true);
 
         Politician.empowerEnemy();
     }
 
     @Test
-    public void targetActionNullTest() throws GameActionException
-    {
+    public void targetActionNullTest() throws GameActionException {
         Politician.target = null;
         Politician.rc = mockRC;
 
@@ -99,16 +95,15 @@ public class PoliticianTest {
 
         RobotInfo fakeEC = new RobotInfo(100, Team.NEUTRAL, RobotType.ENLIGHTENMENT_CENTER, 100,
                 100, new MapLocation(100, 100));
-        when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(new RobotInfo[] {});
-        when(mockRC.senseNearbyRobots(Politician.actionRadius, Team.NEUTRAL)).thenReturn(new RobotInfo[] {fakeEC});
+        when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(new RobotInfo[]{});
+        when(mockRC.senseNearbyRobots(Politician.actionRadius, Team.NEUTRAL)).thenReturn(new RobotInfo[]{fakeEC});
         when(mockRC.canEmpower(Politician.actionRadius)).thenReturn(true);
 
         Politician.targetActions();
     }
 
     @Test
-    public void targetActionTargetNotTeamTest() throws GameActionException
-    {
+    public void targetActionTargetNotTeamTest() throws GameActionException {
         Politician.target = new MapLocation(100, 100);
         Politician.actionRadius = 9;
         Politician.rc = mockRC;
@@ -123,16 +118,15 @@ public class PoliticianTest {
 
         RobotInfo fakeEC = new RobotInfo(100, Team.NEUTRAL, RobotType.ENLIGHTENMENT_CENTER, 100,
                 100, new MapLocation(100, 100));
-        when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(new RobotInfo[] {});
-        when(mockRC.senseNearbyRobots(Politician.actionRadius, Team.NEUTRAL)).thenReturn(new RobotInfo[] {fakeEC});
+        when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(new RobotInfo[]{});
+        when(mockRC.senseNearbyRobots(Politician.actionRadius, Team.NEUTRAL)).thenReturn(new RobotInfo[]{fakeEC});
         when(mockRC.canEmpower(Politician.actionRadius)).thenReturn(true);
 
         Politician.targetActions();
     }
 
     @Test
-    public void targetActionTargetTeamTest() throws GameActionException
-    {
+    public void targetActionTargetTeamTest() throws GameActionException {
         Politician.target = new MapLocation(100, 100);
         Politician.actionRadius = 9;
         Politician.targetTeam = 1;
@@ -148,15 +142,90 @@ public class PoliticianTest {
     }
 
     @Test
+    public void defendHomeNullTest() throws GameActionException {
+        Politician.homeLoc = null;
+        Politician.rc = mockRC;
+        Politician.defendHome();
+    }
+
+    @Test
+    public void defendHomeNearHomeTest() throws GameActionException {
+        Politician.actionRadius = 9;
+        Politician.enemy = Team.B;
+        Politician.homeLoc = new MapLocation(100, 100);
+        when(mockRC.getTeam()).thenReturn(Team.A);
+        when(mockRC.canSenseLocation(Politician.homeLoc)).thenReturn(true);
+        when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(new RobotInfo[]{
+                new RobotInfo(100, Team.NEUTRAL, RobotType.ENLIGHTENMENT_CENTER, 100, 100,
+                        new MapLocation(102, 102))});
+        Politician.rc = mockRC;
+        Politician.defendHome();
+    }
+
+    @Test
+    public void followSlaTest() throws GameActionException {
+        Politician.senseRadius = 25;
+        Politician.target = null;
+        Politician.enemy = Team.B;
+        RobotInfo[] enemies = new RobotInfo[] {new RobotInfo(100,Politician.enemy, RobotType.MUCKRAKER,
+                1,1,new MapLocation(21900, 21900)), new RobotInfo(100,Politician.enemy,
+                RobotType.MUCKRAKER, 1,1,new MapLocation(21901, 21901))};
+        when(mockRC.senseNearbyRobots(Politician.senseRadius, Politician.enemy)).thenReturn(enemies);
+        Politician.rc = mockRC;
+        Politician.follow();
+    }
+
+    @Test
+    public void followPolTest() throws GameActionException {
+        Politician.senseRadius = 25;
+        Politician.target = null;
+        Politician.enemy = Team.B;
+        RobotInfo[] enemies = new RobotInfo[] {new RobotInfo(100,Politician.enemy, RobotType.MUCKRAKER,
+                1,1,new MapLocation(21900, 21900)), new RobotInfo(100,Politician.enemy,
+                RobotType.POLITICIAN, 1,1,new MapLocation(21901, 21901))};
+        when(mockRC.senseNearbyRobots(Politician.senseRadius, Politician.enemy)).thenReturn(enemies);
+        Politician.rc = mockRC;
+        Politician.follow();
+    }
+
+    @Test
     public void runPoliticianTest() throws GameActionException {
         Politician.rc = mockRC;
-        Robot.target = null;
+        Politician.homeLoc = null;
+        Politician.target = null;
         when(mockRC.canGetFlag(100)).thenReturn(false);
+        when(mockRC.getInfluence()).thenReturn(300);
 
         Politician.actionRadius = 9;
         Politician.enemy = Team.B;
-        when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(new RobotInfo[] {});
-        when(mockRC.senseNearbyRobots(Politician.actionRadius, Team.NEUTRAL)).thenReturn(new RobotInfo[] {});
+        when(mockRC.senseNearbyRobots(Politician.senseRadius, Politician.enemy)).thenReturn(new RobotInfo[]{});
+        when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(new RobotInfo[]{});
+        when(mockRC.senseNearbyRobots(Politician.actionRadius, Team.NEUTRAL)).thenReturn(new RobotInfo[]{});
+
+        Politician.runPolitician();
+    }
+
+    @Test
+    public void runPoliticianFollowTest() throws GameActionException {
+        Politician.rc = mockRC;
+        Politician.homeLoc = null;
+        Politician.target = null;
+        when(mockRC.canGetFlag(100)).thenReturn(false);
+        when(mockRC.getInfluence()).thenReturn(300);
+
+        Politician.senseRadius = 25;
+        Politician.actionRadius = 9;
+        Politician.enemy = Team.B;
+        RobotInfo pol = new RobotInfo(100,Politician.enemy,
+                RobotType.POLITICIAN, 1,1,new MapLocation(21901, 21901));
+        RobotInfo[] enemies = new RobotInfo[] {pol};
+        when(mockRC.senseNearbyRobots(Politician.senseRadius, Politician.enemy)).thenReturn(enemies);
+        when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(new RobotInfo[]{});
+        when(mockRC.senseNearbyRobots(Politician.actionRadius, Team.NEUTRAL)).thenReturn(new RobotInfo[]{});
+
+        when(mockRC.canSenseRobot(100)).thenReturn(true);
+        when(mockRC.senseRobot(100)).thenReturn(pol);
+        when(mockRC.getLocation()).thenReturn(new MapLocation(21908, 21908));
 
         Politician.runPolitician();
     }

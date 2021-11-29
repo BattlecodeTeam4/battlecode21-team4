@@ -1,15 +1,16 @@
 package robotgamma;
 
 import battlecode.common.*;
-import org.junit.*;
-import org.mockito.*;
+import org.junit.Assert;
+import org.junit.Test;
+import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Map;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class EnlightenmentCenterTest {
     @Mock
@@ -51,53 +52,53 @@ public class EnlightenmentCenterTest {
         EnlightenmentCenter.mucIDList = new HashSet<>();
         EnlightenmentCenter.mucIDList.add(200);
         when(mockRC.canGetFlag(200)).thenReturn(true);
-        Assert.assertEquals(1,EnlightenmentCenter.checkIfExistMuckraker());
+        Assert.assertEquals(1, EnlightenmentCenter.checkIfExistMuckraker());
     }
 
     @Test
     public void checkIfExistPolitician() throws GameActionException {
         EnlightenmentCenter.rc = mockRC;
-        EnlightenmentCenter.polIDList= new HashSet<>();
+        EnlightenmentCenter.polIDList = new HashSet<>();
         EnlightenmentCenter.polIDList.add(200);
         EnlightenmentCenter.polIDList.add(300);
         when(mockRC.canGetFlag(200)).thenReturn(true);
         when(mockRC.canGetFlag(300)).thenReturn(true);
-        Assert.assertEquals(2 ,EnlightenmentCenter.checkIfExistPolitician());
+        Assert.assertEquals(2, EnlightenmentCenter.checkIfExistPolitician());
     }
 
     @Test
     public void checkIfExistSlandererRmSlanderer() throws GameActionException {
         EnlightenmentCenter.rc = mockRC;
-        EnlightenmentCenter.slaIDList= new HashSet<>();
+        EnlightenmentCenter.slaIDList = new HashSet<>();
         EnlightenmentCenter.slaThreshold = 290;
         EnlightenmentCenter.slaIDList.add(295);
         when(mockRC.canGetFlag(295)).thenReturn(false);
         when(mockRC.getFlag(295)).thenReturn(295);
-        Assert.assertEquals(0,EnlightenmentCenter.checkIfExistSlanderer());
+        Assert.assertEquals(0, EnlightenmentCenter.checkIfExistSlanderer());
     }
 
     @Test
     public void checkIfExistSlandererNot() throws GameActionException {
         EnlightenmentCenter.rc = mockRC;
-        EnlightenmentCenter.slaIDList= new HashSet<>();
+        EnlightenmentCenter.slaIDList = new HashSet<>();
         EnlightenmentCenter.polIDList = new HashSet<>();
         EnlightenmentCenter.slaThreshold = 290;
         EnlightenmentCenter.slaIDList.add(295);
         when(mockRC.canGetFlag(295)).thenReturn(true);
         when(mockRC.getFlag(295)).thenReturn(295);
-        Assert.assertEquals(0,EnlightenmentCenter.checkIfExistSlanderer());
-        Assert.assertEquals(1,EnlightenmentCenter.checkIfExistPolitician());
+        Assert.assertEquals(0, EnlightenmentCenter.checkIfExistSlanderer());
+        Assert.assertEquals(1, EnlightenmentCenter.checkIfExistPolitician());
     }
 
     @Test
     public void checkIfExistSlandererYes() throws GameActionException {
         EnlightenmentCenter.rc = mockRC;
-        EnlightenmentCenter.slaIDList= new HashSet<>();
+        EnlightenmentCenter.slaIDList = new HashSet<>();
         EnlightenmentCenter.slaThreshold = 290;
         EnlightenmentCenter.slaIDList.add(285);
         when(mockRC.canGetFlag(285)).thenReturn(true);
         when(mockRC.getFlag(285)).thenReturn(285);
-        Assert.assertEquals(1,EnlightenmentCenter.checkIfExistSlanderer());
+        Assert.assertEquals(1, EnlightenmentCenter.checkIfExistSlanderer());
     }
 
     @Test
@@ -143,7 +144,7 @@ public class EnlightenmentCenterTest {
         RobotInfo fakeEnemy = new RobotInfo(100, Team.B, RobotType.ENLIGHTENMENT_CENTER,
                 100, 100, new MapLocation(100, 100));
         when(mockRC.senseNearbyRobots(EnlightenmentCenter.senseRadius, Team.B))
-                .thenReturn(new RobotInfo[] {fakeEnemy});
+                .thenReturn(new RobotInfo[]{fakeEnemy});
         EnlightenmentCenter.rc = mockRC;
         Assert.assertEquals(100, EnlightenmentCenter.senseNearEC());
     }
@@ -202,6 +203,7 @@ public class EnlightenmentCenterTest {
         EnlightenmentCenter.rc = mockRC;
         Assert.assertTrue(EnlightenmentCenter.bidByThreshold());
     }
+
     @Test
     public void bidByThresholdLargeInfluence() throws GameActionException {
         EnlightenmentCenter.currRound = 1500;
@@ -290,7 +292,7 @@ public class EnlightenmentCenterTest {
         EnlightenmentCenter.mucIDList = new HashSet<>();
         EnlightenmentCenter.targetList = new LinkedList<>();
         Muckraker.enemy = Team.B;
-        when(mockRC.senseNearbyRobots(EnlightenmentCenter.senseRadius, Team.B)).thenReturn(new RobotInfo[] {});
+        when(mockRC.senseNearbyRobots(EnlightenmentCenter.senseRadius, Team.B)).thenReturn(new RobotInfo[]{});
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.runEnlightenmentCenter();
     }
@@ -305,7 +307,7 @@ public class EnlightenmentCenterTest {
         EnlightenmentCenter.mucIDList = new HashSet<>();
         EnlightenmentCenter.targetList = new LinkedList<>();
         Muckraker.enemy = Team.B;
-        when(mockRC.senseNearbyRobots(EnlightenmentCenter.senseRadius, Team.B)).thenReturn(new RobotInfo[] {});
+        when(mockRC.senseNearbyRobots(EnlightenmentCenter.senseRadius, Team.B)).thenReturn(new RobotInfo[]{});
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.runEnlightenmentCenter();
     }
@@ -323,7 +325,7 @@ public class EnlightenmentCenterTest {
         RobotInfo fakeEnemy = new RobotInfo(100, Team.B, RobotType.ENLIGHTENMENT_CENTER,
                 100, 100, new MapLocation(100, 100));
         when(mockRC.senseNearbyRobots(EnlightenmentCenter.senseRadius, Team.B))
-                .thenReturn(new RobotInfo[] {fakeEnemy});
+                .thenReturn(new RobotInfo[]{fakeEnemy});
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.runEnlightenmentCenter();
     }
