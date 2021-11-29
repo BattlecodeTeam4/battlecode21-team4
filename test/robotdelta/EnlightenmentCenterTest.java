@@ -601,5 +601,16 @@ public class EnlightenmentCenterTest {
         when(mockRC.getFlag(100)).thenReturn(200);
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.mucScan();
+
+    public void polScanZeroTest() throws GameActionException {
+        EnlightenmentCenter.rc = mockRC;
+        EnlightenmentCenter.polIDList= new HashSet<>();
+        EnlightenmentCenter.polIDList.add(300);
+        when(mockRC.canGetFlag(300))
+                .thenReturn(true);
+        when(mockRC.getFlag(300))
+                .thenReturn(0);
+        int result = EnlightenmentCenter.polScan();
+        Assert.assertEquals(1, result);
     }
 }
