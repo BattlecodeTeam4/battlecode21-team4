@@ -601,6 +601,7 @@ public class EnlightenmentCenterTest {
         when(mockRC.getFlag(100)).thenReturn(200);
         EnlightenmentCenter.rc = mockRC;
         EnlightenmentCenter.mucScan();
+    }
 
     public void polScanZeroTest() throws GameActionException {
         EnlightenmentCenter.rc = mockRC;
