@@ -73,7 +73,9 @@ public class Politician extends Robot {
         if (homeLoc != null) {
             if (rc.canSenseLocation(homeLoc)) {
                 RobotInfo[] list = rc.senseNearbyRobots(actionRadius, enemy);
-                if (list.length >= 1) empowerEnemy();
+                if (list.length >= 1) {
+                    attack(follow());
+                }
             }
         }
     }
@@ -89,6 +91,17 @@ public class Politician extends Robot {
         return 0;
     }
 
+    public static int attack(int id) throws GameActionException {
+        if(id == 0) return 0;
+        RobotInfo[] targetRobot = rc.senseNearbyRobots(actionRadius, enemy);
+        for(RobotInfo rt: targetRobot){
+            if(rt.getID() == id && rc.canEmpower(actionRadius) && (rt.getType() == RobotType.POLITICIAN || rt.getType() == RobotType.MUCKRAKER)) {
+                rc.empower(actionRadius);
+            }
+        }
+        return targetRobot.length;
+    }
+
     /**
      * @throws GameActionException
      */
@@ -100,7 +113,7 @@ public class Politician extends Robot {
         if(id != 0 && rc.canSenseRobot(id))
         {
             found = rc.senseRobot(id).getLocation();
-            empowerEnemy();
+            attack(id);
         }
         else
         {

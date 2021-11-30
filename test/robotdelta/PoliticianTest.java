@@ -158,6 +158,7 @@ public class PoliticianTest {
         when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(new RobotInfo[]{
                 new RobotInfo(100, Team.NEUTRAL, RobotType.ENLIGHTENMENT_CENTER, 100, 100,
                         new MapLocation(102, 102))});
+        when(mockRC.senseNearbyRobots(Politician.senseRadius, Politician.enemy)).thenReturn(new RobotInfo[]{});
         Politician.rc = mockRC;
         Politician.defendHome();
     }
@@ -173,6 +174,25 @@ public class PoliticianTest {
         when(mockRC.senseNearbyRobots(Politician.senseRadius, Politician.enemy)).thenReturn(enemies);
         Politician.rc = mockRC;
         Politician.follow();
+    }
+
+    @Test
+    public void attackTest() throws GameActionException {
+        Politician.actionRadius = 9;
+        Politician.enemy = Team.B;
+        when(mockRC.getTeam()).thenReturn(Team.A);
+        when(mockRC.senseNearbyRobots(Politician.actionRadius, Politician.enemy)).thenReturn(new RobotInfo[]{
+                new RobotInfo(100,Politician.enemy, RobotType.MUCKRAKER,
+                1,1,new MapLocation(21900, 21900)), new RobotInfo(200,Politician.enemy,
+                RobotType.POLITICIAN, 1,1,new MapLocation(21901, 21901))});
+        when(mockRC.canEmpower(Politician.actionRadius)).thenReturn(true);
+        Politician.rc = mockRC;
+        Politician.attack(200);
+    }
+
+    @Test
+    public void attackID0Test() throws GameActionException {
+        Assert.assertEquals(0, Politician.attack(0));
     }
 
     @Test

@@ -285,12 +285,12 @@ public class EnlightenmentCenter extends Robot {
      */
     public static RobotType setupProfile() throws GameActionException {
         RobotType toBuild;
-        if (influence >= threshold) {
-            toBuild = spawnRobot(20, 10, 70);
+        if (influence <= threshold) {
+            toBuild = spawnRobot(100, 0, 0);
             return buildRobot(toBuild, randomDirection(), mucInfluence, defaultInfGive, defaultInfGive);
         }
         else {
-            toBuild = spawnRobot(100, 0, 0);
+            toBuild = spawnRobot(0, 40, 60);
             return buildRobot(toBuild, randomDirection(), mucInfluence, defaultInfGive, defaultInfGive);
         }
     }
