@@ -65,3 +65,7 @@ This is the Battlecode 2021 scaffold, containing an `examplefuncsplayer`. Read h
     Runs a game with the settings in gradle.properties
 - `./gradlew update`
     Update to the newest version! Run every so often
+
+### Resources
+
+Used for sendLocation() and getLocationFromFlag() in EnlightenmentCenter.java: [Battlecode 2021 Lecture 4](https://youtu.be/skIEPSSEaQE)
