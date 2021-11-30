@@ -336,7 +336,7 @@ public class EnlightenmentCenter extends Robot {
             return buildRobot(toBuild, randomDirection(), mucInfluence, defaultInfGive, defaultInfGive);
         }
         else {
-            toBuild = spawnRobot(20, 40, 40);
+            toBuild = spawnRobot(10, 40, 50);
             return buildRobot(toBuild, randomDirection(), mucInfluence, defaultInfGive, defaultInfGive);
         }
         return toBuild;
